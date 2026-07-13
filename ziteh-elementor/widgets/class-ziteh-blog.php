@@ -4,6 +4,10 @@
  * three-column grid of article cards (image, category chip, title and a
  * "مطالعه مقاله" link).
  *
+ * Two sources:
+ *   - wordpress: real posts pulled live via WP_Query (count, category, order).
+ *   - manual: hand-authored cards (repeater).
+ *
  * @package Ziteh_Elementor
  */
 
@@ -76,8 +80,9 @@ class Ziteh_Blog_Widget extends Ziteh_Widget_Base {
 			array(
 				'label'         => esc_html__( 'لینک', 'ziteh' ),
 				'type'          => Controls_Manager::URL,
-				'default'       => array( 'url' => '#' ),
+				'default'       => array( 'url' => '' ),
 				'show_external' => false,
+				'description'   => esc_html__( 'خالی بگذارید تا به‌صورت خودکار به صفحه مطالب لینک شود.', 'ziteh' ),
 			)
 		);
 
@@ -92,12 +97,93 @@ class Ziteh_Blog_Widget extends Ziteh_Widget_Base {
 
 		$this->end_controls_section();
 
-		// Posts.
+		// Source.
+		$this->start_controls_section(
+			'section_source',
+			array(
+				'label' => esc_html__( 'منبع مقالات', 'ziteh' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			)
+		);
+
+		$this->add_control(
+			'source',
+			array(
+				'label'   => esc_html__( 'منبع', 'ziteh' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'wordpress',
+				'options' => array(
+					'wordpress' => esc_html__( 'نوشته‌های وردپرس (داینامیک)', 'ziteh' ),
+					'manual'    => esc_html__( 'دستی', 'ziteh' ),
+				),
+			)
+		);
+
+		$this->add_control(
+			'wp_post_type',
+			array(
+				'label'     => esc_html__( 'نوع محتوا', 'ziteh' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'post',
+				'options'   => $this->get_post_types(),
+				'condition' => array( 'source' => 'wordpress' ),
+			)
+		);
+
+		$this->add_control(
+			'wp_count',
+			array(
+				'label'     => esc_html__( 'تعداد مقالات', 'ziteh' ),
+				'type'      => Controls_Manager::NUMBER,
+				'min'       => 1,
+				'max'       => 12,
+				'default'   => 3,
+				'condition' => array( 'source' => 'wordpress' ),
+			)
+		);
+
+		$this->add_control(
+			'wp_orderby',
+			array(
+				'label'     => esc_html__( 'مرتب‌سازی بر اساس', 'ziteh' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'date',
+				'options'   => array(
+					'date'          => esc_html__( 'جدیدترین', 'ziteh' ),
+					'comment_count' => esc_html__( 'پربحث‌ترین', 'ziteh' ),
+					'title'         => esc_html__( 'عنوان', 'ziteh' ),
+					'rand'          => esc_html__( 'تصادفی', 'ziteh' ),
+				),
+				'condition' => array( 'source' => 'wordpress' ),
+			)
+		);
+
+		$this->add_control(
+			'wp_category',
+			array(
+				'label'       => esc_html__( 'دسته‌بندی (اسلاگ)', 'ziteh' ),
+				'type'        => Controls_Manager::SELECT2,
+				'multiple'    => true,
+				'label_block' => true,
+				'options'     => $this->get_categories(),
+				'default'     => array(),
+				'description' => esc_html__( 'خالی بگذارید تا از همه دسته‌ها نمایش داده شود.', 'ziteh' ),
+				'condition'   => array(
+					'source'       => 'wordpress',
+					'wp_post_type' => 'post',
+				),
+			)
+		);
+
+		$this->end_controls_section();
+
+		// Manual posts.
 		$this->start_controls_section(
 			'section_posts',
 			array(
-				'label' => esc_html__( 'مقالات', 'ziteh' ),
-				'tab'   => Controls_Manager::TAB_CONTENT,
+				'label'     => esc_html__( 'مقالات (دستی)', 'ziteh' ),
+				'tab'       => Controls_Manager::TAB_CONTENT,
+				'condition' => array( 'source' => 'manual' ),
 			)
 		);
 
@@ -168,6 +254,77 @@ class Ziteh_Blog_Widget extends Ziteh_Widget_Base {
 		);
 
 		$this->end_controls_section();
+
+		// Layout.
+		$this->start_controls_section(
+			'section_layout',
+			array(
+				'label' => esc_html__( 'چیدمان', 'ziteh' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			)
+		);
+
+		$this->add_responsive_control(
+			'columns',
+			array(
+				'label'          => esc_html__( 'تعداد ستون', 'ziteh' ),
+				'type'           => Controls_Manager::NUMBER,
+				'min'            => 1,
+				'max'            => 4,
+				'default'        => 3,
+				'tablet_default' => 2,
+				'mobile_default' => 1,
+				'selectors'      => array(
+					'{{WRAPPER}} .ziteh-blog__grid' => 'grid-template-columns: repeat({{VALUE}}, 1fr);',
+				),
+			)
+		);
+
+		$this->end_controls_section();
+	}
+
+	/**
+	 * Public post types available for the source selector.
+	 *
+	 * @return array<string,string>
+	 */
+	private function get_post_types() {
+		$types   = get_post_types( array( 'public' => true ), 'objects' );
+		$options = array();
+		$exclude = array( 'attachment', 'product', 'elementor_library', 'e-landing-page' );
+		foreach ( $types as $type ) {
+			if ( in_array( $type->name, $exclude, true ) ) {
+				continue;
+			}
+			$options[ $type->name ] = $type->label;
+		}
+		if ( empty( $options ) ) {
+			$options['post'] = esc_html__( 'نوشته‌ها', 'ziteh' );
+		}
+		return $options;
+	}
+
+	/**
+	 * Category slug => name map for the SELECT2 control.
+	 *
+	 * @return array<string,string>
+	 */
+	private function get_categories() {
+		$options = array();
+		$terms   = get_terms(
+			array(
+				'taxonomy'   => 'category',
+				'hide_empty' => false,
+				'number'     => 100,
+			)
+		);
+		if ( is_wp_error( $terms ) ) {
+			return $options;
+		}
+		foreach ( $terms as $term ) {
+			$options[ $term->slug ] = $term->name;
+		}
+		return $options;
 	}
 
 	/**
@@ -175,7 +332,12 @@ class Ziteh_Blog_Widget extends Ziteh_Widget_Base {
 	 */
 	protected function render() {
 		$settings     = $this->get_settings_for_display();
-		$view_all_url = ! empty( $settings['view_all_url']['url'] ) ? $settings['view_all_url']['url'] : '#';
+		$view_all_url = ! empty( $settings['view_all_url']['url'] ) ? $settings['view_all_url']['url'] : '';
+
+		if ( '' === $view_all_url ) {
+			$posts_page = get_permalink( get_option( 'page_for_posts' ) );
+			$view_all_url = $posts_page ? $posts_page : home_url( '/' );
+		}
 		?>
 		<section class="ziteh-blog">
 			<div class="ziteh-container">
@@ -192,30 +354,125 @@ class Ziteh_Blog_Widget extends Ziteh_Widget_Base {
 				</div>
 
 				<div class="ziteh-blog__grid">
-					<?php foreach ( $settings['posts'] as $post ) : ?>
-						<?php $url = ! empty( $post['post_url']['url'] ) ? $post['post_url']['url'] : '#'; ?>
-						<article class="ziteh-post-card">
-							<a class="ziteh-post-card__thumb" href="<?php echo esc_url( $url ); ?>">
-								<?php if ( ! empty( $post['post_image']['url'] ) ) : ?>
-									<img src="<?php echo esc_url( $post['post_image']['url'] ); ?>" alt="<?php echo esc_attr( wp_strip_all_tags( $post['post_title'] ) ); ?>">
-								<?php endif; ?>
-								<span class="ziteh-post-card__chip"><?php echo esc_html( $post['post_cat'] ); ?></span>
-							</a>
-							<div class="ziteh-post-card__body">
-								<h3 class="ziteh-post-card__title">
-									<a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $post['post_title'] ); ?></a>
-								</h3>
-								<a class="ziteh-link" href="<?php echo esc_url( $url ); ?>">
-									<?php echo esc_html( $settings['read_more_text'] ); ?>
-									<?php echo $this->get_icon_svg( 'arrow-l' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-								</a>
-							</div>
-						</article>
-					<?php endforeach; ?>
+					<?php
+					if ( 'wordpress' === $settings['source'] ) {
+						$this->render_wp_posts( $settings );
+					} else {
+						$this->render_manual_posts( $settings );
+					}
+					?>
 				</div>
 
 			</div>
 		</section>
+		<?php
+	}
+
+	/**
+	 * Render manually-authored article cards.
+	 *
+	 * @param array $settings Widget settings.
+	 */
+	private function render_manual_posts( $settings ) {
+		if ( empty( $settings['posts'] ) ) {
+			return;
+		}
+		foreach ( $settings['posts'] as $post ) {
+			$url = ! empty( $post['post_url']['url'] ) ? $post['post_url']['url'] : '#';
+			$this->card(
+				$url,
+				! empty( $post['post_image']['url'] ) ? '<img src="' . esc_url( $post['post_image']['url'] ) . '" alt="' . esc_attr( wp_strip_all_tags( $post['post_title'] ) ) . '">' : '',
+				$post['post_cat'],
+				$post['post_title'],
+				$settings['read_more_text']
+			);
+		}
+	}
+
+	/**
+	 * Query WordPress posts and render real article cards.
+	 *
+	 * @param array $settings Widget settings.
+	 */
+	private function render_wp_posts( $settings ) {
+		$args = array(
+			'post_type'           => ! empty( $settings['wp_post_type'] ) ? $settings['wp_post_type'] : 'post',
+			'posts_per_page'      => isset( $settings['wp_count'] ) ? (int) $settings['wp_count'] : 3,
+			'post_status'         => 'publish',
+			'ignore_sticky_posts' => true,
+			'orderby'             => ! empty( $settings['wp_orderby'] ) ? $settings['wp_orderby'] : 'date',
+			'order'               => ( 'title' === ( $settings['wp_orderby'] ?? '' ) ) ? 'ASC' : 'DESC',
+			'no_found_rows'       => true,
+		);
+
+		if ( 'post' === $args['post_type'] && ! empty( $settings['wp_category'] ) ) {
+			$args['category_name'] = implode( ',', (array) $settings['wp_category'] );
+		}
+
+		$query = new WP_Query( $args );
+
+		if ( ! $query->have_posts() ) {
+			echo '<p class="ziteh-blog__empty">' . esc_html__( 'مقاله‌ای برای نمایش یافت نشد.', 'ziteh' ) . '</p>';
+			wp_reset_postdata();
+			return;
+		}
+
+		while ( $query->have_posts() ) {
+			$query->the_post();
+
+			$thumb = '';
+			if ( has_post_thumbnail() ) {
+				$thumb = get_the_post_thumbnail( get_the_ID(), 'medium_large' );
+			}
+
+			$cat_name = '';
+			$cats     = get_the_category();
+			if ( ! empty( $cats ) && ! is_wp_error( $cats ) ) {
+				$cat_name = $cats[0]->name;
+			} elseif ( 'post' !== $args['post_type'] ) {
+				$obj      = get_post_type_object( $args['post_type'] );
+				$cat_name = $obj ? $obj->labels->singular_name : '';
+			}
+
+			$this->card(
+				get_permalink(),
+				$thumb,
+				$cat_name,
+				get_the_title(),
+				$settings['read_more_text']
+			);
+		}
+		wp_reset_postdata();
+	}
+
+	/**
+	 * Output one article card (shared by both sources).
+	 *
+	 * @param string $url        Permalink.
+	 * @param string $image_html Ready image markup (may be empty).
+	 * @param string $cat        Category label (may be empty).
+	 * @param string $title      Post title.
+	 * @param string $read_more  Read-more label.
+	 */
+	private function card( $url, $image_html, $cat, $title, $read_more ) {
+		?>
+		<article class="ziteh-post-card">
+			<a class="ziteh-post-card__thumb" href="<?php echo esc_url( $url ); ?>">
+				<?php echo $image_html; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php if ( $cat ) : ?>
+					<span class="ziteh-post-card__chip"><?php echo esc_html( $cat ); ?></span>
+				<?php endif; ?>
+			</a>
+			<div class="ziteh-post-card__body">
+				<h3 class="ziteh-post-card__title">
+					<a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $title ); ?></a>
+				</h3>
+				<a class="ziteh-link" href="<?php echo esc_url( $url ); ?>">
+					<?php echo esc_html( $read_more ); ?>
+					<?php echo $this->get_icon_svg( 'arrow-l' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				</a>
+			</div>
+		</article>
 		<?php
 	}
 }

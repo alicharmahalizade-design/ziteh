@@ -4,6 +4,12 @@
  * side arrows and a slider of product cards (wishlist heart, image, brand,
  * name, price and an add-to-cart button).
  *
+ * Two sources:
+ *   - manual: hand-authored cards (repeater).
+ *   - woocommerce: real products pulled live from the store, with options for
+ *     ordering, count and category. Falls back to manual if WooCommerce is not
+ *     active.
+ *
  * @package Ziteh_Elementor
  */
 
@@ -38,6 +44,15 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 	 */
 	public function get_icon() {
 		return 'eicon-products';
+	}
+
+	/**
+	 * Whether WooCommerce is available for dynamic queries.
+	 *
+	 * @return bool
+	 */
+	private function has_woocommerce() {
+		return class_exists( 'WooCommerce' ) && function_exists( 'wc_get_products' );
 	}
 
 	/**
@@ -83,12 +98,121 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 
 		$this->end_controls_section();
 
-		// Products.
+		// Source.
+		$this->start_controls_section(
+			'section_source',
+			array(
+				'label' => esc_html__( 'منبع محصولات', 'ziteh' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			)
+		);
+
+		$this->add_control(
+			'source',
+			array(
+				'label'   => esc_html__( 'منبع', 'ziteh' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => $this->has_woocommerce() ? 'woocommerce' : 'manual',
+				'options' => array(
+					'woocommerce' => esc_html__( 'ووکامرس (داینامیک)', 'ziteh' ),
+					'manual'      => esc_html__( 'دستی', 'ziteh' ),
+				),
+			)
+		);
+
+		if ( ! $this->has_woocommerce() ) {
+			$this->add_control(
+				'wc_missing_notice',
+				array(
+					'type'            => Controls_Manager::RAW_HTML,
+					'raw'             => esc_html__( 'ووکامرس فعال نیست؛ در صورت انتخاب حالت داینامیک، محتوای دستی نمایش داده می‌شود.', 'ziteh' ),
+					'content_classes' => 'elementor-panel-alert elementor-panel-alert-warning',
+					'condition'       => array( 'source' => 'woocommerce' ),
+				)
+			);
+		}
+
+		$this->add_control(
+			'wc_count',
+			array(
+				'label'     => esc_html__( 'تعداد محصولات', 'ziteh' ),
+				'type'      => Controls_Manager::NUMBER,
+				'min'       => 1,
+				'max'       => 24,
+				'default'   => 10,
+				'condition' => array( 'source' => 'woocommerce' ),
+			)
+		);
+
+		$this->add_control(
+			'wc_orderby',
+			array(
+				'label'     => esc_html__( 'مرتب‌سازی بر اساس', 'ziteh' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'date',
+				'options'   => array(
+					'date'       => esc_html__( 'جدیدترین', 'ziteh' ),
+					'popularity' => esc_html__( 'پرفروش‌ترین', 'ziteh' ),
+					'rating'     => esc_html__( 'بیشترین امتیاز', 'ziteh' ),
+					'price'      => esc_html__( 'قیمت (صعودی)', 'ziteh' ),
+					'price-desc' => esc_html__( 'قیمت (نزولی)', 'ziteh' ),
+					'title'      => esc_html__( 'عنوان', 'ziteh' ),
+					'rand'       => esc_html__( 'تصادفی', 'ziteh' ),
+				),
+				'condition' => array( 'source' => 'woocommerce' ),
+			)
+		);
+
+		$this->add_control(
+			'wc_filter',
+			array(
+				'label'     => esc_html__( 'فیلتر ویژه', 'ziteh' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'none',
+				'options'   => array(
+					'none'      => esc_html__( 'همه محصولات', 'ziteh' ),
+					'featured'  => esc_html__( 'فقط محصولات ویژه', 'ziteh' ),
+					'on_sale'   => esc_html__( 'فقط تخفیف‌دار', 'ziteh' ),
+					'in_stock'  => esc_html__( 'فقط موجود', 'ziteh' ),
+				),
+				'condition' => array( 'source' => 'woocommerce' ),
+			)
+		);
+
+		$this->add_control(
+			'wc_category',
+			array(
+				'label'       => esc_html__( 'دسته‌بندی محصول (اسلاگ)', 'ziteh' ),
+				'type'        => Controls_Manager::SELECT2,
+				'multiple'    => true,
+				'label_block' => true,
+				'options'     => $this->get_product_categories(),
+				'default'     => array(),
+				'description' => esc_html__( 'خالی بگذارید تا از همه دسته‌ها نمایش داده شود.', 'ziteh' ),
+				'condition'   => array( 'source' => 'woocommerce' ),
+			)
+		);
+
+		$this->add_control(
+			'wc_show_cart',
+			array(
+				'label'        => esc_html__( 'نمایش دکمه افزودن به سبد', 'ziteh' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'return_value' => 'yes',
+				'default'      => 'yes',
+				'condition'    => array( 'source' => 'woocommerce' ),
+			)
+		);
+
+		$this->end_controls_section();
+
+		// Manual products.
 		$this->start_controls_section(
 			'section_products',
 			array(
-				'label' => esc_html__( 'محصولات', 'ziteh' ),
-				'tab'   => Controls_Manager::TAB_CONTENT,
+				'label'     => esc_html__( 'محصولات (دستی)', 'ziteh' ),
+				'tab'       => Controls_Manager::TAB_CONTENT,
+				'condition' => array( 'source' => 'manual' ),
 			)
 		);
 
@@ -228,11 +352,47 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 	}
 
 	/**
+	 * Build a slug => name map of product categories for the SELECT2 control.
+	 *
+	 * @return array<string,string>
+	 */
+	private function get_product_categories() {
+		$options = array();
+		if ( ! taxonomy_exists( 'product_cat' ) ) {
+			return $options;
+		}
+		$terms = get_terms(
+			array(
+				'taxonomy'   => 'product_cat',
+				'hide_empty' => false,
+				'number'     => 100,
+			)
+		);
+		if ( is_wp_error( $terms ) ) {
+			return $options;
+		}
+		foreach ( $terms as $term ) {
+			$options[ $term->slug ] = $term->name;
+		}
+		return $options;
+	}
+
+	/**
 	 * Render the front-end output.
 	 */
 	protected function render() {
 		$settings     = $this->get_settings_for_display();
 		$view_all_url = ! empty( $settings['view_all_url']['url'] ) ? $settings['view_all_url']['url'] : '#';
+
+		// If WooCommerce shop link is unset, point "view all" at the shop.
+		if ( ( '#' === $view_all_url || '' === $view_all_url ) && function_exists( 'wc_get_page_permalink' ) ) {
+			$shop = wc_get_page_permalink( 'shop' );
+			if ( $shop ) {
+				$view_all_url = $shop;
+			}
+		}
+
+		$use_wc = ( 'woocommerce' === $settings['source'] ) && $this->has_woocommerce();
 		?>
 		<section class="ziteh-products">
 			<div class="ziteh-container">
@@ -255,31 +415,13 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 
 					<div class="ziteh-products__viewport">
 						<ul class="ziteh-products__track" data-ziteh-track>
-							<?php foreach ( $settings['products'] as $p ) : ?>
-								<?php $url = ! empty( $p['p_url']['url'] ) ? $p['p_url']['url'] : '#'; ?>
-								<li class="ziteh-product-card">
-									<button class="ziteh-product-card__wish" type="button" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'ziteh' ); ?>">
-										<?php echo $this->get_icon_svg( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-									</button>
-									<a class="ziteh-product-card__thumb" href="<?php echo esc_url( $url ); ?>">
-										<?php if ( ! empty( $p['p_image']['url'] ) ) : ?>
-											<img src="<?php echo esc_url( $p['p_image']['url'] ); ?>" alt="<?php echo esc_attr( $p['p_name'] ); ?>">
-										<?php endif; ?>
-									</a>
-									<div class="ziteh-product-card__body">
-										<span class="ziteh-product-card__brand"><?php echo esc_html( $p['p_brand'] ); ?></span>
-										<a class="ziteh-product-card__name" href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $p['p_name'] ); ?></a>
-										<span class="ziteh-product-card__price">
-											<strong><?php echo esc_html( $p['p_price'] ); ?></strong>
-											<em><?php echo esc_html( $p['p_currency'] ); ?></em>
-										</span>
-										<a class="ziteh-btn ziteh-btn--outline ziteh-product-card__btn" href="<?php echo esc_url( $url ); ?>">
-											<?php echo $this->get_icon_svg( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-											<?php echo esc_html( $p['p_button'] ); ?>
-										</a>
-									</div>
-								</li>
-							<?php endforeach; ?>
+							<?php
+							if ( $use_wc ) {
+								$this->render_woocommerce_cards( $settings );
+							} else {
+								$this->render_manual_cards( $settings );
+							}
+							?>
 						</ul>
 					</div>
 
@@ -291,5 +433,204 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 			</div>
 		</section>
 		<?php
+	}
+
+	/**
+	 * Render manually-authored product cards.
+	 *
+	 * @param array $settings Widget settings.
+	 */
+	private function render_manual_cards( $settings ) {
+		if ( empty( $settings['products'] ) ) {
+			return;
+		}
+		foreach ( $settings['products'] as $p ) {
+			$url = ! empty( $p['p_url']['url'] ) ? $p['p_url']['url'] : '#';
+			?>
+			<li class="ziteh-product-card">
+				<button class="ziteh-product-card__wish" type="button" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'ziteh' ); ?>">
+					<?php echo $this->get_icon_svg( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				</button>
+				<a class="ziteh-product-card__thumb" href="<?php echo esc_url( $url ); ?>">
+					<?php if ( ! empty( $p['p_image']['url'] ) ) : ?>
+						<img src="<?php echo esc_url( $p['p_image']['url'] ); ?>" alt="<?php echo esc_attr( $p['p_name'] ); ?>">
+					<?php endif; ?>
+				</a>
+				<div class="ziteh-product-card__body">
+					<span class="ziteh-product-card__brand"><?php echo esc_html( $p['p_brand'] ); ?></span>
+					<a class="ziteh-product-card__name" href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $p['p_name'] ); ?></a>
+					<span class="ziteh-product-card__price">
+						<strong><?php echo esc_html( $p['p_price'] ); ?></strong>
+						<em><?php echo esc_html( $p['p_currency'] ); ?></em>
+					</span>
+					<a class="ziteh-btn ziteh-btn--outline ziteh-product-card__btn" href="<?php echo esc_url( $url ); ?>">
+						<?php echo $this->get_icon_svg( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php echo esc_html( $p['p_button'] ); ?>
+					</a>
+				</div>
+			</li>
+			<?php
+		}
+	}
+
+	/**
+	 * Query WooCommerce and render real product cards.
+	 *
+	 * @param array $settings Widget settings.
+	 */
+	private function render_woocommerce_cards( $settings ) {
+		$orderby = isset( $settings['wc_orderby'] ) ? $settings['wc_orderby'] : 'date';
+		$order   = 'ASC';
+
+		// Map friendly orderby values onto wc_get_products arguments.
+		switch ( $orderby ) {
+			case 'price':
+				$orderby = 'price';
+				$order   = 'ASC';
+				break;
+			case 'price-desc':
+				$orderby = 'price';
+				$order   = 'DESC';
+				break;
+			case 'title':
+				$orderby = 'title';
+				$order   = 'ASC';
+				break;
+			case 'popularity':
+				$orderby = 'popularity';
+				$order   = 'DESC';
+				break;
+			case 'rating':
+				$orderby = 'rating';
+				$order   = 'DESC';
+				break;
+			case 'rand':
+				$orderby = 'rand';
+				break;
+			case 'date':
+			default:
+				$orderby = 'date';
+				$order   = 'DESC';
+				break;
+		}
+
+		$args = array(
+			'status'   => 'publish',
+			'limit'    => isset( $settings['wc_count'] ) ? (int) $settings['wc_count'] : 10,
+			'orderby'  => $orderby,
+			'order'    => $order,
+			'paginate' => false,
+		);
+
+		$filter = isset( $settings['wc_filter'] ) ? $settings['wc_filter'] : 'none';
+		if ( 'featured' === $filter ) {
+			$args['featured'] = true;
+		} elseif ( 'on_sale' === $filter ) {
+			$args['include'] = wc_get_product_ids_on_sale();
+			if ( empty( $args['include'] ) ) {
+				$args['include'] = array( 0 ); // Force empty result set.
+			}
+		} elseif ( 'in_stock' === $filter ) {
+			$args['stock_status'] = 'instock';
+		}
+
+		if ( ! empty( $settings['wc_category'] ) ) {
+			$args['category'] = (array) $settings['wc_category']; // slugs.
+		}
+
+		$products = wc_get_products( $args );
+
+		if ( empty( $products ) ) {
+			echo '<li class="ziteh-products__empty">' . esc_html__( 'محصولی برای نمایش یافت نشد.', 'ziteh' ) . '</li>';
+			return;
+		}
+
+		$show_cart = ! isset( $settings['wc_show_cart'] ) || 'yes' === $settings['wc_show_cart'];
+
+		foreach ( $products as $product ) {
+			$this->render_wc_card( $product, $show_cart );
+		}
+	}
+
+	/**
+	 * Render a single WooCommerce product card.
+	 *
+	 * @param \WC_Product $product   Product object.
+	 * @param bool        $show_cart Whether to show the add-to-cart button.
+	 */
+	private function render_wc_card( $product, $show_cart ) {
+		$permalink = get_permalink( $product->get_id() );
+		$name      = $product->get_name();
+		$brand     = $this->get_product_brand( $product );
+		$image     = $product->get_image( 'woocommerce_thumbnail' );
+		$price_html = $product->get_price_html();
+		?>
+		<li class="ziteh-product-card">
+			<button class="ziteh-product-card__wish" type="button" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'ziteh' ); ?>">
+				<?php echo $this->get_icon_svg( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			</button>
+
+			<?php if ( $product->is_on_sale() ) : ?>
+				<span class="ziteh-product-card__badge"><?php esc_html_e( 'تخفیف', 'ziteh' ); ?></span>
+			<?php endif; ?>
+
+			<a class="ziteh-product-card__thumb" href="<?php echo esc_url( $permalink ); ?>">
+				<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			</a>
+			<div class="ziteh-product-card__body">
+				<?php if ( $brand ) : ?>
+					<span class="ziteh-product-card__brand"><?php echo esc_html( $brand ); ?></span>
+				<?php endif; ?>
+				<a class="ziteh-product-card__name" href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $name ); ?></a>
+				<?php if ( $price_html ) : ?>
+					<span class="ziteh-product-card__price ziteh-product-card__price--wc"><?php echo wp_kses_post( $price_html ); ?></span>
+				<?php endif; ?>
+				<?php if ( $show_cart ) : ?>
+					<?php
+					$cart_url  = $product->add_to_cart_url();
+					$cart_text = $product->add_to_cart_text();
+					$ajax_cls  = $product->supports( 'ajax_add_to_cart' ) && $product->is_purchasable() && $product->is_in_stock() ? ' add_to_cart_button ajax_add_to_cart' : '';
+					?>
+					<a class="ziteh-btn ziteh-btn--outline ziteh-product-card__btn<?php echo esc_attr( $ajax_cls ); ?>"
+						href="<?php echo esc_url( $cart_url ); ?>"
+						data-quantity="1"
+						data-product_id="<?php echo esc_attr( $product->get_id() ); ?>"
+						rel="nofollow">
+						<?php echo $this->get_icon_svg( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php echo esc_html( $cart_text ); ?>
+					</a>
+				<?php endif; ?>
+			</div>
+		</li>
+		<?php
+	}
+
+	/**
+	 * Best-effort "brand" line for a product: a brand taxonomy term if present,
+	 * otherwise the first product category name.
+	 *
+	 * @param \WC_Product $product Product object.
+	 * @return string
+	 */
+	private function get_product_brand( $product ) {
+		$id = $product->get_id();
+
+		// Common brand taxonomies used by popular plugins.
+		foreach ( array( 'product_brand', 'pwb-brand', 'yith_product_brand' ) as $tax ) {
+			if ( taxonomy_exists( $tax ) ) {
+				$terms = get_the_terms( $id, $tax );
+				if ( $terms && ! is_wp_error( $terms ) ) {
+					return $terms[0]->name;
+				}
+			}
+		}
+
+		// Fallback: first product category.
+		$cats = get_the_terms( $id, 'product_cat' );
+		if ( $cats && ! is_wp_error( $cats ) ) {
+			return $cats[0]->name;
+		}
+
+		return '';
 	}
 }

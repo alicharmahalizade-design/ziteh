@@ -355,77 +355,110 @@
 	border-radius: 2px;
 }
 
-/* ---------- Hero ---------- */
+/* ---------- Hero (image slider) ---------- */
 
-.ziteh-hero {
+.ziteh-hero-slider {
+	--ziteh-hero-h: 460px;
+	--ziteh-hero-radius: 0px;
 	position: relative;
-	background: var(--ziteh-cream-2);
-	overflow: hidden;
-}
-
-.ziteh-hero__inner {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	align-items: center;
-	gap: 40px;
-	min-height: 460px;
-	padding-block: 40px;
-}
-
-.ziteh-hero__media {
-	order: 1;
-}
-
-.ziteh-hero__content {
-	order: 2;
-	text-align: start;
-}
-
-.ziteh-hero__media img {
 	width: 100%;
-	height: auto;
-	display: block;
-	border-radius: var(--ziteh-radius-lg);
-	object-fit: cover;
+	height: var(--ziteh-hero-h);
+	overflow: hidden;
+	background: var(--ziteh-cream-2);
+	border-radius: var(--ziteh-hero-radius);
 }
 
-.ziteh-hero__title {
-	margin: 0 0 22px;
-	font-weight: 800;
-	color: var(--ziteh-green-dark);
-	line-height: 1.35;
-}
-
-.ziteh-hero__title-1 {
-	display: block;
-	font-size: 30px;
-	color: var(--ziteh-ink);
-	font-weight: 700;
-}
-
-.ziteh-hero__title-2 {
-	display: block;
-	font-size: 42px;
-}
-
-.ziteh-hero__desc {
-	margin: 0 0 30px;
-	max-width: 430px;
-	font-size: 16px;
-	color: var(--ziteh-muted);
-	line-height: 2;
-}
-
-.ziteh-hero__leaf {
+.ziteh-hero-slider__slides {
 	position: absolute;
-	inset-inline-start: 5%;
-	top: 12%;
-	color: rgba(124, 138, 92, .18);
+	inset: 0;
 }
 
-.ziteh-hero__leaf .ziteh-icon {
-	width: 90px;
-	height: 90px;
+.ziteh-hero-slide {
+	position: absolute;
+	inset: 0;
+	display: block;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .7s ease;
+	z-index: 1;
+}
+
+.ziteh-hero-slide.is-active {
+	opacity: 1;
+	visibility: visible;
+	z-index: 2;
+}
+
+.ziteh-hero-slide img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* Prev / next arrows */
+.ziteh-hero-slider__arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 5;
+	width: 44px;
+	height: 44px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 0;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, .85);
+	color: var(--ziteh-green-dark);
+	cursor: pointer;
+	box-shadow: var(--ziteh-shadow-sm);
+	transition: background .2s ease, color .2s ease;
+}
+
+.ziteh-hero-slider__arrow:hover {
+	background: var(--ziteh-green);
+	color: #fff;
+}
+
+.ziteh-hero-slider__arrow--prev {
+	inset-inline-end: 20px;
+}
+
+.ziteh-hero-slider__arrow--next {
+	inset-inline-start: 20px;
+}
+
+.ziteh-hero-slider__arrow .ziteh-icon {
+	width: 20px;
+	height: 20px;
+}
+
+/* Dots */
+.ziteh-hero-slider__dots {
+	position: absolute;
+	inset-inline: 0;
+	bottom: 18px;
+	z-index: 5;
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+}
+
+.ziteh-hero-slider__dot {
+	width: 9px;
+	height: 9px;
+	padding: 0;
+	border: 0;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, .6);
+	cursor: pointer;
+	transition: width .25s ease, background .25s ease;
+}
+
+.ziteh-hero-slider__dot.is-active {
+	width: 26px;
+	background: #fff;
 }
 
 /* ---------- Story ---------- */
@@ -864,6 +897,67 @@
 	height: 16px;
 }
 
+/* Sale badge (WooCommerce) */
+.ziteh-product-card__badge {
+	position: absolute;
+	top: 18px;
+	inset-inline-end: 18px;
+	z-index: 2;
+	background: var(--ziteh-green);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	padding: 4px 10px;
+	border-radius: 999px;
+}
+
+/* WooCommerce product image markup normalisation */
+.ziteh-product-card__thumb img,
+.ziteh-product-card__thumb .wp-post-image {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+	display: block;
+}
+
+/* WooCommerce price html (del/ins/amount) */
+.ziteh-product-card__price--wc {
+	display: flex;
+	align-items: baseline;
+	justify-content: center;
+	gap: 6px;
+	flex-wrap: wrap;
+	color: var(--ziteh-green-dark);
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.ziteh-product-card__price--wc del {
+	color: var(--ziteh-muted);
+	font-weight: 400;
+	font-size: 12.5px;
+	opacity: .8;
+}
+
+.ziteh-product-card__price--wc ins {
+	text-decoration: none;
+}
+
+.ziteh-product-card__price--wc .woocommerce-Price-currencySymbol {
+	font-size: 12px;
+	font-weight: 400;
+	color: var(--ziteh-muted);
+	margin-inline-start: 2px;
+}
+
+.ziteh-products__empty {
+	flex: 1;
+	text-align: center;
+	color: var(--ziteh-muted);
+	padding: 40px 0;
+	list-style: none;
+}
+
 /* ---------- Brands ---------- */
 
 .ziteh-brands {
@@ -1008,6 +1102,21 @@
 
 .ziteh-post-card__body .ziteh-link {
 	margin-top: auto;
+}
+
+.ziteh-post-card__thumb .wp-post-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.ziteh-blog__empty {
+	grid-column: 1 / -1;
+	text-align: center;
+	color: var(--ziteh-muted);
+	padding: 40px 0;
+	margin: 0;
 }
 
 /* ---------- Consultation CTA ---------- */
@@ -1402,7 +1511,7 @@
 /* ---------- Responsive ---------- */
 
 @media (max-width: 1024px) {
-	.ziteh-hero__title-2 { font-size: 34px; }
+	.ziteh-hero-slider { --ziteh-hero-h: 360px; }
 	.ziteh-footer__inner { grid-template-columns: repeat(2, 1fr); }
 	.ziteh-footer__col--brand { grid-column: 1 / -1; }
 }
@@ -1423,26 +1532,22 @@
 	.ziteh-header__menu.is-open ul { flex-direction: column; align-items: flex-start; gap: 14px; }
 	.ziteh-header { position: relative; }
 
-	.ziteh-hero__inner,
 	.ziteh-story__inner,
 	.ziteh-newsletter__box,
 	.ziteh-cta__box {
 		grid-template-columns: 1fr;
 	}
-	.ziteh-hero__content,
 	.ziteh-story__content,
 	.ziteh-newsletter__intro,
 	.ziteh-cta__content {
 		order: 1;
 		text-align: center;
 	}
-	.ziteh-hero__media,
 	.ziteh-story__media,
 	.ziteh-newsletter__form,
 	.ziteh-cta__media {
 		order: 2;
 	}
-	.ziteh-hero__desc { margin-inline: auto; }
 
 	.ziteh-blog__grid,
 	.ziteh-testimonials__grid {
@@ -1458,5 +1563,6 @@
 	.ziteh-insta__grid { grid-template-columns: repeat(3, 1fr) !important; }
 	.ziteh-brands__row { gap: 24px; }
 	.ziteh-routine__steps.is-active { grid-template-columns: 1fr; }
-	.ziteh-hero__title-2 { font-size: 28px; }
+	.ziteh-hero-slider { --ziteh-hero-h: 240px; }
+	.ziteh-hero-slider__arrow { width: 36px; height: 36px; }
 }

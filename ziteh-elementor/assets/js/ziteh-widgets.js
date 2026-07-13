@@ -91,6 +91,91 @@
 	}
 
 	/**
+	 * Wire up a hero image slider (fade slides, autoplay, arrows, dots).
+	 *
+	 * @param {HTMLElement} root Element carrying [data-ziteh-hero].
+	 */
+	function initHero(root) {
+		if (root.dataset.zitehHeroReady === '1') {
+			return;
+		}
+		root.dataset.zitehHeroReady = '1';
+
+		var slides = Array.prototype.slice.call(root.querySelectorAll('.ziteh-hero-slide'));
+		var dots = Array.prototype.slice.call(root.querySelectorAll('[data-ziteh-hero-dot]'));
+		var prev = root.querySelector('[data-ziteh-hero-prev]');
+		var next = root.querySelector('[data-ziteh-hero-next]');
+		var delay = parseInt(root.getAttribute('data-autoplay'), 10) || 0;
+
+		if (slides.length <= 1) {
+			return;
+		}
+
+		var current = Math.max(0, slides.findIndex(function (s) {
+			return s.classList.contains('is-active');
+		}));
+		var timer = null;
+
+		function show(n) {
+			current = (n + slides.length) % slides.length;
+			slides.forEach(function (s, i) {
+				s.classList.toggle('is-active', i === current);
+			});
+			dots.forEach(function (d, i) {
+				d.classList.toggle('is-active', i === current);
+			});
+		}
+
+		function nextSlide() {
+			show(current + 1);
+		}
+
+		function prevSlide() {
+			show(current - 1);
+		}
+
+		function start() {
+			if (delay > 0) {
+				stop();
+				timer = setInterval(nextSlide, delay);
+			}
+		}
+
+		function stop() {
+			if (timer) {
+				clearInterval(timer);
+				timer = null;
+			}
+		}
+
+		if (next) {
+			next.addEventListener('click', function () {
+				nextSlide();
+				start();
+			});
+		}
+		if (prev) {
+			prev.addEventListener('click', function () {
+				prevSlide();
+				start();
+			});
+		}
+		dots.forEach(function (dot) {
+			dot.addEventListener('click', function () {
+				show(parseInt(dot.getAttribute('data-ziteh-hero-dot'), 10) || 0);
+				start();
+			});
+		});
+
+		// Pause on hover for usability.
+		root.addEventListener('mouseenter', stop);
+		root.addEventListener('mouseleave', start);
+
+		show(current);
+		start();
+	}
+
+	/**
 	 * Wire up a routine day/night toggle.
 	 *
 	 * @param {HTMLElement} toggle Element carrying [data-ziteh-routine].
@@ -153,6 +238,7 @@
 	 */
 	function initAll(scope) {
 		scope = scope || document;
+		scope.querySelectorAll('[data-ziteh-hero]').forEach(initHero);
 		scope.querySelectorAll('[data-ziteh-slider]').forEach(initSlider);
 		scope.querySelectorAll('[data-ziteh-routine]').forEach(initRoutine);
 		scope.querySelectorAll('[data-ziteh-burger]').forEach(initBurger);
@@ -172,7 +258,7 @@
 			if (!window.elementorFrontend || !window.elementorFrontend.hooks) {
 				return;
 			}
-			var slugs = ['ziteh-categories', 'ziteh-products', 'ziteh-routine', 'ziteh-header'];
+			var slugs = ['ziteh-hero', 'ziteh-categories', 'ziteh-products', 'ziteh-routine', 'ziteh-header'];
 			slugs.forEach(function (slug) {
 				window.elementorFrontend.hooks.addAction(
 					'frontend/element_ready/' + slug + '.default',
