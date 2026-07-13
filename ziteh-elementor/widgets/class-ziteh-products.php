@@ -448,25 +448,28 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 			$url = ! empty( $p['p_url']['url'] ) ? $p['p_url']['url'] : '#';
 			?>
 			<li class="ziteh-product-card">
-				<button class="ziteh-product-card__wish" type="button" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'ziteh' ); ?>">
-					<?php echo $this->get_icon_svg( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-				</button>
-				<a class="ziteh-product-card__thumb" href="<?php echo esc_url( $url ); ?>">
-					<?php if ( ! empty( $p['p_image']['url'] ) ) : ?>
-						<img src="<?php echo esc_url( $p['p_image']['url'] ); ?>" alt="<?php echo esc_attr( $p['p_name'] ); ?>">
-					<?php endif; ?>
-				</a>
+				<div class="ziteh-product-card__media">
+					<button class="ziteh-product-card__wish" type="button" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'ziteh' ); ?>">
+						<?php echo $this->get_icon_svg( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					</button>
+					<a class="ziteh-product-card__thumb" href="<?php echo esc_url( $url ); ?>">
+						<?php if ( ! empty( $p['p_image']['url'] ) ) : ?>
+							<img src="<?php echo esc_url( $p['p_image']['url'] ); ?>" alt="<?php echo esc_attr( $p['p_name'] ); ?>">
+						<?php endif; ?>
+					</a>
+				</div>
 				<div class="ziteh-product-card__body">
 					<span class="ziteh-product-card__brand"><?php echo esc_html( $p['p_brand'] ); ?></span>
 					<a class="ziteh-product-card__name" href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $p['p_name'] ); ?></a>
-					<span class="ziteh-product-card__price">
-						<strong><?php echo esc_html( $p['p_price'] ); ?></strong>
-						<em><?php echo esc_html( $p['p_currency'] ); ?></em>
-					</span>
-					<a class="ziteh-btn ziteh-btn--outline ziteh-product-card__btn" href="<?php echo esc_url( $url ); ?>">
-						<?php echo $this->get_icon_svg( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-						<?php echo esc_html( $p['p_button'] ); ?>
-					</a>
+					<div class="ziteh-product-card__foot">
+						<span class="ziteh-product-card__price">
+							<strong><?php echo esc_html( $p['p_price'] ); ?></strong>
+							<em><?php echo esc_html( $p['p_currency'] ); ?></em>
+						</span>
+						<a class="ziteh-product-card__add" href="<?php echo esc_url( $url ); ?>" aria-label="<?php echo esc_attr( $p['p_button'] ); ?>" title="<?php echo esc_attr( $p['p_button'] ); ?>">
+							<?php echo $this->get_icon_svg( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						</a>
+					</div>
 				</div>
 			</li>
 			<?php
@@ -566,40 +569,45 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 		$price_html = $product->get_price_html();
 		?>
 		<li class="ziteh-product-card">
-			<button class="ziteh-product-card__wish" type="button" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'ziteh' ); ?>">
-				<?php echo $this->get_icon_svg( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-			</button>
+			<div class="ziteh-product-card__media">
+				<button class="ziteh-product-card__wish" type="button" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'ziteh' ); ?>">
+					<?php echo $this->get_icon_svg( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				</button>
 
-			<?php if ( $product->is_on_sale() ) : ?>
-				<span class="ziteh-product-card__badge"><?php esc_html_e( 'تخفیف', 'ziteh' ); ?></span>
-			<?php endif; ?>
+				<?php if ( $product->is_on_sale() ) : ?>
+					<span class="ziteh-product-card__badge"><?php esc_html_e( 'تخفیف', 'ziteh' ); ?></span>
+				<?php endif; ?>
 
-			<a class="ziteh-product-card__thumb" href="<?php echo esc_url( $permalink ); ?>">
-				<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-			</a>
+				<a class="ziteh-product-card__thumb" href="<?php echo esc_url( $permalink ); ?>">
+					<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				</a>
+			</div>
 			<div class="ziteh-product-card__body">
 				<?php if ( $brand ) : ?>
 					<span class="ziteh-product-card__brand"><?php echo esc_html( $brand ); ?></span>
 				<?php endif; ?>
 				<a class="ziteh-product-card__name" href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $name ); ?></a>
-				<?php if ( $price_html ) : ?>
-					<span class="ziteh-product-card__price ziteh-product-card__price--wc"><?php echo wp_kses_post( $price_html ); ?></span>
-				<?php endif; ?>
-				<?php if ( $show_cart ) : ?>
-					<?php
-					$cart_url  = $product->add_to_cart_url();
-					$cart_text = $product->add_to_cart_text();
-					$ajax_cls  = $product->supports( 'ajax_add_to_cart' ) && $product->is_purchasable() && $product->is_in_stock() ? ' add_to_cart_button ajax_add_to_cart' : '';
-					?>
-					<a class="ziteh-btn ziteh-btn--outline ziteh-product-card__btn<?php echo esc_attr( $ajax_cls ); ?>"
-						href="<?php echo esc_url( $cart_url ); ?>"
-						data-quantity="1"
-						data-product_id="<?php echo esc_attr( $product->get_id() ); ?>"
-						rel="nofollow">
-						<?php echo $this->get_icon_svg( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-						<?php echo esc_html( $cart_text ); ?>
-					</a>
-				<?php endif; ?>
+				<div class="ziteh-product-card__foot">
+					<?php if ( $price_html ) : ?>
+						<span class="ziteh-product-card__price ziteh-product-card__price--wc"><?php echo wp_kses_post( $price_html ); ?></span>
+					<?php endif; ?>
+					<?php if ( $show_cart ) : ?>
+						<?php
+						$cart_url  = $product->add_to_cart_url();
+						$cart_text = $product->add_to_cart_text();
+						$ajax_cls  = $product->supports( 'ajax_add_to_cart' ) && $product->is_purchasable() && $product->is_in_stock() ? ' add_to_cart_button ajax_add_to_cart' : '';
+						?>
+						<a class="ziteh-product-card__add<?php echo esc_attr( $ajax_cls ); ?>"
+							href="<?php echo esc_url( $cart_url ); ?>"
+							data-quantity="1"
+							data-product_id="<?php echo esc_attr( $product->get_id() ); ?>"
+							aria-label="<?php echo esc_attr( $cart_text ); ?>"
+							title="<?php echo esc_attr( $cart_text ); ?>"
+							rel="nofollow">
+							<?php echo $this->get_icon_svg( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						</a>
+					<?php endif; ?>
+				</div>
 			</div>
 		</li>
 		<?php

@@ -31,63 +31,62 @@
 			return;
 		}
 
-		var index = 0;
-
-		function items() {
-			return track.children.length;
-		}
-
-		function perView() {
-			var v = parseInt(getComputedStyle(track).getPropertyValue('--ziteh-per-view'), 10);
-			return isNaN(v) || v < 1 ? 1 : v;
-		}
+		// The scroll container is the track's parent (viewport).
+		var viewport = track.parentElement;
 
 		function step() {
 			var first = track.children[0];
 			if (!first) {
-				return 0;
+				return viewport.clientWidth;
 			}
 			var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
 			return first.getBoundingClientRect().width + gap;
 		}
 
-		function maxIndex() {
-			return Math.max(0, items() - perView());
+		function isRtl() {
+			return getComputedStyle(track).direction === 'rtl';
 		}
 
-		function apply() {
-			index = Math.max(0, Math.min(index, maxIndex()));
-			var dir = getComputedStyle(track).direction === 'rtl' ? 1 : -1;
-			track.style.transform = 'translateX(' + (dir * index * step()) + 'px)';
+		// Scroll one item towards later (next) or earlier (prev) items. RTL-safe
+		// via native scrollLeft sign handling in modern browsers.
+		function scrollByDir(forward) {
+			var amount = step() * (forward ? 1 : -1) * (isRtl() ? -1 : 1);
+			viewport.scrollBy({ left: amount, behavior: 'smooth' });
+		}
+
+		function update() {
+			var max = track.scrollWidth - viewport.clientWidth - 1;
+			var pos = Math.abs(viewport.scrollLeft);
 			if (prev) {
-				prev.disabled = index <= 0;
+				prev.disabled = pos <= 1;
 			}
 			if (next) {
-				next.disabled = index >= maxIndex();
+				next.disabled = pos >= max;
 			}
 		}
 
 		if (prev) {
 			prev.addEventListener('click', function () {
-				index -= 1;
-				apply();
+				scrollByDir(false);
 			});
 		}
 		if (next) {
 			next.addEventListener('click', function () {
-				index += 1;
-				apply();
+				scrollByDir(true);
 			});
 		}
 
-		// Re-clamp on resize (per-view is responsive).
+		viewport.addEventListener('scroll', function () {
+			window.requestAnimationFrame(update);
+		});
+
 		var t;
 		window.addEventListener('resize', function () {
 			clearTimeout(t);
-			t = setTimeout(apply, 150);
+			t = setTimeout(update, 150);
 		});
 
-		apply();
+		update();
 	}
 
 	/**
