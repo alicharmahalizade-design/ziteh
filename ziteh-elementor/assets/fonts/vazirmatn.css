@@ -1,0 +1,40 @@
+/**
+ * Vazirmatn — a free, open-source Persian/Arabic web font (SIL OFL 1.1).
+ * Loaded from the jsDelivr CDN so the plugin stays lightweight. If you prefer
+ * to self-host, download the woff2 files into this folder and point the src
+ * URLs below at them instead.
+ *
+ * Project: https://github.com/rastikerdar/vazirmatn
+ */
+
+@font-face {
+	font-family: 'Vazirmatn';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Vazirmatn';
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Medium.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Vazirmatn';
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Bold.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Vazirmatn';
+	font-style: normal;
+	font-weight: 800;
+	font-display: swap;
+	src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-ExtraBold.woff2') format('woff2');
+}

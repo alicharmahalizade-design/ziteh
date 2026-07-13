@@ -1,0 +1,1462 @@
+/**
+ * Ziteh Elementor widgets — front-end + editor styles.
+ *
+ * All widgets share the palette and primitives defined under :root here, then
+ * each section adds its own block. RTL-first (the design is a Persian store).
+ *
+ * Palette (sampled from the reference design):
+ *   green        #7c8a5c   primary sage/olive
+ *   green-dark   #55603a   headings & strong text
+ *   green-soft   #eef0e6   tint used for chips / toggles
+ *   cream        #f6f2ea   page + section washes
+ *   cream-2      #f1ece2   alt wash (hero / cards)
+ *   beige        #e9e2d5   image placeholders
+ *   ink          #47473f   body text
+ *   muted        #9b9a8d   secondary text
+ *   line         #e8e2d6   hairline borders
+ */
+
+:root {
+	--ziteh-green: #7c8a5c;
+	--ziteh-green-dark: #55603a;
+	--ziteh-green-hover: #6b784e;
+	--ziteh-green-soft: #eef0e6;
+	--ziteh-cream: #f6f2ea;
+	--ziteh-cream-2: #f1ece2;
+	--ziteh-beige: #e9e2d5;
+	--ziteh-ink: #47473f;
+	--ziteh-muted: #9b9a8d;
+	--ziteh-line: #e8e2d6;
+	--ziteh-white: #ffffff;
+	--ziteh-radius: 18px;
+	--ziteh-radius-lg: 28px;
+	--ziteh-shadow: 0 18px 40px -24px rgba(60, 65, 40, 0.35);
+	--ziteh-shadow-sm: 0 10px 24px -18px rgba(60, 65, 40, 0.4);
+	--ziteh-font: 'Vazirmatn', 'IRANSans', 'Tahoma', sans-serif;
+	--ziteh-maxw: 1200px;
+}
+
+/* ---------- Shared primitives ---------- */
+
+[class^="ziteh-"],
+[class*=" ziteh-"] {
+	box-sizing: border-box;
+}
+
+.ziteh-topbar,
+.ziteh-header,
+.ziteh-hero,
+.ziteh-story,
+.ziteh-cats,
+.ziteh-routine,
+.ziteh-products,
+.ziteh-brands,
+.ziteh-blog,
+.ziteh-cta,
+.ziteh-testimonials,
+.ziteh-insta,
+.ziteh-newsletter,
+.ziteh-footer {
+	direction: rtl;
+	font-family: var(--ziteh-font);
+	color: var(--ziteh-ink);
+	line-height: 1.9;
+	-webkit-font-smoothing: antialiased;
+}
+
+.ziteh-container {
+	width: 100%;
+	max-width: var(--ziteh-maxw);
+	margin-inline: auto;
+	padding-inline: 24px;
+}
+
+.ziteh-icon {
+	width: 22px;
+	height: 22px;
+	flex: 0 0 auto;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+/* Section title with a little leaf glyph, matching the design's headings. */
+.ziteh-section-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 34px;
+	font-size: 26px;
+	font-weight: 700;
+	color: var(--ziteh-green-dark);
+}
+
+.ziteh-section-title--center {
+	justify-content: center;
+	text-align: center;
+}
+
+.ziteh-section-title--start {
+	justify-content: flex-start;
+}
+
+.ziteh-section-title__leaf {
+	width: 20px;
+	height: 20px;
+	color: var(--ziteh-green);
+}
+
+/* Section head that carries a "مشاهده همه" link opposite a centred title. */
+.ziteh-section-head {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 34px;
+}
+
+.ziteh-section-head .ziteh-section-title {
+	margin: 0;
+}
+
+.ziteh-section-head .ziteh-link--muted {
+	position: absolute;
+	inset-inline-start: 0;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+/* Buttons */
+.ziteh-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 13px 26px;
+	border-radius: 999px;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 500;
+	line-height: 1;
+	cursor: pointer;
+	border: 1px solid transparent;
+	text-decoration: none;
+	transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.ziteh-btn .ziteh-icon {
+	width: 18px;
+	height: 18px;
+}
+
+.ziteh-btn--primary {
+	background: var(--ziteh-green);
+	color: #fff;
+}
+
+.ziteh-btn--primary:hover {
+	background: var(--ziteh-green-hover);
+	color: #fff;
+}
+
+.ziteh-btn--outline {
+	background: transparent;
+	color: var(--ziteh-green-dark);
+	border-color: var(--ziteh-green);
+}
+
+.ziteh-btn--outline:hover {
+	background: var(--ziteh-green);
+	color: #fff;
+}
+
+/* Inline text link with a chevron. */
+.ziteh-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	color: var(--ziteh-green);
+	font-size: 14px;
+	font-weight: 500;
+	text-decoration: none;
+	transition: color .2s ease, gap .2s ease;
+}
+
+.ziteh-link .ziteh-icon {
+	width: 16px;
+	height: 16px;
+}
+
+.ziteh-link:hover {
+	color: var(--ziteh-green-hover);
+	gap: 10px;
+}
+
+.ziteh-link--muted {
+	color: var(--ziteh-muted);
+	font-size: 13px;
+}
+
+/* ---------- Top bar ---------- */
+
+.ziteh-topbar {
+	background: var(--ziteh-white);
+	border-bottom: 1px solid var(--ziteh-line);
+	font-size: 13px;
+	color: var(--ziteh-muted);
+}
+
+.ziteh-topbar__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	min-height: 46px;
+}
+
+.ziteh-topbar__cart,
+.ziteh-topbar__account {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	color: var(--ziteh-ink);
+	text-decoration: none;
+	white-space: nowrap;
+	transition: color .2s ease;
+}
+
+.ziteh-topbar__cart:hover,
+.ziteh-topbar__account:hover {
+	color: var(--ziteh-green);
+}
+
+.ziteh-topbar__cart .ziteh-icon,
+.ziteh-topbar__account .ziteh-icon {
+	width: 18px;
+	height: 18px;
+	color: var(--ziteh-green);
+}
+
+.ziteh-topbar__search {
+	flex: 1 1 auto;
+	max-width: 420px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 7px 16px;
+	background: var(--ziteh-cream);
+	border-radius: 999px;
+}
+
+.ziteh-topbar__search .ziteh-icon {
+	width: 16px;
+	height: 16px;
+	color: var(--ziteh-muted);
+}
+
+.ziteh-topbar__search input {
+	flex: 1;
+	border: 0;
+	background: transparent;
+	font-family: inherit;
+	font-size: 13px;
+	color: var(--ziteh-ink);
+	outline: none;
+}
+
+/* ---------- Header ---------- */
+
+.ziteh-header {
+	background: var(--ziteh-white);
+	border-bottom: 1px solid var(--ziteh-line);
+}
+
+.ziteh-header__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 74px;
+	gap: 20px;
+}
+
+.ziteh-header__logo {
+	text-decoration: none;
+	order: 2;
+}
+
+.ziteh-header__logo img {
+	height: 44px;
+	width: auto;
+	display: block;
+}
+
+.ziteh-header__logo-text {
+	font-size: 30px;
+	font-weight: 800;
+	color: var(--ziteh-green-dark);
+	letter-spacing: -.5px;
+}
+
+.ziteh-header__menu {
+	order: 1;
+	flex: 1;
+}
+
+.ziteh-header__menu ul {
+	display: flex;
+	align-items: center;
+	gap: 30px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ziteh-header__menu a {
+	font-size: 15px;
+	font-weight: 500;
+	color: var(--ziteh-ink);
+	text-decoration: none;
+	position: relative;
+	transition: color .2s ease;
+}
+
+.ziteh-header__menu a:hover,
+.ziteh-header__menu a.is-active {
+	color: var(--ziteh-green);
+}
+
+.ziteh-header__menu a.is-active::after {
+	content: '';
+	position: absolute;
+	inset-inline: 0;
+	bottom: -6px;
+	height: 2px;
+	border-radius: 2px;
+	background: var(--ziteh-green);
+}
+
+.ziteh-header__burger {
+	display: none;
+	flex-direction: column;
+	gap: 5px;
+	width: 40px;
+	height: 40px;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	order: 3;
+}
+
+.ziteh-header__burger span {
+	width: 22px;
+	height: 2px;
+	background: var(--ziteh-green-dark);
+	border-radius: 2px;
+}
+
+/* ---------- Hero ---------- */
+
+.ziteh-hero {
+	position: relative;
+	background: var(--ziteh-cream-2);
+	overflow: hidden;
+}
+
+.ziteh-hero__inner {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	align-items: center;
+	gap: 40px;
+	min-height: 460px;
+	padding-block: 40px;
+}
+
+.ziteh-hero__media {
+	order: 1;
+}
+
+.ziteh-hero__content {
+	order: 2;
+	text-align: start;
+}
+
+.ziteh-hero__media img {
+	width: 100%;
+	height: auto;
+	display: block;
+	border-radius: var(--ziteh-radius-lg);
+	object-fit: cover;
+}
+
+.ziteh-hero__title {
+	margin: 0 0 22px;
+	font-weight: 800;
+	color: var(--ziteh-green-dark);
+	line-height: 1.35;
+}
+
+.ziteh-hero__title-1 {
+	display: block;
+	font-size: 30px;
+	color: var(--ziteh-ink);
+	font-weight: 700;
+}
+
+.ziteh-hero__title-2 {
+	display: block;
+	font-size: 42px;
+}
+
+.ziteh-hero__desc {
+	margin: 0 0 30px;
+	max-width: 430px;
+	font-size: 16px;
+	color: var(--ziteh-muted);
+	line-height: 2;
+}
+
+.ziteh-hero__leaf {
+	position: absolute;
+	inset-inline-start: 5%;
+	top: 12%;
+	color: rgba(124, 138, 92, .18);
+}
+
+.ziteh-hero__leaf .ziteh-icon {
+	width: 90px;
+	height: 90px;
+}
+
+/* ---------- Story ---------- */
+
+.ziteh-story {
+	background: var(--ziteh-white);
+	padding-block: 70px;
+}
+
+.ziteh-story__inner {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	align-items: center;
+	gap: 50px;
+}
+
+.ziteh-story__media {
+	order: 1;
+}
+
+.ziteh-story__content {
+	order: 2;
+}
+
+.ziteh-story__media {
+	position: relative;
+	background: var(--ziteh-green-soft);
+	border-radius: var(--ziteh-radius-lg);
+	padding: 18px;
+}
+
+.ziteh-story__media img {
+	width: 100%;
+	height: 300px;
+	object-fit: cover;
+	border-radius: var(--ziteh-radius);
+	display: block;
+}
+
+.ziteh-story__text {
+	margin-bottom: 22px;
+	color: var(--ziteh-muted);
+	font-size: 15px;
+	line-height: 2.1;
+}
+
+.ziteh-story__text p {
+	margin: 0;
+}
+
+/* ---------- Categories ---------- */
+
+.ziteh-cats {
+	background: var(--ziteh-cream);
+	padding-block: 66px;
+}
+
+.ziteh-slider {
+	position: relative;
+}
+
+.ziteh-cats__viewport {
+	overflow: hidden;
+}
+
+.ziteh-cats__track {
+	display: flex;
+	gap: 22px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	transition: transform .45s cubic-bezier(.4, 0, .2, 1);
+	--ziteh-per-view: 6;
+}
+
+.ziteh-cat-card {
+	flex: 0 0 calc((100% - (var(--ziteh-per-view) - 1) * 22px) / var(--ziteh-per-view));
+}
+
+.ziteh-cat-card a {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: var(--ziteh-ink);
+}
+
+.ziteh-cat-card__thumb {
+	display: block;
+	aspect-ratio: 1 / 1;
+	border-radius: var(--ziteh-radius);
+	overflow: hidden;
+	background: var(--ziteh-beige);
+	margin-bottom: 14px;
+	box-shadow: var(--ziteh-shadow-sm);
+	transition: transform .25s ease;
+}
+
+.ziteh-cat-card a:hover .ziteh-cat-card__thumb {
+	transform: translateY(-4px);
+}
+
+.ziteh-cat-card__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.ziteh-cat-card__title {
+	font-size: 15px;
+	font-weight: 500;
+	color: var(--ziteh-ink);
+}
+
+/* dot-style prev/next under the categories slider */
+.ziteh-slider__nav {
+	display: flex;
+	justify-content: center;
+	gap: 12px;
+	margin-top: 26px;
+}
+
+.ziteh-slider__btn {
+	width: 38px;
+	height: 38px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 1px solid var(--ziteh-line);
+	background: var(--ziteh-white);
+	color: var(--ziteh-green-dark);
+	cursor: pointer;
+	transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.ziteh-slider__btn:hover {
+	background: var(--ziteh-green);
+	border-color: var(--ziteh-green);
+	color: #fff;
+}
+
+.ziteh-slider__btn .ziteh-icon {
+	width: 18px;
+	height: 18px;
+}
+
+/* ---------- Routine ---------- */
+
+.ziteh-routine {
+	background: var(--ziteh-white);
+	padding-block: 70px;
+}
+
+.ziteh-routine__head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 24px;
+	margin-bottom: 40px;
+}
+
+.ziteh-routine__heading .ziteh-section-title {
+	margin-bottom: 8px;
+}
+
+.ziteh-routine__subtitle {
+	margin: 0;
+	color: var(--ziteh-muted);
+	font-size: 15px;
+}
+
+.ziteh-routine__toggle {
+	display: inline-flex;
+	background: var(--ziteh-cream);
+	border-radius: 999px;
+	padding: 5px;
+	gap: 4px;
+}
+
+.ziteh-routine__toggle-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 9px 22px;
+	border-radius: 999px;
+	border: 0;
+	background: transparent;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--ziteh-muted);
+	cursor: pointer;
+	transition: background .2s ease, color .2s ease;
+}
+
+.ziteh-routine__toggle-btn .ziteh-icon {
+	width: 17px;
+	height: 17px;
+}
+
+.ziteh-routine__toggle-btn.is-active {
+	background: var(--ziteh-green);
+	color: #fff;
+}
+
+.ziteh-routine__steps {
+	display: none;
+	grid-auto-flow: column;
+	grid-auto-columns: 1fr;
+	gap: 18px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ziteh-routine__steps.is-active {
+	display: grid;
+}
+
+.ziteh-step {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 10px;
+	padding: 26px 16px 20px;
+	background: var(--ziteh-cream);
+	border-radius: var(--ziteh-radius);
+}
+
+.ziteh-step__num {
+	position: absolute;
+	top: 12px;
+	inset-inline-end: 14px;
+	font-size: 13px;
+	font-weight: 700;
+	color: var(--ziteh-green);
+}
+
+.ziteh-step__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 54px;
+	height: 54px;
+	border-radius: 50%;
+	background: var(--ziteh-white);
+	color: var(--ziteh-green);
+}
+
+.ziteh-step__icon .ziteh-icon {
+	width: 26px;
+	height: 26px;
+}
+
+.ziteh-step__title {
+	font-size: 15px;
+	font-weight: 700;
+	color: var(--ziteh-green-dark);
+}
+
+.ziteh-step__text {
+	font-size: 12.5px;
+	line-height: 1.7;
+	color: var(--ziteh-muted);
+}
+
+.ziteh-routine__foot {
+	margin-top: 30px;
+	text-align: center;
+}
+
+/* ---------- Products ---------- */
+
+.ziteh-products {
+	background: var(--ziteh-cream);
+	padding-block: 66px;
+}
+
+.ziteh-slider--sided {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.ziteh-slider__side {
+	flex: 0 0 auto;
+	width: 42px;
+	height: 42px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 1px solid var(--ziteh-line);
+	background: var(--ziteh-white);
+	color: var(--ziteh-green-dark);
+	cursor: pointer;
+	transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.ziteh-slider__side:hover {
+	background: var(--ziteh-green);
+	border-color: var(--ziteh-green);
+	color: #fff;
+}
+
+.ziteh-products__viewport {
+	flex: 1;
+	overflow: hidden;
+}
+
+.ziteh-products__track {
+	display: flex;
+	gap: 20px;
+	margin: 0;
+	padding: 6px 0;
+	list-style: none;
+	transition: transform .45s cubic-bezier(.4, 0, .2, 1);
+	--ziteh-per-view: 5;
+}
+
+.ziteh-product-card {
+	position: relative;
+	flex: 0 0 calc((100% - (var(--ziteh-per-view) - 1) * 20px) / var(--ziteh-per-view));
+	background: var(--ziteh-white);
+	border: 1px solid var(--ziteh-line);
+	border-radius: var(--ziteh-radius);
+	padding: 14px;
+	display: flex;
+	flex-direction: column;
+	transition: box-shadow .25s ease, transform .25s ease;
+}
+
+.ziteh-product-card:hover {
+	box-shadow: var(--ziteh-shadow);
+	transform: translateY(-4px);
+}
+
+.ziteh-product-card__wish {
+	position: absolute;
+	top: 18px;
+	inset-inline-start: 18px;
+	width: 34px;
+	height: 34px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	background: var(--ziteh-cream);
+	border: 0;
+	color: var(--ziteh-muted);
+	cursor: pointer;
+	z-index: 2;
+	transition: color .2s ease, background .2s ease;
+}
+
+.ziteh-product-card__wish:hover {
+	color: #c06a6a;
+	background: #fff;
+}
+
+.ziteh-product-card__wish .ziteh-icon {
+	width: 18px;
+	height: 18px;
+}
+
+.ziteh-product-card__thumb {
+	display: block;
+	aspect-ratio: 1 / 1;
+	border-radius: 14px;
+	overflow: hidden;
+	background: var(--ziteh-beige);
+	margin-bottom: 14px;
+}
+
+.ziteh-product-card__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.ziteh-product-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: 7px;
+	flex: 1;
+	text-align: center;
+}
+
+.ziteh-product-card__brand {
+	font-size: 12px;
+	color: var(--ziteh-muted);
+}
+
+.ziteh-product-card__name {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--ziteh-ink);
+	text-decoration: none;
+	line-height: 1.7;
+}
+
+.ziteh-product-card__name:hover {
+	color: var(--ziteh-green);
+}
+
+.ziteh-product-card__price {
+	margin-top: 2px;
+	color: var(--ziteh-green-dark);
+}
+
+.ziteh-product-card__price strong {
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.ziteh-product-card__price em {
+	font-style: normal;
+	font-size: 12px;
+	color: var(--ziteh-muted);
+	margin-inline-start: 3px;
+}
+
+.ziteh-product-card__btn {
+	margin-top: 12px;
+	width: 100%;
+	padding: 10px 16px;
+	font-size: 13px;
+}
+
+.ziteh-product-card__btn .ziteh-icon {
+	width: 16px;
+	height: 16px;
+}
+
+/* ---------- Brands ---------- */
+
+.ziteh-brands {
+	background: var(--ziteh-white);
+	padding-block: 56px;
+}
+
+.ziteh-brands__row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 40px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ziteh-brands__item {
+	position: relative;
+}
+
+.ziteh-brands__item:not(:last-child)::after {
+	content: '';
+	position: absolute;
+	inset-inline-start: -20px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 1px;
+	height: 26px;
+	background: var(--ziteh-line);
+}
+
+.ziteh-brands__item a {
+	display: inline-flex;
+	align-items: center;
+	color: var(--ziteh-muted);
+	text-decoration: none;
+	font-size: 17px;
+	font-weight: 700;
+	letter-spacing: .5px;
+	filter: grayscale(1);
+	opacity: .7;
+	transition: opacity .2s ease, color .2s ease;
+}
+
+.ziteh-brands__item a:hover {
+	opacity: 1;
+	color: var(--ziteh-green-dark);
+}
+
+.ziteh-brands__item img {
+	max-height: 34px;
+	width: auto;
+	display: block;
+}
+
+/* ---------- Blog ---------- */
+
+.ziteh-blog {
+	background: var(--ziteh-cream);
+	padding-block: 66px;
+}
+
+.ziteh-blog__grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 26px;
+}
+
+.ziteh-post-card {
+	background: var(--ziteh-white);
+	border-radius: var(--ziteh-radius);
+	overflow: hidden;
+	box-shadow: var(--ziteh-shadow-sm);
+	display: flex;
+	flex-direction: column;
+	transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.ziteh-post-card:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--ziteh-shadow);
+}
+
+.ziteh-post-card__thumb {
+	position: relative;
+	display: block;
+	aspect-ratio: 16 / 10;
+	background: var(--ziteh-beige);
+	overflow: hidden;
+}
+
+.ziteh-post-card__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform .4s ease;
+}
+
+.ziteh-post-card:hover .ziteh-post-card__thumb img {
+	transform: scale(1.05);
+}
+
+.ziteh-post-card__chip {
+	position: absolute;
+	top: 14px;
+	inset-inline-end: 14px;
+	background: rgba(255, 255, 255, .92);
+	color: var(--ziteh-green-dark);
+	font-size: 12px;
+	font-weight: 500;
+	padding: 5px 12px;
+	border-radius: 999px;
+}
+
+.ziteh-post-card__body {
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	flex: 1;
+}
+
+.ziteh-post-card__title {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.9;
+	color: var(--ziteh-ink);
+}
+
+.ziteh-post-card__title a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.ziteh-post-card__title a:hover {
+	color: var(--ziteh-green);
+}
+
+.ziteh-post-card__body .ziteh-link {
+	margin-top: auto;
+}
+
+/* ---------- Consultation CTA ---------- */
+
+.ziteh-cta {
+	background: var(--ziteh-white);
+	padding-block: 40px;
+}
+
+.ziteh-cta__box {
+	display: grid;
+	grid-template-columns: 1fr 1.2fr;
+	align-items: center;
+	gap: 30px;
+	background: var(--ziteh-green-soft);
+	border-radius: var(--ziteh-radius-lg);
+	padding: 40px;
+	overflow: hidden;
+}
+
+.ziteh-cta__media {
+	order: 1;
+}
+
+.ziteh-cta__content {
+	order: 2;
+}
+
+.ziteh-cta__media img {
+	width: 100%;
+	height: 100%;
+	max-height: 260px;
+	object-fit: contain;
+	display: block;
+}
+
+.ziteh-cta__title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 14px;
+	font-size: 26px;
+	font-weight: 700;
+	color: var(--ziteh-green-dark);
+}
+
+.ziteh-cta__text {
+	margin: 0 0 24px;
+	max-width: 460px;
+	color: #5c6150;
+	font-size: 15px;
+	line-height: 2;
+}
+
+/* ---------- Testimonials ---------- */
+
+.ziteh-testimonials {
+	background: var(--ziteh-cream);
+	padding-block: 66px;
+}
+
+.ziteh-testimonials__grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 26px;
+}
+
+.ziteh-testimonial-card {
+	margin: 0;
+	background: var(--ziteh-white);
+	border-radius: var(--ziteh-radius);
+	padding: 28px 26px;
+	box-shadow: var(--ziteh-shadow-sm);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 16px;
+}
+
+.ziteh-stars {
+	display: inline-flex;
+	gap: 3px;
+	color: #d8c98a;
+}
+
+.ziteh-stars__star .ziteh-icon {
+	width: 17px;
+	height: 17px;
+}
+
+.ziteh-stars__star.is-filled .ziteh-icon {
+	fill: #e2c15a;
+	stroke: #e2c15a;
+}
+
+.ziteh-testimonial-card__quote {
+	margin: 0;
+	font-size: 14.5px;
+	line-height: 2.1;
+	color: var(--ziteh-ink);
+}
+
+.ziteh-testimonial-card__author {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	margin-top: auto;
+}
+
+.ziteh-testimonial-card__avatar {
+	width: 54px;
+	height: 54px;
+	border-radius: 50%;
+	overflow: hidden;
+	background: var(--ziteh-green-soft);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ziteh-testimonial-card__avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.ziteh-testimonial-card__initial {
+	font-size: 20px;
+	font-weight: 700;
+	color: var(--ziteh-green);
+}
+
+.ziteh-testimonial-card__name {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--ziteh-green-dark);
+}
+
+/* ---------- Instagram ---------- */
+
+.ziteh-insta {
+	background: var(--ziteh-white);
+	padding-block: 66px;
+}
+
+.ziteh-insta__handle {
+	margin: -22px 0 30px;
+	text-align: center;
+	color: var(--ziteh-muted);
+	font-size: 14px;
+}
+
+.ziteh-insta__grid {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 14px;
+}
+
+.ziteh-insta__tile {
+	position: relative;
+	display: block;
+	aspect-ratio: 1 / 1;
+	border-radius: 14px;
+	overflow: hidden;
+	background: var(--ziteh-beige);
+}
+
+.ziteh-insta__tile img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform .4s ease;
+}
+
+.ziteh-insta__tile:hover img {
+	transform: scale(1.06);
+}
+
+.ziteh-insta__tile-icon {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(85, 96, 58, .32);
+	color: #fff;
+	opacity: 0;
+	transition: opacity .25s ease;
+}
+
+.ziteh-insta__tile:hover .ziteh-insta__tile-icon {
+	opacity: 1;
+}
+
+.ziteh-insta__tile--empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--ziteh-muted);
+}
+
+.ziteh-insta__foot {
+	margin-top: 30px;
+	text-align: center;
+}
+
+/* ---------- Newsletter ---------- */
+
+.ziteh-newsletter {
+	background: var(--ziteh-white);
+	padding-block: 30px 66px;
+}
+
+.ziteh-newsletter__box {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	align-items: center;
+	gap: 30px;
+	background: var(--ziteh-cream);
+	border: 1px solid var(--ziteh-line);
+	border-radius: var(--ziteh-radius-lg);
+	padding: 40px 44px;
+}
+
+.ziteh-newsletter__intro {
+	order: 2;
+	text-align: start;
+}
+
+.ziteh-newsletter__form {
+	order: 1;
+	display: flex;
+	gap: 10px;
+	background: var(--ziteh-white);
+	border-radius: 999px;
+	padding: 7px 7px 7px 20px;
+	box-shadow: var(--ziteh-shadow-sm);
+}
+
+.ziteh-newsletter__form input {
+	flex: 1;
+	border: 0;
+	background: transparent;
+	font-family: inherit;
+	font-size: 14px;
+	color: var(--ziteh-ink);
+	outline: none;
+}
+
+.ziteh-newsletter__title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 10px;
+	font-size: 24px;
+	font-weight: 700;
+	color: var(--ziteh-green-dark);
+}
+
+.ziteh-newsletter__text {
+	margin: 0;
+	color: var(--ziteh-muted);
+	font-size: 14px;
+	line-height: 1.9;
+}
+
+/* ---------- Footer ---------- */
+
+.ziteh-footer {
+	background: var(--ziteh-white);
+	border-top: 1px solid var(--ziteh-line);
+	padding-top: 56px;
+	color: var(--ziteh-ink);
+}
+
+.ziteh-footer__inner {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr) 1.2fr;
+	gap: 30px;
+	padding-bottom: 40px;
+}
+
+.ziteh-footer__col-title {
+	margin: 0 0 18px;
+	font-size: 16px;
+	font-weight: 700;
+	color: var(--ziteh-green-dark);
+}
+
+.ziteh-footer__links {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.ziteh-footer__links a {
+	color: var(--ziteh-muted);
+	text-decoration: none;
+	font-size: 14px;
+	transition: color .2s ease;
+}
+
+.ziteh-footer__links a:hover {
+	color: var(--ziteh-green);
+}
+
+.ziteh-footer__contact {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.ziteh-footer__contact li {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 14px;
+	color: var(--ziteh-muted);
+}
+
+.ziteh-footer__contact .ziteh-icon {
+	width: 18px;
+	height: 18px;
+	color: var(--ziteh-green);
+}
+
+.ziteh-footer__col--brand {
+	text-align: start;
+}
+
+.ziteh-footer__logo {
+	font-size: 30px;
+	font-weight: 800;
+	color: var(--ziteh-green-dark);
+	margin-bottom: 12px;
+}
+
+.ziteh-footer__tagline {
+	margin: 0 0 18px;
+	color: var(--ziteh-muted);
+	font-size: 14px;
+}
+
+.ziteh-footer__socials {
+	display: flex;
+	gap: 12px;
+}
+
+.ziteh-footer__socials a {
+	width: 40px;
+	height: 40px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	background: var(--ziteh-green-soft);
+	color: var(--ziteh-green-dark);
+	transition: background .2s ease, color .2s ease;
+}
+
+.ziteh-footer__socials a:hover {
+	background: var(--ziteh-green);
+	color: #fff;
+}
+
+.ziteh-footer__socials .ziteh-icon {
+	width: 20px;
+	height: 20px;
+}
+
+.ziteh-footer__bottom {
+	border-top: 1px solid var(--ziteh-line);
+	padding-block: 18px;
+}
+
+.ziteh-footer__bottom span {
+	display: block;
+	text-align: center;
+	font-size: 13px;
+	color: var(--ziteh-muted);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1024px) {
+	.ziteh-hero__title-2 { font-size: 34px; }
+	.ziteh-footer__inner { grid-template-columns: repeat(2, 1fr); }
+	.ziteh-footer__col--brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 860px) {
+	.ziteh-header__menu { display: none; }
+	.ziteh-header__burger { display: inline-flex; }
+	.ziteh-header__menu.is-open {
+		display: block;
+		position: absolute;
+		inset-inline: 0;
+		top: 100%;
+		background: #fff;
+		border-bottom: 1px solid var(--ziteh-line);
+		z-index: 30;
+		padding: 12px 24px;
+	}
+	.ziteh-header__menu.is-open ul { flex-direction: column; align-items: flex-start; gap: 14px; }
+	.ziteh-header { position: relative; }
+
+	.ziteh-hero__inner,
+	.ziteh-story__inner,
+	.ziteh-newsletter__box,
+	.ziteh-cta__box {
+		grid-template-columns: 1fr;
+	}
+	.ziteh-hero__content,
+	.ziteh-story__content,
+	.ziteh-newsletter__intro,
+	.ziteh-cta__content {
+		order: 1;
+		text-align: center;
+	}
+	.ziteh-hero__media,
+	.ziteh-story__media,
+	.ziteh-newsletter__form,
+	.ziteh-cta__media {
+		order: 2;
+	}
+	.ziteh-hero__desc { margin-inline: auto; }
+
+	.ziteh-blog__grid,
+	.ziteh-testimonials__grid {
+		grid-template-columns: 1fr;
+	}
+	.ziteh-routine__head { flex-direction: column; align-items: stretch; }
+	.ziteh-routine__steps.is-active { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: repeat(2, 1fr); }
+	.ziteh-topbar__search { display: none; }
+}
+
+@media (max-width: 560px) {
+	.ziteh-container { padding-inline: 16px; }
+	.ziteh-insta__grid { grid-template-columns: repeat(3, 1fr) !important; }
+	.ziteh-brands__row { gap: 24px; }
+	.ziteh-routine__steps.is-active { grid-template-columns: 1fr; }
+	.ziteh-hero__title-2 { font-size: 28px; }
+}
