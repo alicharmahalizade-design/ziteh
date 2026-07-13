@@ -69,6 +69,12 @@ final class Ziteh_Elementor_Plugin {
 		// Load the widgets manager.
 		require_once ZITEH_EL_PATH . 'includes/class-ziteh-widgets-manager.php';
 		Ziteh_Widgets_Manager::instance();
+
+		// Admin-only: the one-click ready-made template importer.
+		if ( is_admin() ) {
+			require_once ZITEH_EL_PATH . 'includes/class-ziteh-template-importer.php';
+			Ziteh_Template_Importer::instance();
+		}
 	}
 
 	/**
