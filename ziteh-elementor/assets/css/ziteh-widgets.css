@@ -547,11 +547,12 @@
 
 .ziteh-cat-card__thumb {
 	display: block;
-	aspect-ratio: 1 / 1;
+	/* Tall / portrait image, matching the reference design. */
+	aspect-ratio: 3 / 4;
 	border-radius: var(--ziteh-radius);
 	overflow: hidden;
 	background: var(--ziteh-beige);
-	margin-bottom: 14px;
+	margin-bottom: 16px;
 	box-shadow: var(--ziteh-shadow-sm);
 	transition: transform .25s ease;
 }
@@ -567,10 +568,25 @@
 	display: block;
 }
 
+/* Label sits below the tall image as a pill/button. */
 .ziteh-cat-card__title {
-	font-size: 15px;
+	display: block;
+	margin: 0 auto;
+	padding: 11px 18px;
+	background: var(--ziteh-white);
+	border: 1px solid var(--ziteh-line);
+	border-radius: 999px;
+	font-size: 14px;
 	font-weight: 500;
-	color: var(--ziteh-ink);
+	color: var(--ziteh-green-dark);
+	box-shadow: var(--ziteh-shadow-sm);
+	transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.ziteh-cat-card a:hover .ziteh-cat-card__title {
+	background: var(--ziteh-green);
+	border-color: var(--ziteh-green);
+	color: #fff;
 }
 
 /* dot-style prev/next under the categories slider */
