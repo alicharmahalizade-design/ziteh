@@ -165,7 +165,7 @@ class Ziteh_Blog_Widget extends Ziteh_Widget_Base {
 				'type'        => Controls_Manager::SELECT2,
 				'multiple'    => true,
 				'label_block' => true,
-				'options'     => $this->get_categories(),
+				'options'     => $this->get_category_options(),
 				'default'     => array(),
 				'description' => esc_html__( 'خالی بگذارید تا از همه دسته‌ها نمایش داده شود.', 'ziteh' ),
 				'condition'   => array(
@@ -307,9 +307,13 @@ class Ziteh_Blog_Widget extends Ziteh_Widget_Base {
 	/**
 	 * Category slug => name map for the SELECT2 control.
 	 *
+	 * Note: intentionally NOT named get_categories() — that is a reserved,
+	 * public method on Elementor\Widget_Base (returns the widget's Elementor
+	 * categories); overriding it as private is a fatal error.
+	 *
 	 * @return array<string,string>
 	 */
-	private function get_categories() {
+	private function get_category_options() {
 		$options = array();
 		$terms   = get_terms(
 			array(
