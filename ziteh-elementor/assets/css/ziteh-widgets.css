@@ -785,6 +785,9 @@
 .ziteh-product-card {
 	position: relative;
 	flex: 0 0 calc((100% - (var(--ziteh-per-view) - 1) * 20px) / var(--ziteh-per-view));
+	max-width: calc((100% - (var(--ziteh-per-view) - 1) * 20px) / var(--ziteh-per-view));
+	align-self: stretch;
+	height: auto;
 	background: var(--ziteh-white);
 	border: 1px solid var(--ziteh-line);
 	border-radius: var(--ziteh-radius);
@@ -862,6 +865,12 @@
 	color: var(--ziteh-ink);
 	text-decoration: none;
 	line-height: 1.7;
+	/* Keep every card's name block two lines tall so prices & buttons align. */
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	min-height: calc(1.7em * 2);
 }
 
 .ziteh-product-card__name:hover {
@@ -871,6 +880,7 @@
 .ziteh-product-card__price {
 	margin-top: 2px;
 	color: var(--ziteh-green-dark);
+	min-height: 24px;
 }
 
 .ziteh-product-card__price strong {
@@ -886,7 +896,7 @@
 }
 
 .ziteh-product-card__btn {
-	margin-top: 12px;
+	margin-top: auto;
 	width: 100%;
 	padding: 10px 16px;
 	font-size: 13px;
