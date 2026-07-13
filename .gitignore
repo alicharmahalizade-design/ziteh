@@ -1,0 +1,7 @@
+# Build artifacts / packaged plugin (regenerate with `zip -r ziteh-elementor.zip ziteh-elementor`)
+*.zip
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*~
