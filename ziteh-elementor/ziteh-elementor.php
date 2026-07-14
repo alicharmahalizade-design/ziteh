@@ -3,7 +3,7 @@
  * Plugin Name: Ziteh Elementor Widgets
  * Plugin URI:  https://ziteh.com
  * Description: مجموعه ویجت‌های اختصاصی المنتور برای پیاده‌سازی پیکسل‌به‌پیکسل صفحه اصلی فروشگاه زیته (تاپ‌بار، هدر، هیرو، دسته‌بندی، روتین، محصولات، برندها، مجله، مشاوره، نظرات، اینستاگرام، خبرنامه و فوتر).
- * Version:     2.0.4
+ * Version:     2.1.0
  * Author:      Ziteh
  * Text Domain: ziteh
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'ZITEH_EL_VERSION', '2.0.4' );
+define( 'ZITEH_EL_VERSION', '2.1.0' );
 define( 'ZITEH_EL_FILE', __FILE__ );
 define( 'ZITEH_EL_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ZITEH_EL_URL', plugin_dir_url( __FILE__ ) );
@@ -81,6 +81,10 @@ final class Ziteh_Elementor_Plugin {
 		// Central design settings (palette / radius / motion).
 		require_once ZITEH_EL_PATH . 'includes/class-ziteh-settings.php';
 		Ziteh_Settings::instance();
+
+		// Auto cache purging (on update / settings save / manual button).
+		require_once ZITEH_EL_PATH . 'includes/class-ziteh-cache.php';
+		Ziteh_Cache::instance();
 
 		// AJAX endpoints + WooCommerce cart glue.
 		require_once ZITEH_EL_PATH . 'includes/class-ziteh-ajax.php';
@@ -167,3 +171,18 @@ final class Ziteh_Elementor_Plugin {
 }
 
 Ziteh_Elementor_Plugin::instance();
+
+/**
+ * On activation, purge caches so freshly-updated assets load immediately.
+ */
+register_activation_hook(
+	ZITEH_EL_FILE,
+	function () {
+		$cache = ZITEH_EL_PATH . 'includes/class-ziteh-cache.php';
+		if ( file_exists( $cache ) ) {
+			require_once $cache;
+			Ziteh_Cache::purge();
+			update_option( Ziteh_Cache::VERSION_OPTION, ZITEH_EL_VERSION );
+		}
+	}
+);

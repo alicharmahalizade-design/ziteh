@@ -177,6 +177,9 @@ class Ziteh_Settings {
 		?>
 		<div class="wrap" dir="rtl" style="max-width:720px">
 			<h1><?php esc_html_e( 'تنظیمات ظاهری زیته', 'ziteh' ); ?></h1>
+			<?php if ( isset( $_GET['ziteh_purged'] ) ) : ?>
+				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'کش با موفقیت پاک شد.', 'ziteh' ); ?></p></div>
+			<?php endif; ?>
 			<p><?php esc_html_e( 'رنگ‌ها و ظاهر کلی همه‌ی ویجت‌های زیته را از همین‌جا کنترل کنید. با ذخیره، کل صفحه به‌روز می‌شود.', 'ziteh' ); ?></p>
 			<form method="post" action="options.php">
 				<?php settings_fields( 'ziteh_settings_group' ); ?>
@@ -227,6 +230,12 @@ class Ziteh_Settings {
 				</table>
 				<?php submit_button(); ?>
 			</form>
+
+			<?php
+			if ( class_exists( 'Ziteh_Cache' ) ) {
+				Ziteh_Cache::render_button();
+			}
+			?>
 		</div>
 		<?php
 	}
