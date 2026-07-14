@@ -888,12 +888,14 @@
 	cursor: pointer;
 	z-index: 2;
 	opacity: 0;
+	pointer-events: none;
 	transform: translateY(-4px);
 	transition: color .2s ease, opacity .25s ease, transform .25s ease;
 }
 
 .ziteh-product-card:hover .ziteh-product-card__wish {
 	opacity: 1;
+	pointer-events: auto;
 	transform: translateY(0);
 }
 
@@ -1945,6 +1947,7 @@ button.ziteh-topbar__search {
 	font-weight: 600;
 	cursor: pointer;
 	opacity: 0;
+	pointer-events: none;
 	transform: translateY(10px);
 	transition: opacity .25s ease, transform .25s ease, background .2s ease, color .2s ease;
 	box-shadow: var(--ziteh-shadow-sm);
@@ -1955,6 +1958,7 @@ button.ziteh-topbar__search {
 
 .ziteh-product-card__media:hover .ziteh-product-card__quick {
 	opacity: 1;
+	pointer-events: auto;
 	transform: none;
 }
 
