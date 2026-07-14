@@ -347,7 +347,9 @@
 
 		document.addEventListener('click', function (e) {
 			var open = e.target.closest('[data-ziteh-cart-open]');
-			if (open && document.querySelector('[data-ziteh-drawer]')) {
+			var link = e.target.closest('a[href]');
+			// Only hijack the cart link itself — never a different (e.g. nested) link.
+			if (open && ( ! link || link === open ) && document.querySelector('[data-ziteh-drawer]')) {
 				e.preventDefault();
 				openPanel('[data-ziteh-drawer]');
 			}
@@ -369,7 +371,12 @@
 		document.body.dataset.zitehQv = '1';
 
 		document.addEventListener('click', function (e) {
-			var btn = e.target.closest('[data-ziteh-quickview]');
+			// A real link always wins over Quick View (see wishlist note above).
+			if (e.target.closest('a[href]')) {
+				if (e.target.closest('[data-ziteh-modal-close]')) { closeShell(); }
+				return;
+			}
+			var btn = e.target.closest('.ziteh-product-card__quick[data-ziteh-quickview]');
 			if (!btn) {
 				if (e.target.closest('[data-ziteh-modal-close]')) { closeShell(); }
 				return;
@@ -412,7 +419,8 @@
 		var timer;
 
 		document.addEventListener('click', function (e) {
-			if (e.target.closest('[data-ziteh-search-open]')) {
+			// Don't open search when a real link was clicked (nesting safety).
+			if (e.target.closest('[data-ziteh-search-open]') && ! e.target.closest('a[href]')) {
 				e.preventDefault();
 				var ov = openPanel('[data-ziteh-search-overlay]');
 				if (ov) {
@@ -464,7 +472,11 @@
 			});
 		}
 		document.addEventListener('click', function (e) {
-			var btn = e.target.closest('[data-ziteh-wish]');
+			// Never interfere with a real navigation link. Guards against a broken
+			// SVG/markup nesting the page inside a wish <button>, which would
+			// otherwise make every link match [data-ziteh-wish].
+			if (e.target.closest('a[href]')) { return; }
+			var btn = e.target.closest('.ziteh-product-card__wish[data-ziteh-wish]');
 			if (!btn) { return; }
 			e.preventDefault();
 			var id = btn.getAttribute('data-ziteh-wish');
