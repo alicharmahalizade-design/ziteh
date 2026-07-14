@@ -2490,3 +2490,154 @@ body.ziteh-noscroll { overflow: hidden; }
 	.ziteh-drawer { width: 100%; max-width: 100vw; }
 	.ziteh-topbar__search-text { display: none; }
 }
+
+/* ========================================================================
+   v2.0.1 — quiz recommendations, quick-view gallery/qty, skeletons
+   ======================================================================== */
+
+/* Skeleton shimmer */
+.ziteh-skel {
+	position: relative;
+	overflow: hidden;
+	background: #ece7dd;
+	border-radius: 10px;
+}
+
+.ziteh-skel::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	transform: translateX(-100%);
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6), transparent);
+	animation: ziteh-shimmer 1.3s infinite;
+}
+
+[dir="rtl"] .ziteh-skel::after { animation-direction: reverse; }
+
+@keyframes ziteh-shimmer { 100% { transform: translateX(100%); } }
+
+.ziteh-skel--line { height: 12px; margin-bottom: 10px; }
+.ziteh-skel--short { width: 55%; }
+.ziteh-skel--title { height: 22px; width: 75%; margin-bottom: 14px; }
+.ziteh-skel--block { height: 70px; margin: 14px 0; border-radius: 12px; }
+.ziteh-skel--thumb { aspect-ratio: 1/1; width: 100%; margin-bottom: 12px; border-radius: 14px; }
+.ziteh-skel--qv-media { aspect-ratio: 1/1; width: 100%; border-radius: var(--ziteh-radius); }
+.ziteh-skel--sq { width: 48px; height: 48px; flex: 0 0 auto; border-radius: 10px; }
+
+.ziteh-skel-card { padding: 6px; }
+
+.ziteh-search-skel { display: flex; align-items: center; gap: 12px; padding: 9px; }
+.ziteh-search-skel .ziteh-skel--line { flex: 1; margin: 0; }
+
+/* Quick View gallery */
+.ziteh-qv__stage {
+	position: relative;
+	border-radius: var(--ziteh-radius);
+	overflow: hidden;
+	background: var(--ziteh-cream);
+	aspect-ratio: 1 / 1;
+}
+
+.ziteh-qv__slide {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	transition: opacity .3s ease;
+}
+
+.ziteh-qv__slide.is-active { opacity: 1; }
+.ziteh-qv__slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.ziteh-qv__thumbs {
+	display: flex;
+	gap: 8px;
+	margin-top: 10px;
+	flex-wrap: wrap;
+}
+
+.ziteh-qv__thumb {
+	width: 56px;
+	height: 56px;
+	padding: 0;
+	border: 2px solid transparent;
+	border-radius: 12px;
+	overflow: hidden;
+	background: var(--ziteh-cream);
+	cursor: pointer;
+}
+
+.ziteh-qv__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ziteh-qv__thumb.is-active { border-color: var(--ziteh-green); }
+
+/* Quantity stepper */
+.ziteh-qty {
+	display: inline-flex;
+	align-items: center;
+	border: 1px solid var(--ziteh-line);
+	border-radius: 999px;
+	overflow: hidden;
+	background: #fff;
+}
+
+.ziteh-qty__btn {
+	width: 38px;
+	height: 42px;
+	border: 0;
+	background: transparent;
+	font-size: 18px;
+	color: var(--ziteh-green-dark);
+	cursor: pointer;
+	line-height: 1;
+}
+
+.ziteh-qty__btn:hover { background: var(--ziteh-cream); }
+
+.ziteh-qty__input {
+	width: 42px;
+	height: 42px;
+	border: 0;
+	text-align: center;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 700;
+	color: var(--ziteh-ink);
+	background: transparent;
+	outline: none;
+	-moz-appearance: textfield;
+}
+
+.ziteh-qty__input::-webkit-outer-spin-button,
+.ziteh-qty__input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* Quiz recommended products */
+.ziteh-quiz__products {
+	margin-top: 26px;
+	border-top: 1px solid var(--ziteh-line);
+	padding-top: 22px;
+}
+
+.ziteh-quiz__products-title {
+	font-size: 17px;
+	font-weight: 700;
+	color: var(--ziteh-green-dark);
+	margin: 0 0 18px;
+}
+
+.ziteh-quiz__products-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px;
+	text-align: start;
+}
+
+.ziteh-quiz__products-grid .ziteh-product-card { flex: none; max-width: none; }
+
+@media (max-width: 860px) {
+	.ziteh-quiz__products-grid { grid-template-columns: repeat(2, 1fr); }
+	.ziteh-qv__thumb { width: 48px; height: 48px; }
+}
+
+@media (max-width: 560px) {
+	.ziteh-quiz__products-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+	.ziteh-qty__btn { width: 34px; }
+}

@@ -72,6 +72,23 @@ class Ziteh_Widgets_Manager {
 		add_action( 'elementor/frontend/after_register_scripts', array( $this, 'register_scripts' ) );
 		add_action( 'elementor/editor/after_enqueue_styles', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
+
+		// Optimisation: defer the widgets script so it never blocks render.
+		add_filter( 'script_loader_tag', array( $this, 'defer_script' ), 10, 2 );
+	}
+
+	/**
+	 * Add defer to the widgets script tag.
+	 *
+	 * @param string $tag    Script tag HTML.
+	 * @param string $handle Script handle.
+	 * @return string
+	 */
+	public function defer_script( $tag, $handle ) {
+		if ( 'ziteh-widgets' === $handle && false === strpos( $tag, 'defer' ) ) {
+			$tag = str_replace( ' src=', ' defer src=', $tag );
+		}
+		return $tag;
 	}
 
 	/**

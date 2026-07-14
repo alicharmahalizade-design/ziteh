@@ -381,15 +381,14 @@
 
 			var body = modal.querySelector('[data-ziteh-modal-body]');
 			var loader = modal.querySelector('[data-ziteh-modal-loader]');
-			if (body) { body.innerHTML = ''; }
-			if (loader) { loader.hidden = false; }
+			if (loader) { loader.hidden = true; }
+			if (body) { body.innerHTML = quickViewSkeleton(); }
 
 			var url = DATA.ajaxUrl + '?action=ziteh_quickview&id=' + encodeURIComponent(id) +
 				'&nonce=' + encodeURIComponent(DATA.nonce || '');
 			fetch(url, { credentials: 'same-origin' })
 				.then(function (r) { return r.json(); })
 				.then(function (res) {
-					if (loader) { loader.hidden = true; }
 					if (res && res.success && body) {
 						body.innerHTML = res.data.html;
 						if (window.jQuery && window.jQuery.fn) {
@@ -400,7 +399,6 @@
 					}
 				})
 				.catch(function () {
-					if (loader) { loader.hidden = true; }
 					if (body) { body.innerHTML = '<p class="ziteh-modal__error">' + (DATA.i18n && DATA.i18n.error || 'Error') + '</p>'; }
 				});
 		});
@@ -432,7 +430,7 @@
 			var q = input.value.trim();
 			clearTimeout(timer);
 			if (q.length < 2) { if (results) { results.innerHTML = ''; } return; }
-			if (results) { results.innerHTML = '<div class="ziteh-search__loading"><span class="ziteh-spinner"></span></div>'; }
+			if (results) { results.innerHTML = searchSkeleton(); }
 			timer = setTimeout(function () {
 				if (!DATA.ajaxUrl) { return; }
 				var url = DATA.ajaxUrl + '?action=ziteh_search&q=' + encodeURIComponent(q) +
@@ -543,6 +541,7 @@
 		var summary = root.querySelector('[data-quiz-summary]');
 		var idx = 0;
 		var answers = [];
+		var cats = [];
 
 		function show(name) {
 			Object.keys(screens).forEach(function (k) {
@@ -562,6 +561,36 @@
 		function toFa(n) {
 			return String(n).replace(/[0-9]/g, function (c) { return '۰۱۲۳۴۵۶۷۸۹'.charAt(+c); });
 		}
+		function loadProducts() {
+			var wrap = root.querySelector('[data-quiz-products-wrap]');
+			var grid = root.querySelector('[data-quiz-products]');
+			if (!wrap || !grid || !DATA.ajaxUrl || DATA.hasWc === false) { return; }
+
+			var chosen = cats.filter(function (c) { return c; });
+			var count = root.getAttribute('data-quiz-count') || '4';
+			var fallback = root.getAttribute('data-quiz-fallback') || '';
+
+			wrap.hidden = false;
+			grid.innerHTML = skeletonCards(parseInt(count, 10) || 4);
+
+			var url = DATA.ajaxUrl + '?action=ziteh_quiz_products' +
+				'&cats=' + encodeURIComponent(chosen.join(',')) +
+				'&fallback=' + encodeURIComponent(fallback) +
+				'&count=' + encodeURIComponent(count) +
+				'&nonce=' + encodeURIComponent(DATA.nonce || '');
+			fetch(url, { credentials: 'same-origin' })
+				.then(function (r) { return r.json(); })
+				.then(function (res) {
+					if (res && res.success && res.data.html.trim()) {
+						grid.innerHTML = res.data.html;
+						initWishlist();
+					} else {
+						wrap.hidden = true;
+					}
+				})
+				.catch(function () { wrap.hidden = true; });
+		}
+
 		function finish() {
 			if (bar) { bar.style.width = '100%'; }
 			if (summary) {
@@ -573,15 +602,17 @@
 				});
 			}
 			show('result');
+			loadProducts();
 		}
 
 		root.addEventListener('click', function (e) {
 			if (e.target.closest('[data-quiz-start]')) {
-				answers = []; showStep(0); show('questions'); return;
+				answers = []; cats = []; showStep(0); show('questions'); return;
 			}
 			var ans = e.target.closest('[data-quiz-answer]');
 			if (ans) {
 				answers[idx] = ans.textContent.trim();
+				cats[idx] = ans.getAttribute('data-cat') || '';
 				var stepEl = ans.closest('[data-quiz-step]');
 				stepEl.querySelectorAll('[data-quiz-answer]').forEach(function (b) { b.classList.remove('is-picked'); });
 				ans.classList.add('is-picked');
@@ -595,9 +626,92 @@
 				return;
 			}
 			if (e.target.closest('[data-quiz-restart]')) {
-				answers = []; show('intro'); return;
+				answers = []; cats = [];
+				var wrap = root.querySelector('[data-quiz-products-wrap]');
+				if (wrap) { wrap.hidden = true; }
+				show('intro'); return;
 			}
 		});
+	}
+
+	/** Quick View skeleton (image block + text lines). */
+	function quickViewSkeleton() {
+		return '<div class="ziteh-qv ziteh-qv--skel">' +
+			'<div class="ziteh-skel ziteh-skel--qv-media"></div>' +
+			'<div class="ziteh-qv__info">' +
+			'<div class="ziteh-skel ziteh-skel--line ziteh-skel--title"></div>' +
+			'<div class="ziteh-skel ziteh-skel--line ziteh-skel--short"></div>' +
+			'<div class="ziteh-skel ziteh-skel--block"></div>' +
+			'<div class="ziteh-skel ziteh-skel--line"></div>' +
+			'<div class="ziteh-skel ziteh-skel--line ziteh-skel--short"></div>' +
+			'</div></div>';
+	}
+
+	/** Search results skeleton rows. */
+	function searchSkeleton() {
+		var row = '<div class="ziteh-search-skel">' +
+			'<span class="ziteh-skel ziteh-skel--sq"></span>' +
+			'<span class="ziteh-skel ziteh-skel--line"></span>' +
+			'</div>';
+		return row + row + row;
+	}
+
+	/** Build N skeleton product-card placeholders. */
+	function skeletonCards(n) {
+		var one = '<div class="ziteh-skel-card">' +
+			'<div class="ziteh-skel ziteh-skel--thumb"></div>' +
+			'<div class="ziteh-skel ziteh-skel--line"></div>' +
+			'<div class="ziteh-skel ziteh-skel--line ziteh-skel--short"></div>' +
+			'</div>';
+		var out = '';
+		for (var i = 0; i < n; i++) { out += one; }
+		return out;
+	}
+
+	/** Quick View gallery thumbnails + quantity stepper (delegated). */
+	function initQvControls() {
+		if (document.body.dataset.zitehQv2 === '1') { return; }
+		document.body.dataset.zitehQv2 = '1';
+
+		document.addEventListener('click', function (e) {
+			var thumb = e.target.closest('[data-qv-thumb]');
+			if (thumb) {
+				var gallery = thumb.closest('[data-ziteh-qv-gallery]');
+				var n = thumb.getAttribute('data-qv-thumb');
+				gallery.querySelectorAll('[data-qv-slide]').forEach(function (s) {
+					s.classList.toggle('is-active', s.getAttribute('data-qv-slide') === n);
+				});
+				gallery.querySelectorAll('[data-qv-thumb]').forEach(function (t) {
+					t.classList.toggle('is-active', t === thumb);
+				});
+				return;
+			}
+			var minus = e.target.closest('[data-qty-minus]');
+			var plus = e.target.closest('[data-qty-plus]');
+			if (minus || plus) {
+				var box = (minus || plus).closest('[data-ziteh-qty]');
+				var input = box.querySelector('[data-qty-input]');
+				var val = parseInt(input.value, 10) || 1;
+				val = plus ? val + 1 : Math.max(1, val - 1);
+				input.value = val;
+				syncQty(box, val);
+			}
+		});
+
+		document.addEventListener('input', function (e) {
+			var input = e.target.closest('[data-qty-input]');
+			if (!input) { return; }
+			var box = input.closest('[data-ziteh-qty]');
+			var val = Math.max(1, parseInt(input.value, 10) || 1);
+			syncQty(box, val);
+		});
+
+		function syncQty(box, val) {
+			var actions = box.closest('.ziteh-qv__actions');
+			if (!actions) { return; }
+			var addBtn = actions.querySelector('.add_to_cart_button, [data-product_id]');
+			if (addBtn) { addBtn.setAttribute('data-quantity', val); }
+		}
 	}
 
 	/**
@@ -617,6 +731,7 @@
 		// Document-level features (run once).
 		initDrawer();
 		initQuickView();
+		initQvControls();
 		initSearch();
 		initWishlist();
 		initStickyHeader();

@@ -1,0 +1,1541 @@
+# Ziteh Elementor Widgets - translation template.
+# Copyright (C) Ziteh
+msgid ""
+msgstr ""
+"Project-Id-Version: Ziteh Elementor Widgets 2.0.1\n"
+"Report-Msgid-Bugs-To: https://ziteh.com\n"
+"POT-Creation-Date: 2026-07-14 07:55+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fa_IR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Domain: ziteh\n"
+
+#: widgets/class-ziteh-offers.php:434
+msgid "%d درصد فروخته شده"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:416 widgets/class-ziteh-products.php:581
+msgid "%d٪"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:436
+msgid "%d٪ فروخته شد"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:312
+msgid "آبرسان مغذی خنزون"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:195
+msgid "آب‌رسانی و حفظ رطوبت."
+msgstr ""
+
+#: widgets/class-ziteh-newsletter.php:95
+msgid "آدرس اکشن فرم"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:228
+msgid "آرایش و آلودگی را پاک کن."
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:107
+msgid "آرایشی"
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:100
+msgid "آواتار"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:121
+msgid "آیتم منو"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:148
+msgid "آیتم‌های منو"
+msgstr ""
+
+#: widgets/class-ziteh-instagram.php:68
+msgid "آیدی اینستاگرام"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:60 widgets/class-ziteh-routine.php:73
+msgid "آیکون"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:160
+msgid "ارتفاع اسلایدر"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:65
+msgid "ارسال"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:107
+msgid "ارسال سریع"
+msgstr ""
+
+#: widgets/class-ziteh-consultation.php:60
+msgid "از اینجا شروع کن"
+msgstr ""
+
+#: widgets/class-ziteh-consultation.php:109 widgets/class-ziteh-features.php:129 widgets/class-ziteh-footer.php:241 widgets/class-ziteh-header.php:172 widgets/class-ziteh-hero.php:189 widgets/class-ziteh-newsletter.php:107 widgets/class-ziteh-story.php:108 widgets/class-ziteh-testimonials.php:137
+msgid "استایل"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:229
+msgid "اسلاگ یک دسته‌بندی محصول. خالی = پرفروش‌ترین‌ها."
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:94
+msgid "اسلاید"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:284
+msgid "اسلاید %d"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:51 widgets/class-ziteh-hero.php:91
+msgid "اسلایدها"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:78
+msgid "اسپری"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:174 widgets/class-ziteh-footer.php:184
+msgid "اطلاعات تماس"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:171
+msgid "افزایش"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:501 widgets/class-ziteh-products.php:273
+msgid "افزودن به سبد"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:412 widgets/class-ziteh-products.php:452 widgets/class-ziteh-products.php:576
+msgid "افزودن به علاقه‌مندی‌ها"
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:163
+msgid "امتیاز %d از ۵"
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:89
+msgid "امتیاز (۱ تا ۵)"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:197
+msgid "انیمیشن‌های اسکرول"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:90
+msgid "اگر خالی بماند، شمارش تا پایان امشب انجام می‌شود."
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:200
+msgid "ایمیل"
+msgstr ""
+
+#: widgets/class-ziteh-newsletter.php:79
+msgid "ایمیل خود را وارد کنید..."
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:72
+msgid "با چند سؤال کوتاه، بهترین محصولات و روتین متناسب با پوست تو را پیشنهاد می‌دهیم."
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:102
+msgid "با یک کلیک، یک برگه‌ی کامل المنتور شامل تمام ویجت‌های زیته (از تاپ‌بار تا فوتر) با چیدمان دقیق طرح ساخته می‌شود. سپس می‌توانید محتوا و تصاویر را در المنتور ویرایش کنید."
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:170
+msgid "بر اساس پاسخ‌های تو، این محصولات و روتین بهترین گزینه برای پوستت هستند. می‌تونی همین حالا مشاهده و خرید کنی."
+msgstr ""
+
+#: widgets/class-ziteh-brands.php:79 widgets/class-ziteh-footer.php:52 widgets/class-ziteh-offers.php:186 widgets/class-ziteh-offers.php:188 widgets/class-ziteh-products.php:235 widgets/class-ziteh-products.php:237
+msgid "برند"
+msgstr ""
+
+#: widgets/class-ziteh-brands.php:96
+msgid "برندها"
+msgstr ""
+
+#: widgets/class-ziteh-brands.php:60
+msgid "برندهای معتبر"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:134
+msgid "برچسب شب"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:125
+msgid "برچسب صبح"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:68 widgets/class-ziteh-routine.php:79
+msgid "برگ"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:423 includes/class-ziteh-frontend.php:94 includes/class-ziteh-frontend.php:104
+msgid "بستن"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:182 widgets/class-ziteh-hero.php:276 widgets/class-ziteh-offers.php:390 widgets/class-ziteh-products.php:428
+msgid "بعدی"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:159
+msgid "بلاگ"
+msgstr ""
+
+#: includes/class-ziteh-frontend.php:58
+msgid "به سبد اضافه شد"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:108
+msgid "به سراسر کشور"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:109
+msgid "بهداشت فردی"
+msgstr ""
+
+#: widgets/class-ziteh-story.php:78
+msgid "بیشتر درباره ما"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:156
+msgid "بیشترین امتیاز"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:113
+msgid "تا ۷ روز"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:583
+msgid "تخفیف"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:80
+msgid "تخفیف‌های شگفت‌انگیز، تا پایان شمارش معکوس!"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:238
+msgid "ترمیم و بازسازی شبانه."
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:461
+msgid "تسویه حساب"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:155 widgets/class-ziteh-products.php:160
+msgid "تصادفی"
+msgstr ""
+
+#: widgets/class-ziteh-instagram.php:77
+msgid "تصاویر"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:195 widgets/class-ziteh-categories.php:79 widgets/class-ziteh-header.php:66 widgets/class-ziteh-hero.php:61 widgets/class-ziteh-offers.php:177 widgets/class-ziteh-products.php:224 widgets/class-ziteh-story.php:95
+msgid "تصویر"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:87
+msgid "تصویر لوگو"
+msgstr ""
+
+#: widgets/class-ziteh-consultation.php:96
+msgid "تصویر محصولات"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:185 widgets/class-ziteh-routine.php:233
+msgid "تعادل رطوبت پوست."
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:170
+msgid "تعداد"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:270 widgets/class-ziteh-instagram.php:115
+msgid "تعداد ستون"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:140 widgets/class-ziteh-products.php:138
+msgid "تعداد محصولات"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:215
+msgid "تعداد محصولات پیشنهادی"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:136
+msgid "تعداد مقالات"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:129 widgets/class-ziteh-offers.php:288 widgets/class-ziteh-products.php:338
+msgid "تعداد نمایش"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:243
+msgid "تغذیه عمیق پوست."
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:85 widgets/class-ziteh-footer.php:191
+msgid "تلفن"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:161
+msgid "تماس با ما"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:231
+msgid "تمامی حقوق مادی و معنوی این فروشگاه اینترنتی متعلق به زیته است."
+msgstr ""
+
+#: widgets/class-ziteh-instagram.php:107
+msgid "تنظیمات"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:121 widgets/class-ziteh-hero.php:109 widgets/class-ziteh-offers.php:280 widgets/class-ziteh-products.php:330
+msgid "تنظیمات اسلایدر"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:109
+msgid "تنظیمات زیته"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:167
+msgid "تنظیمات ظاهری زیته"
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:120
+msgid "تنوع محصولات و توضیحات کامل باعث شد انتخاب راحتی داشته باشم."
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:66
+msgid "توضیح این مرحله را بنویسید."
+msgstr ""
+
+#: widgets/class-ziteh-features.php:88 widgets/class-ziteh-routine.php:63
+msgid "توضیح کوتاه"
+msgstr ""
+
+#: widgets/class-ziteh-consultation.php:67 widgets/class-ziteh-newsletter.php:67
+msgid "توضیحات"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:224 widgets/class-ziteh-products.php:264
+msgid "تومان"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:184 widgets/class-ziteh-routine.php:232
+msgid "تونر"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:349
+msgid "ثانیه"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:219
+msgid "جا‌شدن کامل (Contain)"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:152 widgets/class-ziteh-products.php:154
+msgid "جدیدترین"
+msgstr ""
+
+#: widgets/class-ziteh-newsletter.php:70
+msgid "جدیدترین محصولات، مقالات و تخفیف‌ها را مستقیماً در ایمیل خود دریافت کنید."
+msgstr ""
+
+#: widgets/class-ziteh-topbar.php:84
+msgid "جستجو در فروشگاه..."
+msgstr ""
+
+#: includes/class-ziteh-frontend.php:60
+msgid "جستجوی محصولات..."
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:72
+msgid "جوانه‌ای برای مراقبت از خودت"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:250
+msgid "جوانِ کالو، کلید زیبایی و سلامت"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:449
+msgid "حذف"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:170 widgets/class-ziteh-products.php:191
+msgid "خالی بگذارید تا از همه دسته‌ها نمایش داده شود."
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:85
+msgid "خالی بگذارید تا به‌صورت خودکار به صفحه مطالب لینک شود."
+msgstr ""
+
+#: widgets/class-ziteh-header.php:154
+msgid "خانه"
+msgstr ""
+
+#: widgets/class-ziteh-newsletter.php:60
+msgid "خبرنامه زیته"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:153
+msgid "خدمات مشتریان"
+msgstr ""
+
+#: includes/class-ziteh-frontend.php:59
+msgid "خطایی رخ داد. دوباره تلاش کنید."
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:82
+msgid "خورشید"
+msgstr ""
+
+#: widgets/class-ziteh-story.php:60
+msgid "داستان زیته"
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:114
+msgid "در المنتور به مسیر «قالب‌ها ← قالب‌های ذخیره‌شده ← ایمپورت» بروید و فایل زیر را بارگذاری کنید:"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:546 widgets/class-ziteh-offers.php:561
+msgid "در حال حاضر پیشنهاد تخفیفی موجود نیست."
+msgstr ""
+
+#: widgets/class-ziteh-newsletter.php:97
+msgid "در صورت اتصال به سرویس خبرنامه، آدرس مقصد فرم را وارد کنید."
+msgstr ""
+
+#: widgets/class-ziteh-header.php:160
+msgid "درباره ما"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:74
+msgid "درخواست نامعتبر است."
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:157
+msgid "دسترسی سریع"
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:125
+msgid "دسترسی کافی ندارید."
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:206
+msgid "دسته"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:226
+msgid "دسته پیش‌فرض (وقتی گزینه‌ای دسته ندارد)"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:190
+msgid "دسته:"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:72
+msgid "دسته‌بندی"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:164
+msgid "دسته‌بندی (اسلاگ)"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:185
+msgid "دسته‌بندی محصول (اسلاگ)"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:100 widgets/class-ziteh-header.php:157
+msgid "دسته‌بندی‌ها"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:61
+msgid "دسته‌بندی‌های محبوب"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:117 widgets/class-ziteh-offers.php:132 widgets/class-ziteh-products.php:118
+msgid "دستی"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:348
+msgid "دقیقه"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:161
+msgid "راهنمای خرید"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:145
+msgid "راهنمای کامل روتین"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:137
+msgid "رده سنی‌ات؟"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:430
+msgid "رفتن به فروشگاه"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:202
+msgid "رنگ آیتم فعال"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:159
+msgid "رنگ اصلی (سبز)"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:163
+msgid "رنگ تخفیف (قرمز)"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:160
+msgid "رنگ تیره (عنوان‌ها)"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:162 widgets/class-ziteh-footer.php:260 widgets/class-ziteh-topbar.php:132
+msgid "رنگ متن"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:191
+msgid "رنگ منو"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:147 widgets/class-ziteh-footer.php:249 widgets/class-ziteh-header.php:180 widgets/class-ziteh-story.php:116 widgets/class-ziteh-testimonials.php:145 widgets/class-ziteh-topbar.php:121
+msgid "رنگ پس‌زمینه"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:161
+msgid "رنگ پس‌زمینه (کرم)"
+msgstr ""
+
+#: widgets/class-ziteh-newsletter.php:115
+msgid "رنگ پس‌زمینه باکس"
+msgstr ""
+
+#: widgets/class-ziteh-consultation.php:117
+msgid "رنگ پس‌زمینه بنر"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:168
+msgid "رنگ‌ها و ظاهر کلی همه‌ی ویجت‌های زیته را از همین‌جا کنترل کنید. با ذخیره، کل صفحه به‌روز می‌شود."
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:109
+msgid "روتین مراقبت از پوست"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:160
+msgid "روتین پیشنهادی تو آماده‌ست!"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:346
+msgid "روز"
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:113
+msgid "روش جایگزین: ایمپورت دستی"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:66
+msgid "زمان"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:110 includes/class-ziteh-widgets-manager.php:104 widgets/class-ziteh-footer.php:62 widgets/class-ziteh-header.php:79
+msgid "زیته"
+msgstr ""
+
+#: widgets/class-ziteh-instagram.php:33
+msgid "زیته | اینستاگرام"
+msgstr ""
+
+#: widgets/class-ziteh-brands.php:32
+msgid "زیته | برندها"
+msgstr ""
+
+#: widgets/class-ziteh-consultation.php:32
+msgid "زیته | بنر مشاوره"
+msgstr ""
+
+#: widgets/class-ziteh-topbar.php:35
+msgid "زیته | تاپ‌بار"
+msgstr ""
+
+#: widgets/class-ziteh-newsletter.php:32
+msgid "زیته | خبرنامه"
+msgstr ""
+
+#: widgets/class-ziteh-story.php:32
+msgid "زیته | داستان زیته"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:33
+msgid "زیته | دسته‌بندی‌ها"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:33
+msgid "زیته | روتین پوست"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:33
+msgid "زیته | فوتر"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:37
+msgid "زیته | مجله (بلاگ)"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:39
+msgid "زیته | محصولات منتخب"
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:33
+msgid "زیته | نظرات مشتریان"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:33
+msgid "زیته | نوار مزیت‌ها"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:32
+msgid "زیته | هدر و منو"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:33
+msgid "زیته | هیرو (اسلایدر تصویری)"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:34
+msgid "زیته | پیشنهادهای ویژه"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:34
+msgid "زیته | کوییز پوست"
+msgstr ""
+
+#: widgets/class-ziteh-story.php:69
+msgid "زیته در زبان گیلکی یعنی روییدن و جوانه زدن. ما این نام را انتخاب کردیم چون باور داریم مراقبت از خود، مانند جوانه‌زدن است؛ با قدم‌های کوچک آغاز می‌شود و با عشق و استمرار، بیشتر می‌کند."
+msgstr ""
+
+#: widgets/class-ziteh-features.php:86 widgets/class-ziteh-offers.php:78 widgets/class-ziteh-quiz.php:69 widgets/class-ziteh-routine.php:116
+msgid "زیرعنوان"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:102
+msgid "سؤال"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:91 widgets/class-ziteh-quiz.php:119
+msgid "سؤالات"
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:108
+msgid "ساخت صفحه اصلی زیته"
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:99
+msgid "ساخت صفحه ناموفق بود. فایل قالب یافت نشد یا معتبر نیست."
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:119
+msgid "سارا احمدی"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:209
+msgid "ساعات پاسخگویی"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:347
+msgid "ساعت"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:422 includes/class-ziteh-frontend.php:83 widgets/class-ziteh-features.php:70 widgets/class-ziteh-topbar.php:65
+msgid "سبد خرید"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:428
+msgid "سبد خرید شما خالی است."
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:249
+msgid "سبک زندگی"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:147
+msgid "ستون‌ها"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:119
+msgid "ستون‌های لینک"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:55 widgets/class-ziteh-offers.php:61 widgets/class-ziteh-products.php:66 widgets/class-ziteh-routine.php:99
+msgid "سربخش"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:189
+msgid "سرم"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:237
+msgid "سرم شب"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:254
+msgid "سرم نیاسیناماید ۱۰٪"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:297
+msgid "سرم هیالورونیک اسید"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:64
+msgid "سپر (اصالت/ضمانت)"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:80
+msgid "سپر (ضدآفتاب)"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:136
+msgid "شب"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:80
+msgid "شبکه"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:102
+msgid "شبکه‌های اجتماعی"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:198
+msgid "شروع دوباره"
+msgstr ""
+
+#: widgets/class-ziteh-consultation.php:79
+msgid "شروع مشاوره پوستی"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:81
+msgid "شروع کوییز"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:179
+msgid "شست‌وشو"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:69
+msgid "شعار"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:211
+msgid "شنبه تا چهارشنبه ۹ تا ۱۶"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:127
+msgid "صبح"
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:137
+msgid "صفحه اصلی زیته"
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:88
+msgid "صفحه اصلی زیته با موفقیت ساخته شد. هر ۱۴ سکشن به ترتیب طرح چیده شده‌اند."
+msgstr ""
+
+#: widgets/class-ziteh-header.php:138
+msgid "صفحه فعال"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:150
+msgid "صفحه نتیجه"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:199
+msgid "ضد آفتاب"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:102
+msgid "ضمانت اصالت کالا"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:112
+msgid "ضمانت بازگشت"
+msgstr ""
+
+#: widgets/class-ziteh-newsletter.php:88
+msgid "عضویت"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:108
+msgid "عطر"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:317
+msgid "عطر زنانه"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:350
+msgid "علاقه‌مندی"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:154 widgets/class-ziteh-consultation.php:58 widgets/class-ziteh-features.php:78 widgets/class-ziteh-footer.php:130 widgets/class-ziteh-header.php:119 widgets/class-ziteh-newsletter.php:58 widgets/class-ziteh-offers.php:69 widgets/class-ziteh-products.php:159
+msgid "عنوان"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:63 widgets/class-ziteh-brands.php:58 widgets/class-ziteh-categories.php:59 widgets/class-ziteh-instagram.php:59 widgets/class-ziteh-products.php:74 widgets/class-ziteh-routine.php:107 widgets/class-ziteh-testimonials.php:59
+msgid "عنوان بخش"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:70
+msgid "عنوان دسته"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:128 widgets/class-ziteh-footer.php:182
+msgid "عنوان ستون"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:205
+msgid "عنوان محصولات پیشنهادی"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:54
+msgid "عنوان مرحله"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:215
+msgid "عنوان مقاله"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:218
+msgid "عنوان مقاله را اینجا بنویسید"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:158
+msgid "عنوان نتیجه"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:158
+msgid "فروشگاه"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:201
+msgid "فعال باشد"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:599
+msgid "فقط %d عدد باقی مانده"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:189
+msgid "فقط «Vazirmatn» همراه افزونه لود می‌شود؛ برای بقیه فونت‌ها باید فایل فونت توسط قالب سایت لود شده باشد."
+msgstr ""
+
+#: widgets/class-ziteh-products.php:175
+msgid "فقط تخفیف‌دار"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:174
+msgid "فقط محصولات ویژه"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:176
+msgid "فقط موجود"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:182
+msgid "فونت قالب"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:169
+msgid "فیلتر ویژه"
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:63 includes/class-ziteh-template-importer.php:64
+msgid "قالب آماده زیته"
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:84
+msgid "قالب آماده صفحه اصلی زیته"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:179 widgets/class-ziteh-hero.php:273 widgets/class-ziteh-offers.php:374 widgets/class-ziteh-products.php:412 widgets/class-ziteh-quiz.php:309
+msgid "قبلی"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:69 widgets/class-ziteh-routine.php:77
+msgid "قطره"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:67
+msgid "قلب"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:81
+msgid "قلم‌مو"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:253
+msgid "قیمت"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:157
+msgid "قیمت (صعودی)"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:158
+msgid "قیمت (نزولی)"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:204
+msgid "قیمت اصلی"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:213
+msgid "قیمت با تخفیف"
+msgstr ""
+
+#: widgets/class-ziteh-brands.php:69 widgets/class-ziteh-header.php:50
+msgid "لوگو"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:81 widgets/class-ziteh-brands.php:86 widgets/class-ziteh-categories.php:90 widgets/class-ziteh-footer.php:92 widgets/class-ziteh-header.php:128 widgets/class-ziteh-story.php:85
+msgid "لینک"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:72
+msgid "لینک اسلاید (اختیاری)"
+msgstr ""
+
+#: widgets/class-ziteh-topbar.php:100
+msgid "لینک حساب کاربری"
+msgstr ""
+
+#: widgets/class-ziteh-consultation.php:86
+msgid "لینک دکمه"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:186
+msgid "لینک دکمه نتیجه"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:152
+msgid "لینک راهنما"
+msgstr ""
+
+#: widgets/class-ziteh-topbar.php:72
+msgid "لینک سبد خرید"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:96
+msgid "لینک لوگو"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:231 widgets/class-ziteh-products.php:280
+msgid "لینک محصول"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:106 widgets/class-ziteh-products.php:92
+msgid "لینک مشاهده همه"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:225
+msgid "لینک مقاله"
+msgstr ""
+
+#: widgets/class-ziteh-instagram.php:86
+msgid "لینک پروفایل"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:136
+msgid "لینک‌ها (هر خط یک لینک)"
+msgstr ""
+
+#: widgets/class-ziteh-instagram.php:61
+msgid "ما را در اینستاگرام دنبال کنید"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:266
+msgid "ماسک صورت آبرسان"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:83
+msgid "ماه"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:62 widgets/class-ziteh-story.php:67
+msgid "متن"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:82
+msgid "متن جایگزین تصویر"
+msgstr ""
+
+#: widgets/class-ziteh-topbar.php:82
+msgid "متن جستجو"
+msgstr ""
+
+#: widgets/class-ziteh-topbar.php:91
+msgid "متن حساب کاربری"
+msgstr ""
+
+#: widgets/class-ziteh-consultation.php:77 widgets/class-ziteh-instagram.php:96 widgets/class-ziteh-newsletter.php:86 widgets/class-ziteh-products.php:271
+msgid "متن دکمه"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:79
+msgid "متن دکمه شروع"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:196
+msgid "متن دکمه شروع مجدد"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:92
+msgid "متن دکمه مقاله"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:177
+msgid "متن دکمه نتیجه"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:100
+msgid "متن سؤال"
+msgstr ""
+
+#: widgets/class-ziteh-topbar.php:63
+msgid "متن سبد خرید"
+msgstr ""
+
+#: widgets/class-ziteh-newsletter.php:77
+msgid "متن فیلد ایمیل"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:77
+msgid "متن لوگو"
+msgstr ""
+
+#: widgets/class-ziteh-story.php:76
+msgid "متن لینک"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:143
+msgid "متن لینک راهنما"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:72
+msgid "متن مشاهده مقالات"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:97 widgets/class-ziteh-products.php:83
+msgid "متن مشاهده همه"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:167
+msgid "متن نتیجه"
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:70
+msgid "متن نظر"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:229
+msgid "متن کپی‌رایت"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:65
+msgid "مجله زیته"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:456
+msgid "مجموع"
+msgstr ""
+
+#: widgets/class-ziteh-brands.php:50 widgets/class-ziteh-categories.php:51 widgets/class-ziteh-consultation.php:50 widgets/class-ziteh-instagram.php:51 widgets/class-ziteh-newsletter.php:50 widgets/class-ziteh-story.php:50 widgets/class-ziteh-testimonials.php:51 widgets/class-ziteh-topbar.php:55
+msgid "محتوا"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:92
+msgid "محصول یافت نشد."
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:241 widgets/class-ziteh-products.php:290
+msgid "محصولات"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:166 widgets/class-ziteh-products.php:213
+msgid "محصولات (دستی)"
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:115
+msgid "محصولات اورجینال و ارسال سریع. تجربه خرید برام عالی کرد."
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:73
+msgid "محصولات اورجینال و ارسال سریع. تجربه خرید بسیار خوبی داشتم."
+msgstr ""
+
+#: widgets/class-ziteh-products.php:76
+msgid "محصولات منتخب"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:207
+msgid "محصولات پیشنهادی برای تو"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:547
+msgid "محصولی برای نمایش یافت نشد."
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:127
+msgid "مدت هر اسلاید (میلی‌ثانیه)"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:173 widgets/class-ziteh-routine.php:221
+msgid "مراحل"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:213
+msgid "مراحل شب"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:165
+msgid "مراحل صبح"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:190
+msgid "مراقبت تخصصی."
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:245 widgets/class-ziteh-categories.php:106
+msgid "مراقبت مو"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:208 widgets/class-ziteh-blog.php:241 widgets/class-ziteh-categories.php:105
+msgid "مراقبت پوست"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:148 widgets/class-ziteh-products.php:150
+msgid "مرتب‌سازی بر اساس"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:56
+msgid "مرحله"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:194
+msgid "مرطوب‌کننده"
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:124
+msgid "مریم کریمی"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:80
+msgid "مزیت"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:51
+msgid "مزیت‌ها"
+msgstr ""
+
+#: widgets/class-ziteh-instagram.php:98
+msgid "مشاهده بیشتر در اینستاگرام"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:460
+msgid "مشاهده سبد"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:424 widgets/class-ziteh-products.php:595
+msgid "مشاهده سریع"
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:94
+msgid "مشاهده صفحه"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:179
+msgid "مشاهده محصولات پیشنهادی"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:74
+msgid "مشاهده مقالات"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:99 widgets/class-ziteh-products.php:85
+msgid "مشاهده همه"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:183
+msgid "مشاهده کامل"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:94
+msgid "مطالعه مقاله"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:52
+msgid "معرفی"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:235
+msgid "مقالات"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:184
+msgid "مقالات (دستی)"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:419
+msgid "مقاله‌ای برای نمایش یافت نشد."
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:112 widgets/class-ziteh-offers.php:127 widgets/class-ziteh-products.php:113
+msgid "منبع"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:119 widgets/class-ziteh-products.php:105
+msgid "منبع محصولات"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:104
+msgid "منبع مقالات"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:109 widgets/class-ziteh-header.php:247
+msgid "منو"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:223
+msgid "منوی اصلی"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:129
+msgid "مهم‌ترین دغدغه‌ات چیه؟"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:95
+msgid "موارد"
+msgstr ""
+
+#: widgets/class-ziteh-categories.php:110
+msgid "مکمل‌ها"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:60
+msgid "نام برند"
+msgstr ""
+
+#: widgets/class-ziteh-brands.php:77
+msgid "نام برند (جایگزین لوگو)"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:195 widgets/class-ziteh-offers.php:197 widgets/class-ziteh-products.php:244 widgets/class-ziteh-products.php:246
+msgid "نام محصول"
+msgstr ""
+
+#: includes/class-ziteh-frontend.php:106
+msgid "نام محصول را بنویسید..."
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:80 widgets/class-ziteh-testimonials.php:82
+msgid "نام مشتری"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:226 includes/class-ziteh-ajax.php:266
+msgid "نتیجه‌ای یافت نشد."
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:214
+msgid "نحوه نمایش تصویر"
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:61
+msgid "نظر شما، برای ما ارزشمند است"
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:108
+msgid "نظرات"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:137
+msgid "نمایش داخل کادر"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:152 widgets/class-ziteh-products.php:199
+msgid "نمایش دکمه افزودن به سبد"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:140
+msgid "نمایش فلش‌ها"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:150
+msgid "نمایش نقطه‌ها"
+msgstr ""
+
+#: widgets/class-ziteh-consultation.php:70
+msgid "نمی‌دانی چه محصولی برای پوستت مناسبه؟ با چند سؤال کوتاه، روتین مناسب پوست خودت را پیدا کن."
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:114
+msgid "نهال محمدی"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:221
+msgid "نوار پایین"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:302
+msgid "نوشته‌ها"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:116
+msgid "نوشته‌های وردپرس (داینامیک)"
+msgstr ""
+
+#: widgets/class-ziteh-header.php:58
+msgid "نوع لوگو"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:125
+msgid "نوع محتوا"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:125
+msgid "نوع پوست تو چیه؟"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:139
+msgid "هر خط یک آیتم. برای تعیین آدرس از قالب «عنوان | https://...» استفاده کنید."
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:112
+msgid "هر خط یک گزینه. برای پیشنهاد محصول، دسته‌بندی ووکامرس را با این قالب اضافه کنید: «متن گزینه | اسلاگ-دسته». مثال: «چرب و جوش‌دار | acne-care»."
+msgstr ""
+
+#: widgets/class-ziteh-products.php:173
+msgid "همه محصولات"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:222 widgets/class-ziteh-products.php:262
+msgid "واحد پول"
+msgstr ""
+
+#: widgets/class-ziteh-topbar.php:93
+msgid "ورود / ثبت‌نام"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:117
+msgid "ووکامرس (داینامیک)"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:131
+msgid "ووکامرس - محصولات تخفیف‌دار"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:85
+msgid "ووکامرس فعال نیست."
+msgstr ""
+
+#: widgets/class-ziteh-products.php:128
+msgid "ووکامرس فعال نیست؛ در صورت انتخاب حالت داینامیک، محتوای دستی نمایش داده می‌شود."
+msgstr ""
+
+#: includes/class-ziteh-template-importer.php:91
+msgid "ویرایش با المنتور"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:118
+msgid "پاسخگویی هر روز"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:227
+msgid "پاک‌سازی"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:87
+msgid "پایان شمارش معکوس"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:117
+msgid "پخش خودکار"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:153
+msgid "پربحث‌ترین"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:155
+msgid "پرفروش‌ترین"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:218
+msgid "پرکردن (Cover)"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:71 widgets/class-ziteh-features.php:117
+msgid "پشتیبانی"
+msgstr ""
+
+#: widgets/class-ziteh-testimonials.php:125
+msgid "پشتیبانی عالی و بسته‌بندی شیک. حس خاصی به من داد. ممنون از زیته!"
+msgstr ""
+
+#: ziteh-elementor.php:134
+msgid "پلاگین «ویجت‌های زیته» برای کار کردن به المنتور نیاز دارد. لطفاً ابتدا المنتور را نصب و فعال کنید."
+msgstr ""
+
+#: ziteh-elementor.php:162
+msgid "پلاگین «ویجت‌های زیته» به PHP نسخه %s یا بالاتر نیاز دارد."
+msgstr ""
+
+#: ziteh-elementor.php:147
+msgid "پلاگین «ویجت‌های زیته» به المنتور نسخه %s یا بالاتر نیاز دارد."
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:180
+msgid "پوست را تمیز و آماده کن."
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:200
+msgid "پوست را در برابر UV محافظت کن."
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:118
+msgid "پوستی سالم، با یک روتین ساده و مداوم"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:71
+msgid "پیشنهادهای ویژه"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:133
+msgid "چقدر برای روتین وقت داری؟"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:246
+msgid "چگونه شامپو مناسب موهای خود را انتخاب کنیم؟"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:262
+msgid "چیدمان"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:260 widgets/class-ziteh-products.php:307
+msgid "ژل شست‌وشوی صورت"
+msgstr ""
+
+#: includes/class-ziteh-ajax.php:169
+msgid "کاهش"
+msgstr ""
+
+#: widgets/class-ziteh-routine.php:242
+msgid "کرم شب"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:302
+msgid "کرم مرطوب‌کننده"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:248
+msgid "کرم مرطوب‌کننده صورت"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:62
+msgid "کوییز پوست: روتین مناسب خودت را پیدا کن"
+msgstr ""
+
+#: includes/class-ziteh-settings.php:193
+msgid "گردی گوشه کارت‌ها (px)"
+msgstr ""
+
+#: widgets/class-ziteh-hero.php:197
+msgid "گردی گوشه‌ها"
+msgstr ""
+
+#: widgets/class-ziteh-quiz.php:108
+msgid "گزینه‌ها (هر خط یک گزینه)"
+msgstr ""
+
+#: widgets/class-ziteh-footer.php:193
+msgid "۰۹۱۲ ۱۲۳ ۴۵۶۷"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:250
+msgid "۱٬۱۰۰٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:313
+msgid "۱٬۱۸۰٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:298
+msgid "۱٬۲۹۰٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:249 widgets/class-ziteh-products.php:303
+msgid "۱٬۵۵۰٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:318
+msgid "۱٬۹۵۰٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-features.php:103
+msgid "۱۰۰٪ اورجینال"
+msgstr ""
+
+#: widgets/class-ziteh-products.php:255
+msgid "۱۹۰,۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:268
+msgid "۳۴۰٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:215
+msgid "۳۵۰٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:267
+msgid "۴۹۵٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-blog.php:242
+msgid "۵ نکته برای داشتن پوستی سالم در فصل تابستان"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:206
+msgid "۵۰۰٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:256
+msgid "۶۹۰٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:262
+msgid "۷۱۰٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:261 widgets/class-ziteh-products.php:308
+msgid "۹۵۰٬۰۰۰"
+msgstr ""
+
+#: widgets/class-ziteh-offers.php:255
+msgid "۹۸۰٬۰۰۰"
+msgstr ""

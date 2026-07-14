@@ -57,6 +57,23 @@ class Ziteh_Settings {
 			'sale'       => '#e0483d',
 			'radius'     => '20',
 			'animations' => 'on',
+			'font'       => 'Vazirmatn',
+		);
+	}
+
+	/**
+	 * Allowed font-family choices (label => CSS stack).
+	 *
+	 * @return array<string,string>
+	 */
+	public static function fonts() {
+		return array(
+			'Vazirmatn' => "'Vazirmatn', 'Tahoma', sans-serif",
+			'Estedad'   => "'Estedad', 'Vazirmatn', 'Tahoma', sans-serif",
+			'Sahel'     => "'Sahel', 'Vazirmatn', 'Tahoma', sans-serif",
+			'IRANSansX' => "'IRANSansX', 'IRANSans', 'Vazirmatn', 'Tahoma', sans-serif",
+			'IRANYekan' => "'IRANYekan', 'Vazirmatn', 'Tahoma', sans-serif",
+			'System'    => "'Tahoma', 'Segoe UI', sans-serif",
 		);
 	}
 
@@ -125,6 +142,8 @@ class Ziteh_Settings {
 		}
 		$out['radius']     = isset( $input['radius'] ) ? (string) max( 0, min( 40, (int) $input['radius'] ) ) : $defaults['radius'];
 		$out['animations'] = ( isset( $input['animations'] ) && 'on' === $input['animations'] ) ? 'on' : 'off';
+		$fonts             = self::fonts();
+		$out['font']       = ( isset( $input['font'] ) && isset( $fonts[ $input['font'] ] ) ) ? $input['font'] : $defaults['font'];
 		return $out;
 	}
 
@@ -160,6 +179,17 @@ class Ziteh_Settings {
 						</tr>
 					<?php endforeach; ?>
 					<tr>
+						<th scope="row"><label for="ziteh-font"><?php esc_html_e( 'فونت قالب', 'ziteh' ); ?></label></th>
+						<td>
+							<select id="ziteh-font" name="<?php echo esc_attr( self::OPTION ); ?>[font]">
+								<?php foreach ( array_keys( self::fonts() ) as $font ) : ?>
+									<option value="<?php echo esc_attr( $font ); ?>" <?php selected( $font, $s['font'] ); ?>><?php echo esc_html( $font ); ?></option>
+								<?php endforeach; ?>
+							</select>
+							<p class="description"><?php esc_html_e( 'فقط «Vazirmatn» همراه افزونه لود می‌شود؛ برای بقیه فونت‌ها باید فایل فونت توسط قالب سایت لود شده باشد.', 'ziteh' ); ?></p>
+						</td>
+					</tr>
+					<tr>
 						<th scope="row"><label for="ziteh-radius"><?php esc_html_e( 'گردی گوشه کارت‌ها (px)', 'ziteh' ); ?></label></th>
 						<td><input type="number" id="ziteh-radius" min="0" max="40" name="<?php echo esc_attr( self::OPTION ); ?>[radius]" value="<?php echo esc_attr( $s['radius'] ); ?>"></td>
 					</tr>
@@ -194,6 +224,10 @@ class Ziteh_Settings {
 		$css .= '--ziteh-ink:' . $s['ink'] . ';';
 		$css .= '--ziteh-sale:' . $s['sale'] . ';';
 		$css .= '--ziteh-radius:' . (int) $s['radius'] . 'px;';
+		$fonts = self::fonts();
+		if ( isset( $fonts[ $s['font'] ] ) ) {
+			$css .= '--ziteh-font:' . $fonts[ $s['font'] ] . ';';
+		}
 		$css .= '}';
 
 		if ( 'off' === $s['animations'] ) {

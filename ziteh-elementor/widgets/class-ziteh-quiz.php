@@ -107,9 +107,9 @@ class Ziteh_Quiz_Widget extends Ziteh_Widget_Base {
 			array(
 				'label'       => esc_html__( 'گزینه‌ها (هر خط یک گزینه)', 'ziteh' ),
 				'type'        => Controls_Manager::TEXTAREA,
-				'rows'        => 4,
+				'rows'        => 5,
 				'default'     => "گزینه اول\nگزینه دوم\nگزینه سوم",
-				'description' => esc_html__( 'هر خط یک گزینه.', 'ziteh' ),
+				'description' => esc_html__( 'هر خط یک گزینه. برای پیشنهاد محصول، دسته‌بندی ووکامرس را با این قالب اضافه کنید: «متن گزینه | اسلاگ-دسته». مثال: «چرب و جوش‌دار | acne-care».', 'ziteh' ),
 			)
 		);
 
@@ -199,22 +199,64 @@ class Ziteh_Quiz_Widget extends Ziteh_Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'products_heading',
+			array(
+				'label'     => esc_html__( 'عنوان محصولات پیشنهادی', 'ziteh' ),
+				'type'      => Controls_Manager::TEXT,
+				'default'   => esc_html__( 'محصولات پیشنهادی برای تو', 'ziteh' ),
+				'separator' => 'before',
+			)
+		);
+
+		$this->add_control(
+			'products_count',
+			array(
+				'label'   => esc_html__( 'تعداد محصولات پیشنهادی', 'ziteh' ),
+				'type'    => Controls_Manager::NUMBER,
+				'min'     => 2,
+				'max'     => 12,
+				'default' => 4,
+			)
+		);
+
+		$this->add_control(
+			'fallback_cat',
+			array(
+				'label'       => esc_html__( 'دسته پیش‌فرض (وقتی گزینه‌ای دسته ندارد)', 'ziteh' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => '',
+				'description' => esc_html__( 'اسلاگ یک دسته‌بندی محصول. خالی = پرفروش‌ترین‌ها.', 'ziteh' ),
+			)
+		);
+
 		$this->end_controls_section();
 	}
 
 	/**
-	 * Split a textarea of answers into a clean array.
+	 * Split a textarea of answers into [text, category-slug] pairs.
+	 * Line format: "متن گزینه" or "متن گزینه | اسلاگ-دسته".
 	 *
 	 * @param string $raw Raw textarea value.
-	 * @return string[]
+	 * @return array<int,array{text:string,cat:string}>
 	 */
 	private function lines( $raw ) {
 		$out = array();
 		foreach ( preg_split( '/\r\n|\r|\n/', (string) $raw ) as $line ) {
 			$line = trim( $line );
-			if ( '' !== $line ) {
-				$out[] = $line;
+			if ( '' === $line ) {
+				continue;
 			}
+			$cat = '';
+			if ( false !== strpos( $line, '|' ) ) {
+				list( $text, $cat ) = array_map( 'trim', explode( '|', $line, 2 ) );
+			} else {
+				$text = $line;
+			}
+			$out[] = array(
+				'text' => $text,
+				'cat'  => sanitize_title( $cat ),
+			);
 		}
 		return $out;
 	}
@@ -228,7 +270,9 @@ class Ziteh_Quiz_Widget extends Ziteh_Widget_Base {
 		$total      = count( $questions );
 		$result_url = ! empty( $settings['result_button_url']['url'] ) ? $settings['result_button_url']['url'] : '#';
 		?>
-		<section class="ziteh-quiz ziteh-reveal" data-ziteh-quiz>
+		<section class="ziteh-quiz ziteh-reveal" data-ziteh-quiz
+			data-quiz-count="<?php echo esc_attr( isset( $settings['products_count'] ) ? (int) $settings['products_count'] : 4 ); ?>"
+			data-quiz-fallback="<?php echo esc_attr( isset( $settings['fallback_cat'] ) ? sanitize_title( $settings['fallback_cat'] ) : '' ); ?>">
 			<div class="ziteh-container">
 				<div class="ziteh-quiz__box">
 
@@ -257,7 +301,7 @@ class Ziteh_Quiz_Widget extends Ziteh_Widget_Base {
 								<h3 class="ziteh-quiz__question"><?php echo esc_html( $item['question'] ); ?></h3>
 								<div class="ziteh-quiz__answers">
 									<?php foreach ( $this->lines( $item['answers'] ) as $answer ) : ?>
-										<button class="ziteh-quiz__answer" type="button" data-quiz-answer><?php echo esc_html( $answer ); ?></button>
+										<button class="ziteh-quiz__answer" type="button" data-quiz-answer data-cat="<?php echo esc_attr( $answer['cat'] ); ?>"><?php echo esc_html( $answer['text'] ); ?></button>
 									<?php endforeach; ?>
 								</div>
 								<button class="ziteh-quiz__back" type="button" data-quiz-back hidden>
@@ -274,6 +318,12 @@ class Ziteh_Quiz_Widget extends Ziteh_Widget_Base {
 						<h2 class="ziteh-quiz__title"><?php echo esc_html( $settings['result_title'] ); ?></h2>
 						<p class="ziteh-quiz__subtitle"><?php echo esc_html( $settings['result_text'] ); ?></p>
 						<ul class="ziteh-quiz__summary" data-quiz-summary></ul>
+
+						<div class="ziteh-quiz__products" data-quiz-products-wrap hidden>
+							<h3 class="ziteh-quiz__products-title"><?php echo esc_html( $settings['products_heading'] ); ?></h3>
+							<div class="ziteh-quiz__products-grid" data-quiz-products></div>
+						</div>
+
 						<div class="ziteh-quiz__result-actions">
 							<a class="ziteh-btn ziteh-btn--primary" href="<?php echo esc_url( $result_url ); ?>">
 								<?php echo esc_html( $settings['result_button_text'] ); ?>

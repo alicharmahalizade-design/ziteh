@@ -57,6 +57,9 @@ class Ziteh_Ajax {
 		add_action( 'wp_ajax_ziteh_search', array( $this, 'search' ) );
 		add_action( 'wp_ajax_nopriv_ziteh_search', array( $this, 'search' ) );
 
+		add_action( 'wp_ajax_ziteh_quiz_products', array( $this, 'quiz_products' ) );
+		add_action( 'wp_ajax_nopriv_ziteh_quiz_products', array( $this, 'quiz_products' ) );
+
 		if ( $this->wc() ) {
 			add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'cart_fragments' ) );
 		}
@@ -101,10 +104,54 @@ class Ziteh_Ajax {
 	 */
 	private function render_quickview( $product ) {
 		$permalink = get_permalink( $product->get_id() );
+		$can_buy   = $product->is_type( 'simple' ) && $product->is_purchasable() && $product->is_in_stock();
+
+		// Build the gallery: featured image + gallery images.
+		$image_ids = array();
+		if ( $product->get_image_id() ) {
+			$image_ids[] = $product->get_image_id();
+		}
+		$image_ids = array_merge( $image_ids, $product->get_gallery_image_ids() );
+		$image_ids = array_values( array_unique( array_filter( $image_ids ) ) );
 		?>
 		<div class="ziteh-qv">
 			<div class="ziteh-qv__media">
-				<?php echo $product->get_image( 'woocommerce_single' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<div class="ziteh-qv__gallery" data-ziteh-qv-gallery>
+					<div class="ziteh-qv__stage">
+						<?php
+						if ( ! empty( $image_ids ) ) {
+							$i = 0;
+							foreach ( $image_ids as $img_id ) {
+								printf(
+									'<div class="ziteh-qv__slide%s" data-qv-slide="%d">%s</div>',
+									0 === $i ? ' is-active' : '',
+									(int) $i,
+									wp_get_attachment_image( $img_id, 'woocommerce_single' ) // phpcs:ignore WordPress.Security.EscapeOutput
+								);
+								$i++;
+							}
+						} else {
+							echo $product->get_image( 'woocommerce_single' ); // phpcs:ignore WordPress.Security.EscapeOutput
+						}
+						?>
+					</div>
+					<?php if ( count( $image_ids ) > 1 ) : ?>
+						<div class="ziteh-qv__thumbs">
+							<?php
+							$i = 0;
+							foreach ( $image_ids as $img_id ) {
+								printf(
+									'<button type="button" class="ziteh-qv__thumb%s" data-qv-thumb="%d">%s</button>',
+									0 === $i ? ' is-active' : '',
+									(int) $i,
+									wp_get_attachment_image( $img_id, 'thumbnail' ) // phpcs:ignore WordPress.Security.EscapeOutput
+								);
+								$i++;
+							}
+							?>
+						</div>
+					<?php endif; ?>
+				</div>
 			</div>
 			<div class="ziteh-qv__info">
 				<h3 class="ziteh-qv__title"><a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $product->get_name() ); ?></a></h3>
@@ -117,7 +164,12 @@ class Ziteh_Ajax {
 				<div class="ziteh-qv__excerpt"><?php echo wp_kses_post( wpautop( $product->get_short_description() ) ); ?></div>
 
 				<div class="ziteh-qv__actions">
-					<?php if ( $product->is_type( 'simple' ) && $product->is_purchasable() && $product->is_in_stock() ) : ?>
+					<?php if ( $can_buy ) : ?>
+						<div class="ziteh-qty" data-ziteh-qty>
+							<button type="button" class="ziteh-qty__btn" data-qty-minus aria-label="<?php esc_attr_e( 'کاهش', 'ziteh' ); ?>">−</button>
+							<input type="number" class="ziteh-qty__input" data-qty-input value="1" min="1" step="1" inputmode="numeric" aria-label="<?php esc_attr_e( 'تعداد', 'ziteh' ); ?>">
+							<button type="button" class="ziteh-qty__btn" data-qty-plus aria-label="<?php esc_attr_e( 'افزایش', 'ziteh' ); ?>">+</button>
+						</div>
 						<a class="ziteh-btn ziteh-btn--primary add_to_cart_button ajax_add_to_cart"
 							href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"
 							data-quantity="1"
@@ -229,6 +281,109 @@ class Ziteh_Ajax {
 			wp_reset_postdata();
 		}
 		wp_send_json_success( array( 'html' => ob_get_clean() ) );
+	}
+
+	/**
+	 * Quiz recommendations: return product cards for the chosen categories.
+	 */
+	public function quiz_products() {
+		$this->check_nonce();
+
+		if ( ! $this->wc() || ! function_exists( 'wc_get_products' ) ) {
+			wp_send_json_success( array( 'html' => '' ) );
+		}
+
+		$raw_cats = isset( $_REQUEST['cats'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['cats'] ) ) : '';
+		$fallback = isset( $_REQUEST['fallback'] ) ? sanitize_title( wp_unslash( $_REQUEST['fallback'] ) ) : '';
+		$count    = isset( $_REQUEST['count'] ) ? absint( $_REQUEST['count'] ) : 4;
+		$count    = max( 1, min( 12, $count ) );
+
+		$cats = array_filter( array_map( 'sanitize_title', explode( ',', $raw_cats ) ) );
+		$cats = array_values( array_unique( $cats ) );
+
+		$args = array(
+			'status'   => 'publish',
+			'limit'    => $count,
+			'orderby'  => 'popularity',
+			'order'    => 'DESC',
+			'paginate' => false,
+		);
+		if ( ! empty( $cats ) ) {
+			$args['category'] = $cats;
+		} elseif ( $fallback ) {
+			$args['category'] = array( $fallback );
+		}
+
+		$products = wc_get_products( $args );
+
+		// If a category filter returned nothing, fall back to best-sellers.
+		if ( empty( $products ) && ( ! empty( $cats ) || $fallback ) ) {
+			$products = wc_get_products(
+				array(
+					'status'  => 'publish',
+					'limit'   => $count,
+					'orderby' => 'popularity',
+					'order'   => 'DESC',
+				)
+			);
+		}
+
+		ob_start();
+		foreach ( $products as $product ) {
+			$this->render_mini_product_card( $product );
+		}
+		wp_send_json_success( array( 'html' => ob_get_clean() ) );
+	}
+
+	/**
+	 * Compact product card (same classes as the products widget) for AJAX use.
+	 *
+	 * @param \WC_Product $product Product.
+	 */
+	private function render_mini_product_card( $product ) {
+		$id        = $product->get_id();
+		$permalink = get_permalink( $id );
+		$ajax      = $product->supports( 'ajax_add_to_cart' ) && $product->is_purchasable() && $product->is_in_stock();
+		?>
+		<div class="ziteh-product-card" data-ziteh-product="<?php echo esc_attr( $id ); ?>">
+			<div class="ziteh-product-card__media">
+				<button class="ziteh-product-card__wish" type="button" data-ziteh-wish="<?php echo esc_attr( $id ); ?>" aria-label="<?php esc_attr_e( 'علاقه‌مندی', 'ziteh' ); ?>">
+					<?php echo $this->heart_svg(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				</button>
+				<a class="ziteh-product-card__thumb" href="<?php echo esc_url( $permalink ); ?>"><?php echo $product->get_image( 'woocommerce_thumbnail' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a>
+			</div>
+			<div class="ziteh-product-card__body">
+				<a class="ziteh-product-card__name" href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $product->get_name() ); ?></a>
+				<div class="ziteh-product-card__foot">
+					<span class="ziteh-product-card__price ziteh-product-card__price--wc"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
+					<a class="ziteh-product-card__add<?php echo $ajax ? ' add_to_cart_button ajax_add_to_cart' : ''; ?>"
+						href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"
+						data-quantity="1" data-product_id="<?php echo esc_attr( $id ); ?>"
+						aria-label="<?php echo esc_attr( $product->add_to_cart_text() ); ?>" rel="nofollow">
+						<?php echo $this->cart_svg(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					</a>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Minimal heart icon (independent of the widget base).
+	 *
+	 * @return string
+	 */
+	private function heart_svg() {
+		return '<svg class="ziteh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.3-9C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.4.8-1.2 2-2.4 4-2.4 3.5 0 5 3.5 3.3 6.5C19 16.4 12 21 12 21z"/></svg>';
+	}
+
+	/**
+	 * Minimal cart icon.
+	 *
+	 * @return string
+	 */
+	private function cart_svg() {
+		return '<svg class="ziteh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M6 6 5 3H2"/></svg>';
 	}
 
 	/**

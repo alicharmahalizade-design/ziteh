@@ -3,7 +3,7 @@
  * Plugin Name: Ziteh Elementor Widgets
  * Plugin URI:  https://ziteh.com
  * Description: مجموعه ویجت‌های اختصاصی المنتور برای پیاده‌سازی پیکسل‌به‌پیکسل صفحه اصلی فروشگاه زیته (تاپ‌بار، هدر، هیرو، دسته‌بندی، روتین، محصولات، برندها، مجله، مشاوره، نظرات، اینستاگرام، خبرنامه و فوتر).
- * Version:     2.0.0
+ * Version:     2.0.1
  * Author:      Ziteh
  * Text Domain: ziteh
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'ZITEH_EL_VERSION', '2.0.0' );
+define( 'ZITEH_EL_VERSION', '2.0.1' );
 define( 'ZITEH_EL_FILE', __FILE__ );
 define( 'ZITEH_EL_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ZITEH_EL_URL', plugin_dir_url( __FILE__ ) );
@@ -56,6 +56,14 @@ final class Ziteh_Elementor_Plugin {
 	 */
 	private function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'on_plugins_loaded' ) );
+		add_action( 'init', array( $this, 'load_textdomain' ) );
+	}
+
+	/**
+	 * Load translations from /languages.
+	 */
+	public function load_textdomain() {
+		load_plugin_textdomain( 'ziteh', false, dirname( plugin_basename( ZITEH_EL_FILE ) ) . '/languages' );
 	}
 
 	/**
