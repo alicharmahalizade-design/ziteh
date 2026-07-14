@@ -719,23 +719,34 @@
 	 *
 	 * @param {ParentNode} [scope=document] Where to look.
 	 */
+	/**
+	 * Run a function without ever letting it throw out — a failure in one Ziteh
+	 * feature must never break the page or a host theme's own scripts.
+	 *
+	 * @param {Function} fn Callback.
+	 * @param {*}        [arg] Optional argument.
+	 */
+	function safe(fn, arg) {
+		try { fn(arg); } catch (e) { if (window.console) { console.warn('[ziteh]', e); } }
+	}
+
 	function initAll(scope) {
 		scope = scope || document;
-		scope.querySelectorAll('[data-ziteh-hero]').forEach(initHero);
-		scope.querySelectorAll('[data-ziteh-slider]').forEach(initSlider);
-		scope.querySelectorAll('[data-ziteh-countdown]').forEach(initCountdown);
-		scope.querySelectorAll('[data-ziteh-routine]').forEach(initRoutine);
-		scope.querySelectorAll('[data-ziteh-burger]').forEach(initBurger);
-		scope.querySelectorAll('[data-ziteh-quiz]').forEach(initQuiz);
+		safe(function () { scope.querySelectorAll('[data-ziteh-hero]').forEach(function (n) { safe(initHero, n); }); });
+		safe(function () { scope.querySelectorAll('[data-ziteh-slider]').forEach(function (n) { safe(initSlider, n); }); });
+		safe(function () { scope.querySelectorAll('[data-ziteh-countdown]').forEach(function (n) { safe(initCountdown, n); }); });
+		safe(function () { scope.querySelectorAll('[data-ziteh-routine]').forEach(function (n) { safe(initRoutine, n); }); });
+		safe(function () { scope.querySelectorAll('[data-ziteh-burger]').forEach(function (n) { safe(initBurger, n); }); });
+		safe(function () { scope.querySelectorAll('[data-ziteh-quiz]').forEach(function (n) { safe(initQuiz, n); }); });
 
 		// Document-level features (run once).
-		initDrawer();
-		initQuickView();
-		initQvControls();
-		initSearch();
-		initWishlist();
-		initStickyHeader();
-		initReveal();
+		safe(initDrawer);
+		safe(initQuickView);
+		safe(initQvControls);
+		safe(initSearch);
+		safe(initWishlist);
+		safe(initStickyHeader);
+		safe(initReveal);
 	}
 
 	// Global: overlay click + Esc close the shell.
