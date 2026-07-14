@@ -4,7 +4,7 @@
   "type": "page",
   "content": [
     {
-      "id": "ebc73cbc",
+      "id": "20ba3547",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -29,7 +29,7 @@
       },
       "elements": [
         {
-          "id": "9674ebd1",
+          "id": "19b33cf9",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -45,7 +45,7 @@
           },
           "elements": [
             {
-              "id": "8109bf34",
+              "id": "4bba36ba",
               "elType": "widget",
               "widgetType": "ziteh-topbar",
               "settings": {},
@@ -58,7 +58,7 @@
       "isInner": false
     },
     {
-      "id": "bd282a2e",
+      "id": "bb7fdc8e",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -83,7 +83,7 @@
       },
       "elements": [
         {
-          "id": "1b18a04f",
+          "id": "56cc51c6",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -99,7 +99,7 @@
           },
           "elements": [
             {
-              "id": "d90cc186",
+              "id": "01f229f7",
               "elType": "widget",
               "widgetType": "ziteh-header",
               "settings": {},
@@ -112,7 +112,7 @@
       "isInner": false
     },
     {
-      "id": "3739ea6e",
+      "id": "638298ca",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -137,7 +137,7 @@
       },
       "elements": [
         {
-          "id": "7d0a43fa",
+          "id": "83bedf7f",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -153,7 +153,7 @@
           },
           "elements": [
             {
-              "id": "cc13af4c",
+              "id": "4cf6a027",
               "elType": "widget",
               "widgetType": "ziteh-hero",
               "settings": {},
@@ -166,7 +166,7 @@
       "isInner": false
     },
     {
-      "id": "949faf65",
+      "id": "f6e9c9be",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -191,7 +191,7 @@
       },
       "elements": [
         {
-          "id": "8c041e52",
+          "id": "edeb7dec",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -207,7 +207,7 @@
           },
           "elements": [
             {
-              "id": "ec6d4cd9",
+              "id": "09a7a37d",
               "elType": "widget",
               "widgetType": "ziteh-story",
               "settings": {},
@@ -220,7 +220,7 @@
       "isInner": false
     },
     {
-      "id": "be302668",
+      "id": "eb1c340b",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -245,7 +245,7 @@
       },
       "elements": [
         {
-          "id": "5a1cdee5",
+          "id": "aab96f04",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -261,7 +261,7 @@
           },
           "elements": [
             {
-              "id": "f7607ead",
+              "id": "c4ada712",
               "elType": "widget",
               "widgetType": "ziteh-categories",
               "settings": {},
@@ -274,7 +274,7 @@
       "isInner": false
     },
     {
-      "id": "d1e3d22a",
+      "id": "96ef3d63",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -299,7 +299,7 @@
       },
       "elements": [
         {
-          "id": "913d0e3f",
+          "id": "36805265",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -315,7 +315,7 @@
           },
           "elements": [
             {
-              "id": "306e89dd",
+              "id": "7db405e1",
               "elType": "widget",
               "widgetType": "ziteh-routine",
               "settings": {},
@@ -328,7 +328,7 @@
       "isInner": false
     },
     {
-      "id": "a693d2d8",
+      "id": "ffd0ed9b",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -353,7 +353,7 @@
       },
       "elements": [
         {
-          "id": "4819f4dc",
+          "id": "bec3f878",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -369,7 +369,7 @@
           },
           "elements": [
             {
-              "id": "9b7802be",
+              "id": "0f188a10",
               "elType": "widget",
               "widgetType": "ziteh-products",
               "settings": {},
@@ -382,7 +382,7 @@
       "isInner": false
     },
     {
-      "id": "0c1f6b11",
+      "id": "66a717e2",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -407,7 +407,7 @@
       },
       "elements": [
         {
-          "id": "6b5fd33c",
+          "id": "936cada0",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -423,7 +423,61 @@
           },
           "elements": [
             {
-              "id": "a57906bd",
+              "id": "8eb52da6",
+              "elType": "widget",
+              "widgetType": "ziteh-offers",
+              "settings": {},
+              "elements": []
+            }
+          ],
+          "isInner": false
+        }
+      ],
+      "isInner": false
+    },
+    {
+      "id": "2f56db6c",
+      "elType": "section",
+      "settings": {
+        "layout": "full_width",
+        "gap": "no",
+        "content_position": "top",
+        "padding": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        },
+        "margin": {
+          "unit": "px",
+          "top": "0",
+          "right": "0",
+          "bottom": "0",
+          "left": "0",
+          "isLinked": true
+        }
+      },
+      "elements": [
+        {
+          "id": "ced8f65e",
+          "elType": "column",
+          "settings": {
+            "_column_size": 100,
+            "_inline_size": null,
+            "padding": {
+              "unit": "px",
+              "top": "0",
+              "right": "0",
+              "bottom": "0",
+              "left": "0",
+              "isLinked": true
+            }
+          },
+          "elements": [
+            {
+              "id": "1176ba6f",
               "elType": "widget",
               "widgetType": "ziteh-brands",
               "settings": {},
@@ -436,7 +490,7 @@
       "isInner": false
     },
     {
-      "id": "39b76973",
+      "id": "18c4c3a9",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -461,7 +515,7 @@
       },
       "elements": [
         {
-          "id": "a87c53dc",
+          "id": "ef72a2bf",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -477,7 +531,7 @@
           },
           "elements": [
             {
-              "id": "ecef49fe",
+              "id": "a248a6a9",
               "elType": "widget",
               "widgetType": "ziteh-blog",
               "settings": {},
@@ -490,7 +544,7 @@
       "isInner": false
     },
     {
-      "id": "9f12f604",
+      "id": "ccee8ad9",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -515,7 +569,7 @@
       },
       "elements": [
         {
-          "id": "48ea428e",
+          "id": "e61013dc",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -531,7 +585,7 @@
           },
           "elements": [
             {
-              "id": "1eb77385",
+              "id": "c2693bb1",
               "elType": "widget",
               "widgetType": "ziteh-consultation",
               "settings": {},
@@ -544,7 +598,7 @@
       "isInner": false
     },
     {
-      "id": "6be12954",
+      "id": "8868d2ee",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -569,7 +623,7 @@
       },
       "elements": [
         {
-          "id": "59c99a56",
+          "id": "3653771f",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -585,7 +639,7 @@
           },
           "elements": [
             {
-              "id": "6de6d9b7",
+              "id": "47642648",
               "elType": "widget",
               "widgetType": "ziteh-testimonials",
               "settings": {},
@@ -598,7 +652,7 @@
       "isInner": false
     },
     {
-      "id": "55444322",
+      "id": "a0410198",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -623,7 +677,7 @@
       },
       "elements": [
         {
-          "id": "77bb9358",
+          "id": "8d934feb",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -639,7 +693,7 @@
           },
           "elements": [
             {
-              "id": "530ba46f",
+              "id": "06ef92c8",
               "elType": "widget",
               "widgetType": "ziteh-instagram",
               "settings": {},
@@ -652,7 +706,7 @@
       "isInner": false
     },
     {
-      "id": "78d8ce8b",
+      "id": "a12c18af",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -677,7 +731,7 @@
       },
       "elements": [
         {
-          "id": "ebad1d9a",
+          "id": "47d5be01",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -693,7 +747,7 @@
           },
           "elements": [
             {
-              "id": "d40e6763",
+              "id": "17af6fca",
               "elType": "widget",
               "widgetType": "ziteh-newsletter",
               "settings": {},
@@ -706,7 +760,7 @@
       "isInner": false
     },
     {
-      "id": "a5131282",
+      "id": "1e12ec6c",
       "elType": "section",
       "settings": {
         "layout": "full_width",
@@ -731,7 +785,7 @@
       },
       "elements": [
         {
-          "id": "007be15e",
+          "id": "28a504fa",
           "elType": "column",
           "settings": {
             "_column_size": 100,
@@ -747,7 +801,7 @@
           },
           "elements": [
             {
-              "id": "ee563533",
+              "id": "429c795e",
               "elType": "widget",
               "widgetType": "ziteh-footer",
               "settings": {},

@@ -1073,6 +1073,95 @@
 	list-style: none;
 }
 
+/* ---------- Special offers (countdown) ---------- */
+
+.ziteh-offers {
+	background: var(--ziteh-cream);
+	padding-block: 66px;
+}
+
+.ziteh-offers__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 18px 24px;
+	margin-bottom: 34px;
+}
+
+.ziteh-offers__intro .ziteh-section-title {
+	margin-bottom: 6px;
+}
+
+.ziteh-offers__subtitle {
+	margin: 0;
+	color: var(--ziteh-muted);
+	font-size: 14px;
+}
+
+.ziteh-offers__all {
+	margin-inline-start: auto;
+}
+
+/* Countdown timer */
+.ziteh-offers__timer {
+	display: inline-flex;
+	align-items: flex-start;
+	gap: 8px;
+	direction: ltr;
+}
+
+.ziteh-cd {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	min-width: 52px;
+}
+
+.ziteh-cd__num {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 9px 6px;
+	background: var(--ziteh-green);
+	color: #fff;
+	border-radius: 12px;
+	font-size: 20px;
+	font-weight: 800;
+	font-variant-numeric: tabular-nums;
+	line-height: 1;
+	box-shadow: var(--ziteh-shadow-sm);
+}
+
+.ziteh-cd__label {
+	font-size: 11px;
+	color: var(--ziteh-muted);
+	font-weight: 500;
+}
+
+.ziteh-cd__sep {
+	color: var(--ziteh-green-dark);
+	font-size: 18px;
+	font-weight: 800;
+	line-height: 1;
+	margin-top: 12px;
+}
+
+.ziteh-offers.is-ended .ziteh-offers__timer {
+	opacity: .55;
+}
+
+/* Manual price amount (offers) */
+.ziteh-amount em {
+	font-style: normal;
+	font-size: .72em;
+	color: var(--ziteh-muted);
+	font-weight: 400;
+	margin-inline-start: 2px;
+}
+
 /* ---------- Brands ---------- */
 
 .ziteh-brands {

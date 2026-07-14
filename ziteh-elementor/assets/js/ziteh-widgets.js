@@ -207,6 +207,79 @@
 	}
 
 	/**
+	 * Wire up a countdown timer.
+	 *
+	 * @param {HTMLElement} el Element carrying [data-ziteh-countdown] with a
+	 *                        data-end ISO datetime (empty → end of today).
+	 */
+	function initCountdown(el) {
+		if (el.dataset.zitehCountdownReady === '1') {
+			return;
+		}
+		el.dataset.zitehCountdownReady = '1';
+
+		var nums = {
+			d: el.querySelector('[data-cd="d"]'),
+			h: el.querySelector('[data-cd="h"]'),
+			m: el.querySelector('[data-cd="m"]'),
+			s: el.querySelector('[data-cd="s"]')
+		};
+		var section = el.closest('.ziteh-offers');
+
+		function endTime() {
+			var raw = (el.getAttribute('data-end') || '').trim();
+			if (raw) {
+				var t = new Date(raw.replace(' ', 'T')).getTime();
+				if (!isNaN(t)) {
+					return t;
+				}
+			}
+			// Fallback: next local midnight.
+			var d = new Date();
+			d.setHours(24, 0, 0, 0);
+			return d.getTime();
+		}
+
+		var target = endTime();
+
+		// Persian digits, zero-padded to 2.
+		function fa(n) {
+			var s = (n < 10 ? '0' : '') + n;
+			return s.replace(/[0-9]/g, function (ch) {
+				return '۰۱۲۳۴۵۶۷۸۹'.charAt(+ch);
+			});
+		}
+
+		function set(el2, n) {
+			if (el2) {
+				el2.textContent = fa(n);
+			}
+		}
+
+		var timer;
+
+		function tick() {
+			var diff = target - Date.now();
+			if (diff <= 0) {
+				set(nums.d, 0); set(nums.h, 0); set(nums.m, 0); set(nums.s, 0);
+				if (section) {
+					section.classList.add('is-ended');
+				}
+				clearInterval(timer);
+				return;
+			}
+			var totalSec = Math.floor(diff / 1000);
+			set(nums.d, Math.floor(totalSec / 86400));
+			set(nums.h, Math.floor((totalSec % 86400) / 3600));
+			set(nums.m, Math.floor((totalSec % 3600) / 60));
+			set(nums.s, totalSec % 60);
+		}
+
+		tick();
+		timer = setInterval(tick, 1000);
+	}
+
+	/**
 	 * Wire up the mobile header burger.
 	 *
 	 * @param {HTMLElement} burger Element carrying [data-ziteh-burger].
@@ -239,6 +312,7 @@
 		scope = scope || document;
 		scope.querySelectorAll('[data-ziteh-hero]').forEach(initHero);
 		scope.querySelectorAll('[data-ziteh-slider]').forEach(initSlider);
+		scope.querySelectorAll('[data-ziteh-countdown]').forEach(initCountdown);
 		scope.querySelectorAll('[data-ziteh-routine]').forEach(initRoutine);
 		scope.querySelectorAll('[data-ziteh-burger]').forEach(initBurger);
 	}
@@ -257,7 +331,7 @@
 			if (!window.elementorFrontend || !window.elementorFrontend.hooks) {
 				return;
 			}
-			var slugs = ['ziteh-hero', 'ziteh-categories', 'ziteh-products', 'ziteh-routine', 'ziteh-header'];
+			var slugs = ['ziteh-hero', 'ziteh-categories', 'ziteh-products', 'ziteh-offers', 'ziteh-routine', 'ziteh-header'];
 			slugs.forEach(function (slug) {
 				window.elementorFrontend.hooks.addAction(
 					'frontend/element_ready/' + slug + '.default',

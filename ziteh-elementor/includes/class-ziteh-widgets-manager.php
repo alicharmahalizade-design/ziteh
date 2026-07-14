@@ -36,6 +36,7 @@ class Ziteh_Widgets_Manager {
 		'categories',
 		'routine',
 		'products',
+		'offers',
 		'brands',
 		'blog',
 		'consultation',
