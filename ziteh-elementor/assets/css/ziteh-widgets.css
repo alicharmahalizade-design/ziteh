@@ -2255,7 +2255,7 @@ body.ziteh-noscroll { overflow: hidden; }
 .ziteh-drawer {
 	position: fixed;
 	top: 0;
-	inset-inline-end: 0;
+	right: 0;
 	height: 100%;
 	width: 384px;
 	max-width: 90vw;
@@ -2264,14 +2264,16 @@ body.ziteh-noscroll { overflow: hidden; }
 	direction: rtl;
 	font-family: var(--ziteh-font);
 	transform: translateX(100%);
-	transition: transform .35s cubic-bezier(.4, 0, .2, 1);
+	visibility: hidden;
+	transition: transform .35s cubic-bezier(.4, 0, .2, 1), visibility .35s;
 	display: flex;
 	box-shadow: -20px 0 50px -30px rgba(0, 0, 0, .5);
 }
 
-.ziteh-drawer.is-open { transform: translateX(0); }
-[dir="ltr"] .ziteh-drawer { inset-inline-end: 0; transform: translateX(-100%); }
-[dir="ltr"] .ziteh-drawer.is-open { transform: translateX(0); }
+.ziteh-drawer.is-open {
+	transform: translateX(0);
+	visibility: visible;
+}
 
 .ziteh-drawer__panel {
 	display: flex;
