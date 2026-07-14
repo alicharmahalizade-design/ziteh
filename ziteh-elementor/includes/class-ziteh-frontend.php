@@ -74,6 +74,11 @@ class Ziteh_Frontend {
 		if ( is_admin() ) {
 			return;
 		}
+
+		// Respect the kill-switch: when off, print nothing at all.
+		if ( class_exists( 'Ziteh_Settings' ) && ! Ziteh_Settings::shell_enabled() ) {
+			return;
+		}
 		$has_wc = class_exists( 'WooCommerce' );
 		?>
 		<!-- Ziteh interactive shell -->

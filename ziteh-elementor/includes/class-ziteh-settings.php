@@ -58,7 +58,18 @@ class Ziteh_Settings {
 			'radius'     => '20',
 			'animations' => 'on',
 			'font'       => 'Vazirmatn',
+			'shell'      => 'on',
 		);
+	}
+
+	/**
+	 * Whether the interactive shell (cart drawer / quick view / live search) is on.
+	 *
+	 * @return bool
+	 */
+	public static function shell_enabled() {
+		$s = self::get();
+		return 'off' !== $s['shell'];
 	}
 
 	/**
@@ -142,6 +153,7 @@ class Ziteh_Settings {
 		}
 		$out['radius']     = isset( $input['radius'] ) ? (string) max( 0, min( 40, (int) $input['radius'] ) ) : $defaults['radius'];
 		$out['animations'] = ( isset( $input['animations'] ) && 'on' === $input['animations'] ) ? 'on' : 'off';
+		$out['shell']      = ( isset( $input['shell'] ) && 'on' === $input['shell'] ) ? 'on' : 'off';
 		$fonts             = self::fonts();
 		$out['font']       = ( isset( $input['font'] ) && isset( $fonts[ $input['font'] ] ) ) ? $input['font'] : $defaults['font'];
 		return $out;
@@ -200,6 +212,16 @@ class Ziteh_Settings {
 								<input type="checkbox" name="<?php echo esc_attr( self::OPTION ); ?>[animations]" value="on" <?php checked( 'on', $s['animations'] ); ?>>
 								<?php esc_html_e( 'فعال باشد', 'ziteh' ); ?>
 							</label>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'قابلیت‌های تعاملی', 'ziteh' ); ?></th>
+						<td>
+							<label>
+								<input type="checkbox" name="<?php echo esc_attr( self::OPTION ); ?>[shell]" value="on" <?php checked( 'on', $s['shell'] ); ?>>
+								<?php esc_html_e( 'سبد خرید کشویی، مشاهده سریع و جستجوی زنده فعال باشند', 'ziteh' ); ?>
+							</label>
+							<p class="description"><?php esc_html_e( 'اگر با قالب یا افزونه‌ی دیگری تداخل دارد، این گزینه را بردارید تا این لایه‌ها اصلاً روی صفحه قرار نگیرند.', 'ziteh' ); ?></p>
 						</td>
 					</tr>
 				</table>
