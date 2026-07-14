@@ -2245,10 +2245,11 @@ button.ziteh-topbar__search {
 	background: rgba(30, 32, 22, .45);
 	z-index: 9998;
 	opacity: 0;
+	pointer-events: none;
 	transition: opacity .3s ease;
 }
 
-.ziteh-overlay.is-visible { opacity: 1; }
+.ziteh-overlay.is-visible { opacity: 1; pointer-events: auto; }
 body.ziteh-noscroll { overflow: hidden; }
 
 /* Mini-cart drawer */
@@ -2265,6 +2266,7 @@ body.ziteh-noscroll { overflow: hidden; }
 	font-family: var(--ziteh-font);
 	transform: translateX(100%);
 	visibility: hidden;
+	pointer-events: none;
 	transition: transform .35s cubic-bezier(.4, 0, .2, 1), visibility .35s;
 	display: flex;
 	box-shadow: -20px 0 50px -30px rgba(0, 0, 0, .5);
@@ -2273,6 +2275,7 @@ body.ziteh-noscroll { overflow: hidden; }
 .ziteh-drawer.is-open {
 	transform: translateX(0);
 	visibility: visible;
+	pointer-events: auto;
 }
 
 .ziteh-drawer__panel {
@@ -2369,10 +2372,11 @@ body.ziteh-noscroll { overflow: hidden; }
 	padding: 20px;
 	opacity: 0;
 	visibility: hidden;
+	pointer-events: none;
 	transition: opacity .3s ease, visibility .3s ease;
 }
 
-.ziteh-modal.is-open { opacity: 1; visibility: visible; }
+.ziteh-modal.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
 
 .ziteh-modal__dialog {
 	position: relative;
@@ -2417,10 +2421,11 @@ body.ziteh-noscroll { overflow: hidden; }
 	padding: 12vh 20px 20px;
 	opacity: 0;
 	visibility: hidden;
+	pointer-events: none;
 	transition: opacity .3s ease, visibility .3s ease;
 }
 
-.ziteh-search-overlay.is-open { opacity: 1; visibility: visible; }
+.ziteh-search-overlay.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
 
 .ziteh-search-box {
 	position: relative;
