@@ -566,7 +566,6 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 		$name      = $product->get_name();
 		$brand     = $this->get_product_brand( $product );
 		$image     = $product->get_image( 'woocommerce_thumbnail' );
-		$price_html = $product->get_price_html();
 		?>
 		<li class="ziteh-product-card">
 			<div class="ziteh-product-card__media">
@@ -588,9 +587,7 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 				<?php endif; ?>
 				<a class="ziteh-product-card__name" href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $name ); ?></a>
 				<div class="ziteh-product-card__foot">
-					<?php if ( $price_html ) : ?>
-						<span class="ziteh-product-card__price ziteh-product-card__price--wc"><?php echo wp_kses_post( $price_html ); ?></span>
-					<?php endif; ?>
+					<?php $this->render_wc_price( $product ); ?>
 					<?php if ( $show_cart ) : ?>
 						<?php
 						$cart_url  = $product->add_to_cart_url();
@@ -611,6 +608,51 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 			</div>
 		</li>
 		<?php
+	}
+
+	/**
+	 * Render a clean, controlled price block for a product.
+	 *
+	 * We deliberately build the sale markup ourselves (rather than echoing
+	 * WooCommerce's get_price_html()) so theme-injected discount badges and the
+	 * inconsistent del/ins ordering can't leak into the card. For variable /
+	 * grouped products (price ranges) we fall back to the native price HTML.
+	 *
+	 * @param \WC_Product $product Product object.
+	 */
+	private function render_wc_price( $product ) {
+		// Price ranges & grouped products: keep WooCommerce's native output.
+		if ( $product->is_type( 'variable' ) || $product->is_type( 'grouped' ) ) {
+			$html = $product->get_price_html();
+			if ( $html ) {
+				echo '<span class="ziteh-product-card__price ziteh-product-card__price--wc">' . wp_kses_post( $html ) . '</span>';
+			}
+			return;
+		}
+
+		$regular = (float) $product->get_regular_price();
+		$active  = '' !== $product->get_price() ? (float) $product->get_price() : 0.0;
+		$on_sale = $product->is_on_sale() && $regular > 0 && $active > 0 && $active < $regular;
+
+		if ( $on_sale ) {
+			$percent = (int) round( ( ( $regular - $active ) / $regular ) * 100 );
+			echo '<span class="ziteh-product-card__price ziteh-product-card__price--wc is-sale">';
+			echo '<ins>' . wp_kses_post( wc_price( $active ) ) . '</ins>';
+			echo '<span class="ziteh-product-card__old">';
+			echo '<del>' . wp_kses_post( wc_price( $regular ) ) . '</del>';
+			if ( $percent > 0 ) {
+				echo '<span class="ziteh-product-card__off">' . esc_html( sprintf( /* translators: %d discount percent */ __( '%d٪', 'ziteh' ), $percent ) ) . '</span>';
+			}
+			echo '</span>';
+			echo '</span>';
+			return;
+		}
+
+		// Not on sale: native price HTML is clean here (handles "free", etc.).
+		$html = $product->get_price_html();
+		if ( $html ) {
+			echo '<span class="ziteh-product-card__price ziteh-product-card__price--wc">' . wp_kses_post( $html ) . '</span>';
+		}
 	}
 
 	/**

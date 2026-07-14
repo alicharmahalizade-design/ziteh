@@ -985,30 +985,65 @@
 	color: var(--ziteh-muted);
 }
 
-/* WooCommerce price html (del/ins/amount) */
+/* WooCommerce price: new price on top (bold), old price + %off beneath. */
 .ziteh-product-card__price--wc {
-	font-size: 15.5px;
+	display: inline-flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1px;
+	font-size: 16px;
 	font-weight: 800;
-}
-
-.ziteh-product-card__price--wc del {
-	order: 2;
-	color: var(--ziteh-muted);
-	font-weight: 400;
-	font-size: 12px;
-	opacity: .85;
+	line-height: 1.35;
 }
 
 .ziteh-product-card__price--wc ins {
-	order: 1;
 	text-decoration: none;
+	color: var(--ziteh-green-dark);
+	font-weight: 800;
+	white-space: nowrap;
+}
+
+.ziteh-product-card__old {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+}
+
+.ziteh-product-card__price--wc del {
+	color: var(--ziteh-muted);
+	font-weight: 400;
+	font-size: 12px;
+	text-decoration: line-through;
+	white-space: nowrap;
+}
+
+/* Neutralise any theme-injected block inside the amount markup. */
+.ziteh-product-card__price--wc .woocommerce-Price-amount,
+.ziteh-product-card__price--wc .amount,
+.ziteh-product-card__price--wc bdi {
+	display: inline;
+	white-space: nowrap;
 }
 
 .ziteh-product-card__price--wc .woocommerce-Price-currencySymbol {
-	font-size: 11.5px;
+	font-size: .72em;
 	font-weight: 400;
 	color: var(--ziteh-muted);
 	margin-inline-start: 2px;
+}
+
+/* Small discount pill next to the struck-through old price. */
+.ziteh-product-card__off {
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	background: #e7ecdc;
+	color: var(--ziteh-green-dark);
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 1;
+	padding: 3px 7px;
+	border-radius: 999px;
 }
 
 /* Round add-to-cart button */
