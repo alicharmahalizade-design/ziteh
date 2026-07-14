@@ -303,6 +303,303 @@
 		});
 	}
 
+	/* ===================== v2: shell (drawer / modal / search) ============== */
+
+	var DATA = window.zitehData || {};
+
+	/** Show the shared dimming overlay. */
+	function showOverlay() {
+		var o = document.querySelector('[data-ziteh-overlay]');
+		if (o) {
+			o.hidden = false;
+			requestAnimationFrame(function () { o.classList.add('is-visible'); });
+		}
+		document.body.classList.add('ziteh-noscroll');
+	}
+
+	/** Hide the overlay and every shell panel. */
+	function closeShell() {
+		var o = document.querySelector('[data-ziteh-overlay]');
+		if (o) {
+			o.classList.remove('is-visible');
+			setTimeout(function () { o.hidden = true; }, 300);
+		}
+		document.querySelectorAll('[data-ziteh-drawer],[data-ziteh-modal],[data-ziteh-search-overlay]').forEach(function (el) {
+			el.classList.remove('is-open');
+			el.setAttribute('aria-hidden', 'true');
+		});
+		document.body.classList.remove('ziteh-noscroll');
+	}
+
+	function openPanel(sel) {
+		var el = document.querySelector(sel);
+		if (!el) { return null; }
+		showOverlay();
+		el.classList.add('is-open');
+		el.setAttribute('aria-hidden', 'false');
+		return el;
+	}
+
+	/** Cart drawer: open on the cart link + on WooCommerce's added_to_cart. */
+	function initDrawer() {
+		if (document.body.dataset.zitehDrawer === '1') { return; }
+		document.body.dataset.zitehDrawer = '1';
+
+		document.addEventListener('click', function (e) {
+			var open = e.target.closest('[data-ziteh-cart-open]');
+			if (open && document.querySelector('[data-ziteh-drawer]')) {
+				e.preventDefault();
+				openPanel('[data-ziteh-drawer]');
+			}
+			if (e.target.closest('[data-ziteh-drawer-close]')) {
+				closeShell();
+			}
+		});
+
+		if (window.jQuery) {
+			window.jQuery(document.body).on('added_to_cart', function () {
+				openPanel('[data-ziteh-drawer]');
+			});
+		}
+	}
+
+	/** Quick View modal. */
+	function initQuickView() {
+		if (document.body.dataset.zitehQv === '1') { return; }
+		document.body.dataset.zitehQv = '1';
+
+		document.addEventListener('click', function (e) {
+			var btn = e.target.closest('[data-ziteh-quickview]');
+			if (!btn) {
+				if (e.target.closest('[data-ziteh-modal-close]')) { closeShell(); }
+				return;
+			}
+			e.preventDefault();
+			var id = btn.getAttribute('data-ziteh-quickview');
+			var modal = openPanel('[data-ziteh-modal]');
+			if (!modal || !DATA.ajaxUrl) { return; }
+
+			var body = modal.querySelector('[data-ziteh-modal-body]');
+			var loader = modal.querySelector('[data-ziteh-modal-loader]');
+			if (body) { body.innerHTML = ''; }
+			if (loader) { loader.hidden = false; }
+
+			var url = DATA.ajaxUrl + '?action=ziteh_quickview&id=' + encodeURIComponent(id) +
+				'&nonce=' + encodeURIComponent(DATA.nonce || '');
+			fetch(url, { credentials: 'same-origin' })
+				.then(function (r) { return r.json(); })
+				.then(function (res) {
+					if (loader) { loader.hidden = true; }
+					if (res && res.success && body) {
+						body.innerHTML = res.data.html;
+						if (window.jQuery && window.jQuery.fn) {
+							window.jQuery(document.body).trigger('wc_fragment_refresh');
+						}
+					} else if (body) {
+						body.innerHTML = '<p class="ziteh-modal__error">' + (DATA.i18n && DATA.i18n.error || 'Error') + '</p>';
+					}
+				})
+				.catch(function () {
+					if (loader) { loader.hidden = true; }
+					if (body) { body.innerHTML = '<p class="ziteh-modal__error">' + (DATA.i18n && DATA.i18n.error || 'Error') + '</p>'; }
+				});
+		});
+	}
+
+	/** Live AJAX search overlay. */
+	function initSearch() {
+		if (document.body.dataset.zitehSearch === '1') { return; }
+		document.body.dataset.zitehSearch = '1';
+
+		var timer;
+
+		document.addEventListener('click', function (e) {
+			if (e.target.closest('[data-ziteh-search-open]')) {
+				e.preventDefault();
+				var ov = openPanel('[data-ziteh-search-overlay]');
+				if (ov) {
+					var input = ov.querySelector('[data-ziteh-search-input]');
+					if (input) { setTimeout(function () { input.focus(); }, 60); }
+				}
+			}
+			if (e.target.closest('[data-ziteh-search-close]')) { closeShell(); }
+		});
+
+		document.addEventListener('input', function (e) {
+			var input = e.target.closest('[data-ziteh-search-input]');
+			if (!input) { return; }
+			var results = document.querySelector('[data-ziteh-search-results]');
+			var q = input.value.trim();
+			clearTimeout(timer);
+			if (q.length < 2) { if (results) { results.innerHTML = ''; } return; }
+			if (results) { results.innerHTML = '<div class="ziteh-search__loading"><span class="ziteh-spinner"></span></div>'; }
+			timer = setTimeout(function () {
+				if (!DATA.ajaxUrl) { return; }
+				var url = DATA.ajaxUrl + '?action=ziteh_search&q=' + encodeURIComponent(q) +
+					'&nonce=' + encodeURIComponent(DATA.nonce || '');
+				fetch(url, { credentials: 'same-origin' })
+					.then(function (r) { return r.json(); })
+					.then(function (res) {
+						if (results) { results.innerHTML = (res && res.success) ? res.data.html : ''; }
+					})
+					.catch(function () { if (results) { results.innerHTML = ''; } });
+			}, 280);
+		});
+	}
+
+	/** Wishlist toggle backed by localStorage. */
+	function initWishlist() {
+		if (document.body.dataset.zitehWish === '1') { return; }
+		document.body.dataset.zitehWish = '1';
+
+		var KEY = 'ziteh_wishlist';
+		function read() {
+			try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; }
+		}
+		function write(list) {
+			try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {}
+		}
+		function mark() {
+			var list = read();
+			document.querySelectorAll('[data-ziteh-wish]').forEach(function (b) {
+				b.classList.toggle('is-active', list.indexOf(b.getAttribute('data-ziteh-wish')) !== -1);
+			});
+		}
+		document.addEventListener('click', function (e) {
+			var btn = e.target.closest('[data-ziteh-wish]');
+			if (!btn) { return; }
+			e.preventDefault();
+			var id = btn.getAttribute('data-ziteh-wish');
+			var list = read();
+			var i = list.indexOf(id);
+			if (i === -1) { list.push(id); } else { list.splice(i, 1); }
+			write(list);
+			mark();
+			btn.classList.add('is-pulse');
+			setTimeout(function () { btn.classList.remove('is-pulse'); }, 300);
+		});
+		mark();
+	}
+
+	/** Sticky, shrinking header on scroll. */
+	function initStickyHeader() {
+		var header = document.querySelector('.ziteh-header');
+		if (!header || header.dataset.zitehSticky === '1') { return; }
+		header.dataset.zitehSticky = '1';
+		header.classList.add('ziteh-header--sticky');
+
+		var last = 0;
+		function onScroll() {
+			var y = window.pageYOffset || document.documentElement.scrollTop;
+			header.classList.toggle('is-scrolled', y > 40);
+			last = y;
+		}
+		window.addEventListener('scroll', onScroll, { passive: true });
+		onScroll();
+	}
+
+	/** Scroll-reveal animations across the main sections. */
+	function initReveal() {
+		var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		var selectors = [
+			'.ziteh-features', '.ziteh-story', '.ziteh-cats', '.ziteh-routine',
+			'.ziteh-products', '.ziteh-offers', '.ziteh-quiz', '.ziteh-brands',
+			'.ziteh-blog', '.ziteh-cta', '.ziteh-testimonials', '.ziteh-insta',
+			'.ziteh-newsletter'
+		];
+		var nodes = document.querySelectorAll(selectors.join(','));
+		nodes.forEach(function (n) { n.classList.add('ziteh-reveal'); });
+
+		if (reduce || !('IntersectionObserver' in window)) {
+			nodes.forEach(function (n) { n.classList.add('is-visible'); });
+			return;
+		}
+		var io = new IntersectionObserver(function (entries) {
+			entries.forEach(function (en) {
+				if (en.isIntersecting) {
+					en.target.classList.add('is-visible');
+					io.unobserve(en.target);
+				}
+			});
+		}, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+		nodes.forEach(function (n) {
+			if (!n.classList.contains('is-visible')) { io.observe(n); }
+		});
+	}
+
+	/** Multi-step skin quiz. */
+	function initQuiz(root) {
+		if (root.dataset.zitehQuizReady === '1') { return; }
+		root.dataset.zitehQuizReady = '1';
+
+		var screens = {};
+		root.querySelectorAll('[data-quiz-screen]').forEach(function (s) {
+			screens[s.getAttribute('data-quiz-screen')] = s;
+		});
+		var steps = Array.prototype.slice.call(root.querySelectorAll('[data-quiz-step]'));
+		var total = steps.length;
+		var bar = root.querySelector('[data-quiz-progress]');
+		var current = root.querySelector('[data-quiz-current]');
+		var summary = root.querySelector('[data-quiz-summary]');
+		var idx = 0;
+		var answers = [];
+
+		function show(name) {
+			Object.keys(screens).forEach(function (k) {
+				screens[k].classList.toggle('is-active', k === name);
+			});
+		}
+		function showStep(n) {
+			idx = n;
+			steps.forEach(function (s, i) { s.classList.toggle('is-active', i === n); });
+			if (bar) { bar.style.width = ((n) / total * 100) + '%'; }
+			if (current) { current.textContent = toFa(n + 1); }
+			steps.forEach(function (s) {
+				var back = s.querySelector('[data-quiz-back]');
+				if (back) { back.hidden = (n === 0); }
+			});
+		}
+		function toFa(n) {
+			return String(n).replace(/[0-9]/g, function (c) { return '۰۱۲۳۴۵۶۷۸۹'.charAt(+c); });
+		}
+		function finish() {
+			if (bar) { bar.style.width = '100%'; }
+			if (summary) {
+				summary.innerHTML = '';
+				answers.forEach(function (a) {
+					var li = document.createElement('li');
+					li.textContent = a;
+					summary.appendChild(li);
+				});
+			}
+			show('result');
+		}
+
+		root.addEventListener('click', function (e) {
+			if (e.target.closest('[data-quiz-start]')) {
+				answers = []; showStep(0); show('questions'); return;
+			}
+			var ans = e.target.closest('[data-quiz-answer]');
+			if (ans) {
+				answers[idx] = ans.textContent.trim();
+				var stepEl = ans.closest('[data-quiz-step]');
+				stepEl.querySelectorAll('[data-quiz-answer]').forEach(function (b) { b.classList.remove('is-picked'); });
+				ans.classList.add('is-picked');
+				setTimeout(function () {
+					if (idx + 1 < total) { showStep(idx + 1); } else { finish(); }
+				}, 220);
+				return;
+			}
+			if (e.target.closest('[data-quiz-back]')) {
+				if (idx > 0) { showStep(idx - 1); }
+				return;
+			}
+			if (e.target.closest('[data-quiz-restart]')) {
+				answers = []; show('intro'); return;
+			}
+		});
+	}
+
 	/**
 	 * (Re)initialise every widget within a scope.
 	 *
@@ -315,7 +612,24 @@
 		scope.querySelectorAll('[data-ziteh-countdown]').forEach(initCountdown);
 		scope.querySelectorAll('[data-ziteh-routine]').forEach(initRoutine);
 		scope.querySelectorAll('[data-ziteh-burger]').forEach(initBurger);
+		scope.querySelectorAll('[data-ziteh-quiz]').forEach(initQuiz);
+
+		// Document-level features (run once).
+		initDrawer();
+		initQuickView();
+		initSearch();
+		initWishlist();
+		initStickyHeader();
+		initReveal();
 	}
+
+	// Global: overlay click + Esc close the shell.
+	document.addEventListener('click', function (e) {
+		if (e.target.closest('[data-ziteh-overlay]')) { closeShell(); }
+	});
+	document.addEventListener('keydown', function (e) {
+		if (e.key === 'Escape') { closeShell(); }
+	});
 
 	if (document.readyState === 'loading') {
 		document.addEventListener('DOMContentLoaded', function () {
@@ -331,7 +645,7 @@
 			if (!window.elementorFrontend || !window.elementorFrontend.hooks) {
 				return;
 			}
-			var slugs = ['ziteh-hero', 'ziteh-categories', 'ziteh-products', 'ziteh-offers', 'ziteh-routine', 'ziteh-header'];
+			var slugs = ['ziteh-hero', 'ziteh-categories', 'ziteh-products', 'ziteh-offers', 'ziteh-routine', 'ziteh-header', 'ziteh-quiz', 'ziteh-features'];
 			slugs.forEach(function (slug) {
 				window.elementorFrontend.hooks.addAction(
 					'frontend/element_ready/' + slug + '.default',

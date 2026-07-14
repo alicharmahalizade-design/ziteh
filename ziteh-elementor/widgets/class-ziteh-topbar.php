@@ -143,6 +143,18 @@ class Ziteh_Topbar_Widget extends Ziteh_Widget_Base {
 	/**
 	 * Render the front-end output.
 	 */
+	/**
+	 * Current WooCommerce cart item count (0 when WooCommerce is inactive).
+	 *
+	 * @return int
+	 */
+	private function get_cart_count() {
+		if ( class_exists( 'WooCommerce' ) && function_exists( 'WC' ) && WC()->cart ) {
+			return (int) WC()->cart->get_cart_contents_count();
+		}
+		return 0;
+	}
+
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 
@@ -152,15 +164,18 @@ class Ziteh_Topbar_Widget extends Ziteh_Widget_Base {
 		<div class="ziteh-topbar">
 			<div class="ziteh-container ziteh-topbar__inner">
 
-				<a class="ziteh-topbar__cart" href="<?php echo esc_url( $cart_url ); ?>">
-					<?php echo $this->get_icon_svg( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<a class="ziteh-topbar__cart" href="<?php echo esc_url( $cart_url ); ?>" data-ziteh-cart-open>
+					<span class="ziteh-topbar__cart-icon">
+						<?php echo $this->get_icon_svg( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<span class="ziteh-cart-count" data-ziteh-cart-count><?php echo esc_html( $this->get_cart_count() ); ?></span>
+					</span>
 					<span><?php echo esc_html( $settings['cart_label'] ); ?></span>
 				</a>
 
-				<form class="ziteh-topbar__search" role="search" onsubmit="return false;">
+				<button class="ziteh-topbar__search" type="button" data-ziteh-search-open aria-label="<?php echo esc_attr( $settings['search_placeholder'] ); ?>">
 					<?php echo $this->get_icon_svg( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-					<input type="search" placeholder="<?php echo esc_attr( $settings['search_placeholder'] ); ?>" aria-label="<?php echo esc_attr( $settings['search_placeholder'] ); ?>">
-				</form>
+					<span class="ziteh-topbar__search-text"><?php echo esc_html( $settings['search_placeholder'] ); ?></span>
+				</button>
 
 				<a class="ziteh-topbar__account" href="<?php echo esc_url( $account_url ); ?>">
 					<?php echo $this->get_icon_svg( 'user' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>

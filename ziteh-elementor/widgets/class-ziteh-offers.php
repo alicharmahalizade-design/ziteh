@@ -407,9 +407,9 @@ class Ziteh_Offers_Widget extends Ziteh_Widget_Base {
 	 */
 	private function render_card( $data ) {
 		?>
-		<li class="ziteh-product-card">
+		<li class="ziteh-product-card"<?php echo ! empty( $data['id'] ) ? ' data-ziteh-product="' . esc_attr( $data['id'] ) . '"' : ''; ?>>
 			<div class="ziteh-product-card__media">
-				<button class="ziteh-product-card__wish" type="button" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'ziteh' ); ?>">
+				<button class="ziteh-product-card__wish" type="button"<?php echo ! empty( $data['id'] ) ? ' data-ziteh-wish="' . esc_attr( $data['id'] ) . '"' : ''; ?> aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'ziteh' ); ?>">
 					<?php echo $this->get_icon_svg( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</button>
 				<?php if ( ! empty( $data['percent'] ) && $data['percent'] > 0 ) : ?>
@@ -418,12 +418,24 @@ class Ziteh_Offers_Widget extends Ziteh_Widget_Base {
 				<a class="ziteh-product-card__thumb" href="<?php echo esc_url( $data['url'] ); ?>">
 					<?php echo $data['image_html']; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</a>
+				<?php if ( ! empty( $data['id'] ) ) : ?>
+					<button class="ziteh-product-card__quick" type="button" data-ziteh-quickview="<?php echo esc_attr( $data['id'] ); ?>">
+						<?php echo $this->get_icon_svg( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<span><?php esc_html_e( 'مشاهده سریع', 'ziteh' ); ?></span>
+					</button>
+				<?php endif; ?>
 			</div>
 			<div class="ziteh-product-card__body">
 				<?php if ( ! empty( $data['brand'] ) ) : ?>
 					<span class="ziteh-product-card__brand"><?php echo esc_html( $data['brand'] ); ?></span>
 				<?php endif; ?>
 				<a class="ziteh-product-card__name" href="<?php echo esc_url( $data['url'] ); ?>"><?php echo esc_html( $data['name'] ); ?></a>
+				<?php if ( isset( $data['progress'] ) && $data['progress'] >= 0 ) : ?>
+					<div class="ziteh-sold" title="<?php echo esc_attr( sprintf( /* translators: %d percent */ __( '%d درصد فروخته شده', 'ziteh' ), $data['progress'] ) ); ?>">
+						<div class="ziteh-sold__bar"><span style="width:<?php echo esc_attr( max( 6, $data['progress'] ) ); ?>%"></span></div>
+						<span class="ziteh-sold__label"><?php echo esc_html( sprintf( /* translators: %d percent sold */ __( '%d٪ فروخته شد', 'ziteh' ), $data['progress'] ) ); ?></span>
+					</div>
+				<?php endif; ?>
 				<div class="ziteh-product-card__foot">
 					<?php echo $data['price_html']; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 					<?php if ( ! empty( $data['show_cart'] ) ) : ?>
@@ -570,11 +582,13 @@ class Ziteh_Offers_Widget extends Ziteh_Widget_Base {
 
 			$this->render_card(
 				array(
+					'id'         => $product->get_id(),
 					'url'        => get_permalink( $product->get_id() ),
 					'image_html' => $product->get_image( 'woocommerce_thumbnail' ),
 					'brand'      => $this->get_offer_brand( $product ),
 					'name'       => $product->get_name(),
 					'percent'    => $percent,
+					'progress'   => $this->get_sold_progress( $product ),
 					'price_html' => $this->price_block( $new_html, $old_html ),
 					'show_cart'  => $show_cart,
 					'add_url'    => $product->add_to_cart_url(),
@@ -584,6 +598,33 @@ class Ziteh_Offers_Widget extends Ziteh_Widget_Base {
 				)
 			);
 		}
+	}
+
+	/**
+	 * A "sold" progress percentage for the urgency bar.
+	 *
+	 * Uses total_sales vs. remaining stock when stock is managed; otherwise
+	 * derives a stable pseudo value from sales so the bar always shows movement.
+	 *
+	 * @param \WC_Product $product Product object.
+	 * @return int 0-100
+	 */
+	private function get_sold_progress( $product ) {
+		$sold = (int) $product->get_total_sales();
+
+		if ( $product->managing_stock() ) {
+			$stock = max( 0, (int) $product->get_stock_quantity() );
+			$total = $sold + $stock;
+			if ( $total > 0 ) {
+				return (int) min( 99, max( 5, round( ( $sold / $total ) * 100 ) ) );
+			}
+		}
+
+		// No managed stock: map sales onto a friendly 40-90% band.
+		if ( $sold <= 0 ) {
+			return 45;
+		}
+		return (int) min( 90, 45 + ( $sold % 46 ) );
 	}
 
 	/**

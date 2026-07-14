@@ -3,7 +3,7 @@
  * Plugin Name: Ziteh Elementor Widgets
  * Plugin URI:  https://ziteh.com
  * Description: مجموعه ویجت‌های اختصاصی المنتور برای پیاده‌سازی پیکسل‌به‌پیکسل صفحه اصلی فروشگاه زیته (تاپ‌بار، هدر، هیرو، دسته‌بندی، روتین، محصولات، برندها، مجله، مشاوره، نظرات، اینستاگرام، خبرنامه و فوتر).
- * Version:     1.5.0
+ * Version:     2.0.0
  * Author:      Ziteh
  * Text Domain: ziteh
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'ZITEH_EL_VERSION', '1.5.0' );
+define( 'ZITEH_EL_VERSION', '2.0.0' );
 define( 'ZITEH_EL_FILE', __FILE__ );
 define( 'ZITEH_EL_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ZITEH_EL_URL', plugin_dir_url( __FILE__ ) );
@@ -69,6 +69,18 @@ final class Ziteh_Elementor_Plugin {
 		// Load the widgets manager.
 		require_once ZITEH_EL_PATH . 'includes/class-ziteh-widgets-manager.php';
 		Ziteh_Widgets_Manager::instance();
+
+		// Central design settings (palette / radius / motion).
+		require_once ZITEH_EL_PATH . 'includes/class-ziteh-settings.php';
+		Ziteh_Settings::instance();
+
+		// AJAX endpoints + WooCommerce cart glue.
+		require_once ZITEH_EL_PATH . 'includes/class-ziteh-ajax.php';
+		Ziteh_Ajax::instance();
+
+		// Front-end interactive shell (drawer / modal / search).
+		require_once ZITEH_EL_PATH . 'includes/class-ziteh-frontend.php';
+		Ziteh_Frontend::instance();
 
 		// Admin-only: the one-click ready-made template importer.
 		if ( is_admin() ) {

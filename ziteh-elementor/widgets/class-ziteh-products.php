@@ -562,15 +562,18 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 	 * @param bool        $show_cart Whether to show the add-to-cart button.
 	 */
 	private function render_wc_card( $product, $show_cart ) {
-		$permalink = get_permalink( $product->get_id() );
+		$id        = $product->get_id();
+		$permalink = get_permalink( $id );
 		$name      = $product->get_name();
 		$brand     = $this->get_product_brand( $product );
 		$image     = $product->get_image( 'woocommerce_thumbnail' );
 		$percent   = $this->get_discount_percent( $product );
+		$second    = $this->get_second_image( $product );
+		$low_stock = $this->get_low_stock( $product );
 		?>
-		<li class="ziteh-product-card">
-			<div class="ziteh-product-card__media">
-				<button class="ziteh-product-card__wish" type="button" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'ziteh' ); ?>">
+		<li class="ziteh-product-card" data-ziteh-product="<?php echo esc_attr( $id ); ?>">
+			<div class="ziteh-product-card__media<?php echo $second ? ' has-second' : ''; ?>">
+				<button class="ziteh-product-card__wish" type="button" data-ziteh-wish="<?php echo esc_attr( $id ); ?>" aria-label="<?php esc_attr_e( 'افزودن به علاقه‌مندی‌ها', 'ziteh' ); ?>">
 					<?php echo $this->get_icon_svg( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</button>
 
@@ -582,8 +585,19 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 
 				<a class="ziteh-product-card__thumb" href="<?php echo esc_url( $permalink ); ?>">
 					<?php echo $image; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					<?php if ( $second ) : ?>
+						<span class="ziteh-product-card__thumb-2"><?php echo $second; // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+					<?php endif; ?>
 				</a>
+
+				<button class="ziteh-product-card__quick" type="button" data-ziteh-quickview="<?php echo esc_attr( $id ); ?>">
+					<?php echo $this->get_icon_svg( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					<span><?php esc_html_e( 'مشاهده سریع', 'ziteh' ); ?></span>
+				</button>
 			</div>
+			<?php if ( $low_stock ) : ?>
+				<span class="ziteh-product-card__stock"><?php echo esc_html( sprintf( /* translators: %d remaining */ __( 'فقط %d عدد باقی مانده', 'ziteh' ), $low_stock ) ); ?></span>
+			<?php endif; ?>
 			<div class="ziteh-product-card__body">
 				<?php if ( $brand ) : ?>
 					<span class="ziteh-product-card__brand"><?php echo esc_html( $brand ); ?></span>
@@ -629,6 +643,38 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 			return 0;
 		}
 		return (int) round( ( ( $regular - $active ) / $regular ) * 100 );
+	}
+
+	/**
+	 * First gallery image markup, shown on hover (empty when none).
+	 *
+	 * @param \WC_Product $product Product object.
+	 * @return string
+	 */
+	private function get_second_image( $product ) {
+		$ids = $product->get_gallery_image_ids();
+		if ( empty( $ids ) ) {
+			return '';
+		}
+		return wp_get_attachment_image( $ids[0], 'woocommerce_thumbnail' );
+	}
+
+	/**
+	 * Remaining stock when it is low (managed & <= threshold), else 0.
+	 *
+	 * @param \WC_Product $product Product object.
+	 * @return int
+	 */
+	private function get_low_stock( $product ) {
+		if ( ! $product->managing_stock() || ! $product->is_in_stock() ) {
+			return 0;
+		}
+		$qty       = (int) $product->get_stock_quantity();
+		$threshold = (int) apply_filters( 'ziteh_low_stock_threshold', 5 );
+		if ( $qty > 0 && $qty <= $threshold ) {
+			return $qty;
+		}
+		return 0;
 	}
 
 	/**
