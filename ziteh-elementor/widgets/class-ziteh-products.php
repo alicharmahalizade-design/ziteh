@@ -566,6 +566,7 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 		$name      = $product->get_name();
 		$brand     = $this->get_product_brand( $product );
 		$image     = $product->get_image( 'woocommerce_thumbnail' );
+		$percent   = $this->get_discount_percent( $product );
 		?>
 		<li class="ziteh-product-card">
 			<div class="ziteh-product-card__media">
@@ -573,8 +574,10 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 					<?php echo $this->get_icon_svg( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				</button>
 
-				<?php if ( $product->is_on_sale() ) : ?>
-					<span class="ziteh-product-card__badge"><?php esc_html_e( 'تخفیف', 'ziteh' ); ?></span>
+				<?php if ( $percent > 0 ) : ?>
+					<span class="ziteh-product-card__badge ziteh-product-card__badge--off"><?php echo esc_html( sprintf( /* translators: %d discount percent */ __( '%d٪', 'ziteh' ), $percent ) ); ?></span>
+				<?php elseif ( $product->is_on_sale() ) : ?>
+					<span class="ziteh-product-card__badge ziteh-product-card__badge--off"><?php esc_html_e( 'تخفیف', 'ziteh' ); ?></span>
 				<?php endif; ?>
 
 				<a class="ziteh-product-card__thumb" href="<?php echo esc_url( $permalink ); ?>">
@@ -611,6 +614,24 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 	}
 
 	/**
+	 * Discount percentage for a simple product on sale (0 when not applicable).
+	 *
+	 * @param \WC_Product $product Product object.
+	 * @return int
+	 */
+	private function get_discount_percent( $product ) {
+		if ( $product->is_type( 'variable' ) || $product->is_type( 'grouped' ) ) {
+			return 0;
+		}
+		$regular = (float) $product->get_regular_price();
+		$active  = '' !== $product->get_price() ? (float) $product->get_price() : 0.0;
+		if ( ! $product->is_on_sale() || $regular <= 0 || $active <= 0 || $active >= $regular ) {
+			return 0;
+		}
+		return (int) round( ( ( $regular - $active ) / $regular ) * 100 );
+	}
+
+	/**
 	 * Render a clean, controlled price block for a product.
 	 *
 	 * We deliberately build the sale markup ourselves (rather than echoing
@@ -635,15 +656,11 @@ class Ziteh_Products_Widget extends Ziteh_Widget_Base {
 		$on_sale = $product->is_on_sale() && $regular > 0 && $active > 0 && $active < $regular;
 
 		if ( $on_sale ) {
-			$percent = (int) round( ( ( $regular - $active ) / $regular ) * 100 );
+			// The discount percentage is shown as a red badge on the image corner
+			// (see render_wc_card); here we only show new price + struck old price.
 			echo '<span class="ziteh-product-card__price ziteh-product-card__price--wc is-sale">';
 			echo '<ins>' . wp_kses_post( wc_price( $active ) ) . '</ins>';
-			echo '<span class="ziteh-product-card__old">';
 			echo '<del>' . wp_kses_post( wc_price( $regular ) ) . '</del>';
-			if ( $percent > 0 ) {
-				echo '<span class="ziteh-product-card__off">' . esc_html( sprintf( /* translators: %d discount percent */ __( '%d٪', 'ziteh' ), $percent ) ) . '</span>';
-			}
-			echo '</span>';
 			echo '</span>';
 			return;
 		}

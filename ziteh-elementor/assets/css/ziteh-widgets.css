@@ -905,7 +905,7 @@
 	height: 18px;
 }
 
-/* Sale badge */
+/* Sale badge — sits on the image corner. --off shows the discount % in red. */
 .ziteh-product-card__badge {
 	position: absolute;
 	top: 10px;
@@ -913,11 +913,17 @@
 	z-index: 2;
 	background: var(--ziteh-green);
 	color: #fff;
-	font-size: 11px;
-	font-weight: 700;
+	font-size: 12px;
+	font-weight: 800;
 	padding: 5px 11px;
 	border-radius: 999px;
-	box-shadow: var(--ziteh-shadow-sm);
+	box-shadow: 0 6px 14px -6px rgba(0, 0, 0, .35);
+	line-height: 1;
+}
+
+.ziteh-product-card__badge--off {
+	background: #e0483d;
+	color: #fff;
 }
 
 /* Meta */
@@ -1003,12 +1009,6 @@
 	white-space: nowrap;
 }
 
-.ziteh-product-card__old {
-	display: inline-flex;
-	align-items: center;
-	gap: 7px;
-}
-
 .ziteh-product-card__price--wc del {
 	color: var(--ziteh-muted);
 	font-weight: 400;
@@ -1030,20 +1030,6 @@
 	font-weight: 400;
 	color: var(--ziteh-muted);
 	margin-inline-start: 2px;
-}
-
-/* Small discount pill next to the struck-through old price. */
-.ziteh-product-card__off {
-	text-decoration: none;
-	display: inline-flex;
-	align-items: center;
-	background: #e7ecdc;
-	color: var(--ziteh-green-dark);
-	font-size: 11px;
-	font-weight: 700;
-	line-height: 1;
-	padding: 3px 7px;
-	border-radius: 999px;
 }
 
 /* Round add-to-cart button */
