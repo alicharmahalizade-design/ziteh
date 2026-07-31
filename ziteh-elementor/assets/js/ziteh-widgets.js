@@ -865,12 +865,24 @@
 			quantity.appendChild(plus);
 		});
 
+		// Inline SVG rather than an icon-font class: the product canvas cannot
+		// assume Font Awesome is present, and a missing font leaves a tofu box
+		// sitting in the middle of the primary call to action.
 		root.querySelectorAll('.single_add_to_cart_button').forEach(function (button) {
 			if (button.dataset.zitehSpIconReady === '1') { return; }
 			button.dataset.zitehSpIconReady = '1';
-			var icon = document.createElement('i');
-			icon.className = 'fas fa-shopping-bag';
+			var icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+			icon.setAttribute('class', 'ziteh-i ziteh-i--cart');
+			icon.setAttribute('viewBox', '0 0 24 24');
+			icon.setAttribute('fill', 'none');
+			icon.setAttribute('stroke', 'currentColor');
+			icon.setAttribute('stroke-width', '1.5');
+			icon.setAttribute('stroke-linecap', 'round');
+			icon.setAttribute('stroke-linejoin', 'round');
 			icon.setAttribute('aria-hidden', 'true');
+			icon.setAttribute('focusable', 'false');
+			icon.innerHTML = '<path d="M3.4 4.4h2.3l2 9.7h8.8l1.9-6.9H6.4"/>'
+				+ '<circle cx="9.2" cy="18.4" r="1.5"/><circle cx="15.6" cy="18.4" r="1.5"/>';
 			button.insertBefore(icon, button.firstChild);
 		});
 

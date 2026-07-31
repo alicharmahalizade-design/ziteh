@@ -313,7 +313,8 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 		$gallery_ids = $this->gallery_ids( $product );
 		$brand       = $this->brand( $product );
 		$discount    = $this->discount( $product );
-		$rating      = wc_get_rating_html( $product->get_average_rating(), $product->get_rating_count() );
+		$average     = (float) $product->get_average_rating();
+		$rating_qty  = (int) $product->get_rating_count();
 		$heading_tag = in_array( $settings['heading_tag'], array( 'h1', 'h2', 'h3', 'div' ), true ) ? $settings['heading_tag'] : 'h1';
 		$eyebrow     = ! empty( $settings['eyebrow'] ) ? $settings['eyebrow'] : ( $brand ? $brand : esc_html__( 'محصول زیته', 'ziteh' ) );
 		$review_id   = 'ziteh-sp-reviews-' . $this->get_id();
@@ -349,8 +350,8 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 								<div class="ziteh-sp__slide is-active"><?php echo wc_placeholder_img( 'woocommerce_single' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 							<?php endif; ?>
 							<?php if ( count( $gallery_ids ) > 1 ) : ?>
-								<button class="ziteh-sp__gallery-arrow ziteh-sp__gallery-arrow--prev" type="button" data-ziteh-sp-prev aria-label="<?php esc_attr_e( 'تصویر قبلی', 'ziteh' ); ?>"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
-								<button class="ziteh-sp__gallery-arrow ziteh-sp__gallery-arrow--next" type="button" data-ziteh-sp-next aria-label="<?php esc_attr_e( 'تصویر بعدی', 'ziteh' ); ?>"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+								<button class="ziteh-sp__gallery-arrow ziteh-sp__gallery-arrow--prev" type="button" data-ziteh-sp-prev aria-label="<?php esc_attr_e( 'تصویر قبلی', 'ziteh' ); ?>"><?php Ziteh_Icons::render( 'chevron-right' ); ?></button>
+								<button class="ziteh-sp__gallery-arrow ziteh-sp__gallery-arrow--next" type="button" data-ziteh-sp-next aria-label="<?php esc_attr_e( 'تصویر بعدی', 'ziteh' ); ?>"><?php Ziteh_Icons::render( 'chevron-left' ); ?></button>
 							<?php endif; ?>
 						</div>
 
@@ -369,17 +370,40 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 						<?php if ( 'yes' === $settings['show_breadcrumbs'] ) : ?>
 							<nav class="ziteh-sp__breadcrumbs" aria-label="<?php esc_attr_e( 'مسیر راهنمای محصول', 'ziteh' ); ?>"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'خانه', 'ziteh' ); ?></a><span>/</span><a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>"><?php esc_html_e( 'فروشگاه', 'ziteh' ); ?></a><span>/</span><span aria-current="page"><?php echo esc_html( wp_trim_words( $product->get_name(), 4 ) ); ?></span></nav>
 						<?php endif; ?>
-						<div class="ziteh-sp__eyebrow"><i class="fas fa-leaf" aria-hidden="true"></i><span><?php echo esc_html( $eyebrow ); ?></span></div>
+						<div class="ziteh-sp__eyebrow"><?php Ziteh_Icons::render( 'leaf' ); ?><span><?php echo esc_html( $eyebrow ); ?></span></div>
 						<<?php echo esc_attr( $heading_tag ); ?> class="ziteh-sp__title"><?php echo esc_html( $product->get_name() ); ?></<?php echo esc_attr( $heading_tag ); ?>>
 						<?php if ( ! empty( $settings['english_title'] ) ) : ?><div class="ziteh-sp__english" lang="en"><?php echo esc_html( $settings['english_title'] ); ?></div><?php endif; ?>
 
-						<?php if ( 'yes' === $settings['show_rating'] ) : ?><div class="ziteh-sp__rating"><?php echo $rating ? wp_kses_post( $rating ) : '<span class="ziteh-sp__no-rating">' . esc_html__( 'بدون امتیاز', 'ziteh' ) . '</span>'; ?><a href="#<?php echo esc_attr( $review_id ); ?>" data-ziteh-sp-reviews-link><?php echo esc_html( sprintf( _n( '%d دیدگاه', '%d دیدگاه', $product->get_review_count(), 'ziteh' ), $product->get_review_count() ) ); ?></a></div><?php endif; ?>
+						<?php if ( 'yes' === $settings['show_rating'] ) : ?>
+							<div class="ziteh-sp__rating">
+								<?php echo Ziteh_Icons::stars( $average, $rating_qty ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php if ( $rating_qty > 0 ) : ?>
+									<span class="ziteh-sp__rating-value"><?php echo esc_html( sprintf( __( '%s از ۵', 'ziteh' ), number_format_i18n( $average, 1 ) ) ); ?></span>
+								<?php else : ?>
+									<span class="ziteh-sp__no-rating"><?php esc_html_e( 'بدون امتیاز', 'ziteh' ); ?></span>
+								<?php endif; ?>
+								<a class="ziteh-sp__rating-link" href="#<?php echo esc_attr( $review_id ); ?>" data-ziteh-sp-reviews-link><?php echo esc_html( sprintf( _n( '(%s نظر)', '(%s نظر)', $product->get_review_count(), 'ziteh' ), number_format_i18n( $product->get_review_count() ) ) ); ?></a>
+							</div>
+						<?php endif; ?>
 
 						<?php if ( 'yes' === $settings['show_short_description'] && $product->get_short_description() ) : ?>
 							<div class="ziteh-sp__excerpt"><p><?php echo esc_html( wp_trim_words( wp_strip_all_tags( $product->get_short_description() ), max( 12, (int) $settings['short_description_words'] ), '…' ) ); ?></p></div>
 						<?php endif; ?>
-						<?php if ( ! empty( $settings['highlights'] ) ) : ?><ul class="ziteh-sp__highlights"><?php foreach ( $settings['highlights'] as $item ) : ?><li class="ziteh-sp__highlight"><span><?php echo esc_html( $item['text'] ); ?></span><?php Icons_Manager::render_icon( $item['icon'], array( 'aria-hidden' => 'true' ) ); ?></li><?php endforeach; ?></ul><?php endif; ?>
-						<div class="ziteh-sp__shipping"><span class="ziteh-sp__shipping-icon"><?php Icons_Manager::render_icon( $settings['shipping_icon'], array( 'aria-hidden' => 'true' ) ); ?></span><span><strong><?php echo esc_html( $settings['shipping_title'] ); ?></strong><small><?php echo esc_html( $settings['shipping_text'] ); ?></small></span><i class="fas fa-chevron-down" aria-hidden="true"></i></div>
+						<?php if ( ! empty( $settings['highlights'] ) ) : ?>
+							<ul class="ziteh-sp__highlights">
+								<?php foreach ( $settings['highlights'] as $item ) : ?>
+									<li class="ziteh-sp__highlight">
+										<span class="ziteh-sp__highlight-icon"><?php Ziteh_Icons::render_control( $item['icon'], 'check-circle' ); ?></span>
+										<span class="ziteh-sp__highlight-text"><?php echo esc_html( $item['text'] ); ?></span>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
+						<div class="ziteh-sp__shipping">
+							<span class="ziteh-sp__shipping-icon"><?php Ziteh_Icons::render_control( $settings['shipping_icon'], 'truck' ); ?></span>
+							<span class="ziteh-sp__shipping-copy"><strong><?php echo esc_html( $settings['shipping_title'] ); ?></strong><small><?php echo esc_html( $settings['shipping_text'] ); ?></small></span>
+							<span class="ziteh-sp__shipping-chevron"><?php Ziteh_Icons::render( 'chevron-down' ); ?></span>
+						</div>
 						<?php if ( 'yes' === $settings['show_meta'] ) : ?><div class="ziteh-sp__meta">
 							<?php if ( $product->get_sku() ) : ?><span><?php esc_html_e( 'کد محصول:', 'ziteh' ); ?> <strong><?php echo esc_html( $product->get_sku() ); ?></strong></span><?php endif; ?>
 							<?php echo wc_get_product_category_list( $product->get_id(), '، ', '<span>' . esc_html__( 'دسته‌بندی: ', 'ziteh' ), '</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
@@ -388,11 +412,13 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 
 					<aside class="ziteh-sp__purchase<?php echo esc_attr( $sticky ); ?>" aria-label="<?php esc_attr_e( 'خرید محصول', 'ziteh' ); ?>">
 						<?php if ( ! empty( $settings['panel_badge'] ) ) : ?><span class="ziteh-sp__recommendation"><?php echo esc_html( $settings['panel_badge'] ); ?></span><?php endif; ?>
-						<div class="ziteh-sp__purchase-brand"><i class="fas fa-leaf" aria-hidden="true"></i><strong><?php echo esc_html( $settings['panel_title'] ); ?></strong></div>
+						<div class="ziteh-sp__purchase-brand"><?php Ziteh_Icons::render( 'leaf' ); ?><strong><?php echo esc_html( $settings['panel_title'] ); ?></strong></div>
 						<p class="ziteh-sp__purchase-description"><?php echo esc_html( $settings['panel_description'] ); ?></p>
 						<div class="ziteh-sp__purchase-separator"></div>
-						<?php if ( $discount ) : ?><div class="ziteh-sp__purchase-discount"><span><?php echo esc_html( sprintf( __( '%d٪ تخفیف', 'ziteh' ), $discount ) ); ?></span></div><?php endif; ?>
-						<div class="ziteh-sp__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
+						<div class="ziteh-sp__price">
+							<?php if ( $discount ) : ?><span class="ziteh-sp__purchase-discount"><?php echo esc_html( sprintf( __( '%d٪ تخفیف', 'ziteh' ), $discount ) ); ?></span><?php endif; ?>
+							<?php echo wp_kses_post( $product->get_price_html() ); ?>
+						</div>
 						<div class="ziteh-sp__stock"><?php echo wp_kses_post( wc_get_stock_html( $product ) ); ?></div>
 						<div class="ziteh-sp__buy">
 							<?php
@@ -402,8 +428,17 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 							remove_filter( 'woocommerce_product_single_add_to_cart_text', $button_filter );
 							?>
 						</div>
-						<button class="ziteh-sp__wish" type="button" data-ziteh-wish="<?php echo esc_attr( $product->get_id() ); ?>" aria-label="<?php echo esc_attr( $settings['wishlist_text'] ); ?>"><i class="far fa-heart" aria-hidden="true"></i><span><?php echo esc_html( $settings['wishlist_text'] ); ?></span></button>
-						<?php if ( ! empty( $settings['trust_items'] ) ) : ?><ul class="ziteh-sp__trust"><?php foreach ( $settings['trust_items'] as $item ) : ?><li><span class="ziteh-sp__trust-icon"><?php Icons_Manager::render_icon( $item['icon'], array( 'aria-hidden' => 'true' ) ); ?></span><strong><?php echo esc_html( $item['title'] ); ?></strong></li><?php endforeach; ?></ul><?php endif; ?>
+						<button class="ziteh-sp__wish" type="button" data-ziteh-wish="<?php echo esc_attr( $product->get_id() ); ?>" aria-label="<?php echo esc_attr( $settings['wishlist_text'] ); ?>"><?php Ziteh_Icons::render( 'heart' ); ?><span><?php echo esc_html( $settings['wishlist_text'] ); ?></span></button>
+						<?php if ( ! empty( $settings['trust_items'] ) ) : ?>
+							<ul class="ziteh-sp__trust">
+								<?php foreach ( $settings['trust_items'] as $item ) : ?>
+									<li>
+										<span class="ziteh-sp__trust-icon"><?php Ziteh_Icons::render_control( $item['icon'], 'shield' ); ?></span>
+										<strong><?php echo esc_html( $item['title'] ); ?></strong>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
 					</aside>
 				</div>
 
@@ -463,7 +498,7 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 									<?php
 									$review_rating = (int) get_comment_meta( $review->comment_ID, 'rating', true );
 									if ( $review_rating ) {
-										echo wp_kses_post( wc_get_rating_html( $review_rating ) );
+										echo Ziteh_Icons::stars( $review_rating, 1 ); // phpcs:ignore WordPress.Security.EscapeOutput
 									}
 									?>
 									<p><?php echo esc_html( $review->comment_content ); ?></p>
@@ -534,7 +569,7 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 		?>
 		<section class="ziteh-sp__related">
 			<h2 class="ziteh-section-title ziteh-section-title--start">
-				<i class="fas fa-leaf ziteh-section-title__leaf" aria-hidden="true"></i>
+				<?php Ziteh_Icons::render( 'leaf', array( 'class' => 'ziteh-i ziteh-section-title__leaf' ) ); ?>
 				<?php esc_html_e( 'محصولات مرتبط', 'ziteh' ); ?>
 			</h2>
 			<div class="ziteh-sp__related-grid">

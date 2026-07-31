@@ -164,7 +164,16 @@ class Ziteh_Product_Details_Widget extends Ziteh_Widget_Base {
 					<div id="<?php echo esc_attr( $widget_id . '-panel-ingredients' ); ?>" class="ziteh-pd__panel ziteh-pd__panel--text<?php echo 'ingredients' === $active ? ' is-active' : ''; ?>" role="tabpanel" aria-labelledby="<?php echo esc_attr( $widget_id . '-tab-ingredients' ); ?>" data-ziteh-pd-panel="ingredients"<?php echo 'ingredients' === $active ? '' : ' hidden'; ?>><div class="ziteh-pd__copy"><?php echo wp_kses_post( wpautop( $settings['ingredients_content'] ) ); ?></div></div>
 					<div id="<?php echo esc_attr( $widget_id . '-panel-usage' ); ?>" class="ziteh-pd__panel ziteh-pd__panel--text<?php echo 'usage' === $active ? ' is-active' : ''; ?>" role="tabpanel" aria-labelledby="<?php echo esc_attr( $widget_id . '-tab-usage' ); ?>" data-ziteh-pd-panel="usage"<?php echo 'usage' === $active ? '' : ' hidden'; ?>><div class="ziteh-pd__copy"><?php echo wp_kses_post( wpautop( $settings['usage_content'] ) ); ?></div></div>
 					<div id="<?php echo esc_attr( $widget_id . '-panel-reviews' ); ?>" class="ziteh-pd__panel ziteh-pd__panel--reviews<?php echo 'reviews' === $active ? ' is-active' : ''; ?>" role="tabpanel" aria-labelledby="<?php echo esc_attr( $widget_id . '-tab-reviews' ); ?>" data-ziteh-pd-panel="reviews"<?php echo 'reviews' === $active ? '' : ' hidden'; ?>><?php $this->render_reviews( $product, (int) $settings['reviews_limit'] ); ?></div>
-					<?php if ( ! empty( $settings['benefits'] ) ) : ?><ul class="ziteh-pd__benefits"><?php foreach ( $settings['benefits'] as $item ) : ?><li class="ziteh-pd__benefit"><span class="ziteh-pd__benefit-icon"><?php Icons_Manager::render_icon( $item['icon'], array( 'aria-hidden' => 'true' ) ); ?></span><strong><?php echo esc_html( $item['title'] ); ?></strong></li><?php endforeach; ?></ul><?php endif; ?>
+					<?php if ( ! empty( $settings['benefits'] ) ) : ?>
+						<ul class="ziteh-pd__benefits">
+							<?php foreach ( $settings['benefits'] as $item ) : ?>
+								<li class="ziteh-pd__benefit">
+									<span class="ziteh-pd__benefit-icon"><?php Ziteh_Icons::render_control( $item['icon'], 'leaf' ); ?></span>
+									<strong><?php echo esc_html( $item['title'] ); ?></strong>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
 				</div>
 			</div>
 		</section>
@@ -190,7 +199,8 @@ class Ziteh_Product_Details_Widget extends Ziteh_Widget_Base {
 		echo '<div class="ziteh-pd__reviews">';
 		foreach ( $reviews as $review ) {
 			$rating = (int) get_comment_meta( $review->comment_ID, 'rating', true );
-			echo '<article class="ziteh-pd__review"><div class="ziteh-pd__review-head"><strong>' . esc_html( get_comment_author( $review ) ) . '</strong>' . ( $rating ? wp_kses_post( wc_get_rating_html( $rating ) ) : '' ) . '</div><p>' . esc_html( $review->comment_content ) . '</p></article>';
+			// phpcs:ignore WordPress.Security.EscapeOutput -- Ziteh_Icons::stars() escapes its own attributes.
+			echo '<article class="ziteh-pd__review"><div class="ziteh-pd__review-head"><strong>' . esc_html( get_comment_author( $review ) ) . '</strong>' . ( $rating ? Ziteh_Icons::stars( $rating, 1 ) : '' ) . '</div><p>' . esc_html( $review->comment_content ) . '</p></article>';
 		}
 		echo '</div>';
 	}

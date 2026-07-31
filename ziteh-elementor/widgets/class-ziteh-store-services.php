@@ -91,7 +91,7 @@ class Ziteh_Store_Services_Widget extends Ziteh_Widget_Base {
 					$attrs .= $rel ? ' rel="' . esc_attr( implode( ' ', $rel ) ) . '"' : '';
 					?>
 					<<?php echo esc_attr( $tag ); ?> class="ziteh-ss__item elementor-repeater-item-<?php echo esc_attr( isset( $item['_id'] ) ? $item['_id'] : $index ); ?>" role="listitem" aria-label="<?php echo esc_attr( $aria ); ?>"<?php echo $attrs; // phpcs:ignore WordPress.Security.EscapeOutput ?> data-ziteh-service-index="<?php echo esc_attr( $index ); ?>">
-						<span class="ziteh-ss__icon" aria-hidden="true"><?php Icons_Manager::render_icon( $item['selected_icon'], array( 'aria-hidden' => 'true' ) ); ?></span>
+						<span class="ziteh-ss__icon" aria-hidden="true"><?php Ziteh_Icons::render_control( $item['selected_icon'], 'truck' ); ?></span>
 						<span class="ziteh-ss__content"><strong class="ziteh-ss__title"><?php echo esc_html( $item['title'] ); ?></strong><span class="ziteh-ss__description"><?php echo esc_html( $item['description'] ); ?></span></span>
 					</<?php echo esc_attr( $tag ); ?>>
 				<?php endforeach; ?>

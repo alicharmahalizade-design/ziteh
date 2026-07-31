@@ -1,11 +1,19 @@
 /**
  * Ziteh isolated single-product canvas.
- * Loaded last and only on WooCommerce product pages.
+ *
+ * Structural isolation only: it neutralises the theme's page shell and the
+ * Elementor container chrome around the product template so the five Ziteh
+ * widgets can own the full width of the page.
+ *
+ * Widget-level styling and the scoped reset live in ziteh-single-product.css.
+ * This file used to also pin every widget's CSS custom properties with
+ * `!important`, which locked the sections to 1660px and silently disabled every
+ * size, colour and spacing control in the Elementor panel. Those locks are gone
+ * — the widgets ship correct defaults and the panel controls work again.
  */
 
 body.ziteh-product-canvas {
-	--ziteh-product-page-max: 1440px;
-	--ziteh-product-page-bg: #fbfaf7;
+	--ziteh-product-page-bg: #faf9f6;
 	margin: 0;
 	background: var(--ziteh-product-page-bg);
 }
@@ -61,22 +69,15 @@ body.ziteh-product-canvas main .elementor[data-elementor-type="wp-post"] > .e-co
 	background: transparent !important;
 }
 
-/* Make every Ziteh product widget a predictable full-width row. */
+/* Make every Ziteh product widget a predictable full-width row. The widgets
+   centre their own content, so the wrapper must not add a second gutter. */
 body.ziteh-product-canvas :where(
 	.elementor-widget-ziteh-single-product,
 	.elementor-widget-ziteh-product-details,
 	.elementor-widget-ziteh-related-products,
 	.elementor-widget-ziteh-product-reviews,
 	.elementor-widget-ziteh-store-services
-) {
-	width: 100% !important;
-	max-width: none !important;
-	margin: 0 !important;
-	padding: 0 !important;
-	align-self: stretch !important;
-	background: transparent !important;
-}
-
+),
 body.ziteh-product-canvas :where(
 	.elementor-widget-ziteh-single-product,
 	.elementor-widget-ziteh-product-details,
@@ -88,120 +89,8 @@ body.ziteh-product-canvas :where(
 	max-width: none !important;
 	margin: 0 !important;
 	padding: 0 !important;
+	align-self: stretch !important;
 	background: transparent !important;
-}
-
-/* A scoped reset prevents theme typography/form rules from leaking inside. */
-body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss) {
-	isolation: isolate;
-	width: 100%;
-	max-width: none;
-	margin: 0;
-	border: 0;
-	font-family: var(--ziteh-font, "Vazirmatn", Tahoma, sans-serif) !important;
-	font-style: normal;
-	text-transform: none;
-	letter-spacing: normal;
-	box-shadow: none;
-	-webkit-font-smoothing: antialiased;
-	text-rendering: optimizeLegibility;
-}
-
-/* Pixel-lock the selected UI scale so legacy Elementor post CSS cannot shrink it. */
-body.ziteh-product-canvas .elementor-widget-ziteh-single-product .ziteh-sp {
-	--ziteh-sp-max: min(1660px, calc(100vw - 64px)) !important;
-	--ziteh-sp-buy: 340px !important;
-	--ziteh-sp-info: 410px !important;
-	--ziteh-sp-gap: 46px !important;
-	--ziteh-sp-ratio: 1 / 1.05 !important;
-	--ziteh-sp-fit: cover !important;
-	--ziteh-sp-radius: 24px !important;
-	--ziteh-sp-bg: #fbfaf7 !important;
-	--ziteh-sp-primary: #748067 !important;
-	--ziteh-sp-heading: #282b25 !important;
-	--ziteh-sp-text: #6f716a !important;
-	--ziteh-sp-card: #fff !important;
-	--ziteh-sp-border: #e8e5df !important;
-	--ziteh-sp-star: #f5ae00 !important;
-}
-
-body.ziteh-product-canvas .elementor-widget-ziteh-product-details .ziteh-pd {
-	--ziteh-pd-max: min(1650px, calc(100vw - 72px)) !important;
-	--ziteh-pd-gap: 90px !important;
-	--ziteh-pd-image: 700px !important;
-	--ziteh-pd-radius: 24px !important;
-	--ziteh-pd-bg: #fbfaf7 !important;
-	--ziteh-pd-surface: #fff !important;
-	--ziteh-pd-primary: #78866f !important;
-	--ziteh-pd-heading: #444740 !important;
-	--ziteh-pd-text: #7e807a !important;
-	--ziteh-pd-border: #e9e6df !important;
-}
-
-body.ziteh-product-canvas .elementor-widget-ziteh-related-products .ziteh-rp {
-	--ziteh-rp-max: 1620px !important;
-	--ziteh-rp-visible: 5 !important;
-	--ziteh-rp-gap: 16px !important;
-	--ziteh-rp-ratio: 1.22 / 1 !important;
-	--ziteh-rp-fit: cover !important;
-	--ziteh-rp-radius: 10px !important;
-	--ziteh-rp-bg: #fbfaf7 !important;
-	--ziteh-rp-card: #fff !important;
-	--ziteh-rp-image-bg: #eeeae4 !important;
-	--ziteh-rp-primary: #7d8a70 !important;
-	--ziteh-rp-heading: #465044 !important;
-	--ziteh-rp-text: #696d66 !important;
-	--ziteh-rp-border: #e8e5de !important;
-}
-
-body.ziteh-product-canvas .elementor-widget-ziteh-product-reviews .ziteh-pr {
-	--ziteh-pr-max: min(1420px, calc(100vw - 144px)) !important;
-	--ziteh-pr-summary: 420px !important;
-	--ziteh-pr-gap: 24px !important;
-	--ziteh-pr-card-gap: 9px !important;
-	--ziteh-pr-avatar: 58px !important;
-	--ziteh-pr-radius: 14px !important;
-}
-
-body.ziteh-product-canvas .elementor-widget-ziteh-store-services .ziteh-ss {
-	--ziteh-ss-max: min(1620px, calc(100vw - 72px)) !important;
-	--ziteh-ss-height: 72px !important;
-	--ziteh-ss-gap: 20px !important;
-	--ziteh-ss-pad: 24px !important;
-	--ziteh-ss-icon: 32px !important;
-	--ziteh-ss-radius: 18px !important;
-}
-
-body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss),
-body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss) *,
-body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss) *::before,
-body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss) *::after {
-	box-sizing: border-box;
-}
-
-body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss) :where(h1, h2, h3, h4, h5, h6, p, ul, ol, figure) {
-	font-family: inherit !important;
-	letter-spacing: normal !important;
-	text-transform: none !important;
-}
-
-body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss) :where(button, input, select, textarea) {
-	font: inherit !important;
-	letter-spacing: normal !important;
-	text-transform: none !important;
-	-webkit-appearance: none;
-	appearance: none;
-}
-
-body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss) :where(button, a, input, select, textarea):focus-visible {
-	outline: 2px solid var(--ziteh-green, #7c8a5c) !important;
-	outline-offset: 3px;
-}
-
-body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss) img {
-	max-width: 100%;
-	border: 0;
-	box-shadow: none;
 }
 
 /* Native Woo sections duplicate the dedicated Ziteh widgets; hide direct copies. */
@@ -209,52 +98,9 @@ body.ziteh-product-canvas .woocommerce div.product > :where(.woocommerce-product
 	display: none !important;
 }
 
-/* Reference-faithful vertical rhythm across the five independent widgets. */
-body.ziteh-product-canvas .elementor-widget-ziteh-single-product .ziteh-sp {
-	padding-block: clamp(18px, 2.2vw, 32px) clamp(24px, 3vw, 44px);
-}
-
-body.ziteh-product-canvas .elementor-widget-ziteh-product-details .ziteh-pd,
-body.ziteh-product-canvas .elementor-widget-ziteh-related-products .ziteh-rp,
-body.ziteh-product-canvas .elementor-widget-ziteh-product-reviews .ziteh-pr,
-body.ziteh-product-canvas .elementor-widget-ziteh-store-services .ziteh-ss {
-	border-top: 0 !important;
-}
-
-body.ziteh-product-canvas .elementor-widget-ziteh-product-details .ziteh-pd { padding-block: clamp(14px, 2vw, 28px); }
-body.ziteh-product-canvas .elementor-widget-ziteh-related-products .ziteh-rp { padding-block: clamp(18px, 2.4vw, 34px); }
-body.ziteh-product-canvas .elementor-widget-ziteh-product-reviews .ziteh-pr { padding-block: clamp(18px, 2vw, 28px); }
-body.ziteh-product-canvas .elementor-widget-ziteh-store-services .ziteh-ss { padding-block: clamp(18px, 2vw, 28px); }
-
 @media (max-width: 767px) {
 	body.ziteh-product-canvas { overflow-x: clip; }
-	body.ziteh-product-canvas .elementor-widget-ziteh-single-product .ziteh-sp { --ziteh-sp-max: calc(100vw - 28px) !important; }
-	body.ziteh-product-canvas .elementor-widget-ziteh-product-details .ziteh-pd { --ziteh-pd-max: calc(100vw - 28px) !important; }
-	body.ziteh-product-canvas .elementor-widget-ziteh-product-reviews .ziteh-pr { --ziteh-pr-max: calc(100vw - 32px) !important; --ziteh-pr-summary: 100% !important; --ziteh-pr-avatar: 50px !important; }
-	body.ziteh-product-canvas .elementor-widget-ziteh-store-services .ziteh-ss { --ziteh-ss-max: calc(100vw - 32px) !important; }
+
 	body.ziteh-product-canvas .elementor-location-single > .e-con,
 	body.ziteh-product-canvas main .elementor > .e-con { min-width: 0; }
-}
-
-@media (max-width: 800px) {
-	body.ziteh-product-canvas .elementor-widget-ziteh-related-products .ziteh-rp { --ziteh-rp-visible: 3 !important; }
-}
-
-@media (min-width: 768px) and (max-width: 1100px) {
-	body.ziteh-product-canvas .elementor-widget-ziteh-product-reviews .ziteh-pr { --ziteh-pr-summary: 260px !important; --ziteh-pr-gap: 16px !important; --ziteh-pr-card-gap: 6px !important; --ziteh-pr-avatar: 48px !important; }
-	body.ziteh-product-canvas .elementor-widget-ziteh-store-services .ziteh-ss { --ziteh-ss-height: 59px !important; --ziteh-ss-gap: 18px !important; --ziteh-ss-pad: 18px !important; --ziteh-ss-icon: 28px !important; }
-}
-
-@media (max-width: 600px) {
-	body.ziteh-product-canvas .elementor-widget-ziteh-related-products .ziteh-rp { --ziteh-rp-visible: 1.35 !important; --ziteh-rp-gap: 11px !important; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-	body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss) *,
-	body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss) *::before,
-	body.ziteh-product-canvas :where(.ziteh-sp, .ziteh-pd, .ziteh-rp, .ziteh-pr, .ziteh-ss) *::after {
-		scroll-behavior: auto !important;
-		animation-duration: .01ms !important;
-		transition-duration: .01ms !important;
-	}
 }

@@ -3,7 +3,7 @@
  * Plugin Name: هسته زیته
  * Plugin URI:  https://ziteh.com
  * Description: هسته مرکزی زیته برای مدیریت ویجت‌های المنتور، امکانات فروشگاهی، طراحی، تعاملات، کارایی و توسعه‌های آینده.
- * Version:     3.8.0
+ * Version:     3.9.0
  * Author:      Ziteh
  * Text Domain: ziteh
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'ZITEH_EL_VERSION', '3.8.0' );
+define( 'ZITEH_EL_VERSION', '3.9.0' );
 define( 'ZITEH_CORE_VERSION', ZITEH_EL_VERSION );
 define( 'ZITEH_EL_FILE', __FILE__ );
 define( 'ZITEH_EL_PATH', plugin_dir_path( __FILE__ ) );
@@ -74,6 +74,9 @@ final class Ziteh_Elementor_Plugin {
 		if ( ! $this->is_compatible() ) {
 			return;
 		}
+
+		// Inline SVG icon set: widgets must never depend on an external icon font.
+		require_once ZITEH_EL_PATH . 'includes/class-ziteh-icons.php';
 
 		// Load the widgets manager.
 		require_once ZITEH_EL_PATH . 'includes/class-ziteh-widgets-manager.php';

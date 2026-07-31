@@ -1,0 +1,1852 @@
+/**
+ * Ziteh single-product widgets — isolated, reference-faithful layer.
+ *
+ * This file is the single authority for the five product-page widgets and it
+ * loads after ziteh-widgets.css, ziteh-product-canvas.css and (by way of its
+ * dependency chain) the active theme. Two rules keep it that way:
+ *
+ *   1. Every selector carries its `.elementor-widget-ziteh-*` wrapper, so the
+ *      lowest specificity here is (0,2,0). Theme rules written against bare
+ *      elements or a single class cannot reach past it.
+ *   2. The one `!important` block is the hard reset. It both neutralises and
+ *      styles the WooCommerce add-to-cart form, which is the only place where
+ *      themes routinely ship (0,3,2)-and-up selectors. Nothing outside that
+ *      block re-declares those properties, so the file never fights itself.
+ *
+ * Sizes come from the reference UI, whose frame is 935px standing in for a
+ * ~1440px page: mock-up pixels are multiplied by 1.54 and rounded. The older
+ * review and services rules were entered at frame scale, which is why those
+ * sections rendered at roughly two-thirds size.
+ */
+
+/* ==========================================================================
+   Icon and star primitives
+   ========================================================================== */
+
+.ziteh-i {
+	display: block;
+	width: 1em;
+	height: 1em;
+	flex: 0 0 auto;
+	overflow: visible;
+	vertical-align: middle;
+}
+
+.ziteh-stars {
+	display: inline-flex;
+	align-items: center;
+	gap: .18em;
+	direction: ltr;
+	line-height: 1;
+	color: var(--ziteh-star, #efb034);
+}
+
+.ziteh-stars__star {
+	position: relative;
+	display: block;
+	width: 1em;
+	height: 1em;
+	flex: 0 0 auto;
+}
+
+.ziteh-stars__star.is-empty {
+	color: #ddd9d0;
+}
+
+.ziteh-stars__star .ziteh-i {
+	width: 100%;
+	height: 100%;
+}
+
+/* Fractional star: a clipped full-colour copy laid over the empty glyph. */
+.ziteh-stars__fill {
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: 0;
+	overflow: hidden;
+	color: var(--ziteh-star, #efb034);
+}
+
+.ziteh-stars__fill .ziteh-i {
+	width: 1em;
+	height: 1em;
+}
+
+/* ==========================================================================
+   Shared tokens
+   ========================================================================== */
+
+.elementor-widget-ziteh-single-product .ziteh-sp,
+.elementor-widget-ziteh-product-details .ziteh-pd,
+.elementor-widget-ziteh-related-products .ziteh-rp,
+.elementor-widget-ziteh-product-reviews .ziteh-pr,
+.elementor-widget-ziteh-store-services .ziteh-ss {
+	--ziteh-page: 1360px;
+	--ziteh-gutter: clamp(16px, 3vw, 40px);
+	--ziteh-star: #efb034;
+	direction: rtl;
+	font-family: var(--ziteh-font, "Vazirmatn", Tahoma, sans-serif);
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 400;
+	letter-spacing: normal;
+	text-transform: none;
+	text-align: right;
+}
+
+/* ==========================================================================
+   Hard reset — this is what "turn off the theme defaults" means in practice.
+
+   `all: revert` drops every author declaration the theme made and falls back
+   to the browser default, then the handful of properties we actually want to
+   inherit are put back. Only bare elements are targeted, so the widgets' own
+   class-based rules below are untouched.
+   ========================================================================== */
+
+.elementor-widget-ziteh-single-product .ziteh-sp :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, figure, blockquote, table, thead, tbody, tr, th, td, small, strong, b, em, time, address),
+.elementor-widget-ziteh-product-details .ziteh-pd :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, figure, blockquote, table, thead, tbody, tr, th, td, small, strong, b, em, time, address),
+.elementor-widget-ziteh-related-products .ziteh-rp :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, small, strong, b, em, time),
+.elementor-widget-ziteh-product-reviews .ziteh-pr :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, small, strong, b, em, time),
+.elementor-widget-ziteh-store-services .ziteh-ss :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, small, strong, b, em, time) {
+	all: revert;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	color: inherit;
+	background: none;
+	font-family: inherit;
+	font-size: inherit;
+	font-style: inherit;
+	line-height: inherit;
+	letter-spacing: normal;
+	text-transform: none;
+	text-align: inherit;
+	list-style: none;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp :where(a),
+.elementor-widget-ziteh-product-details .ziteh-pd :where(a),
+.elementor-widget-ziteh-related-products .ziteh-rp :where(a),
+.elementor-widget-ziteh-product-reviews .ziteh-pr :where(a),
+.elementor-widget-ziteh-store-services .ziteh-ss :where(a) {
+	box-sizing: border-box;
+	color: inherit;
+	background: none;
+	font: inherit;
+	letter-spacing: normal;
+	text-transform: none;
+	text-decoration: none;
+	box-shadow: none;
+	transition: color .2s ease;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp :where(img, svg),
+.elementor-widget-ziteh-product-details .ziteh-pd :where(img, svg),
+.elementor-widget-ziteh-related-products .ziteh-rp :where(img, svg),
+.elementor-widget-ziteh-product-reviews .ziteh-pr :where(img, svg),
+.elementor-widget-ziteh-store-services .ziteh-ss :where(img, svg) {
+	max-width: 100%;
+	margin: 0;
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+	vertical-align: middle;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp,
+.elementor-widget-ziteh-single-product .ziteh-sp *,
+.elementor-widget-ziteh-single-product .ziteh-sp *::before,
+.elementor-widget-ziteh-single-product .ziteh-sp *::after,
+.elementor-widget-ziteh-product-details .ziteh-pd,
+.elementor-widget-ziteh-product-details .ziteh-pd *,
+.elementor-widget-ziteh-product-details .ziteh-pd *::before,
+.elementor-widget-ziteh-product-details .ziteh-pd *::after,
+.elementor-widget-ziteh-related-products .ziteh-rp,
+.elementor-widget-ziteh-related-products .ziteh-rp *,
+.elementor-widget-ziteh-related-products .ziteh-rp *::before,
+.elementor-widget-ziteh-related-products .ziteh-rp *::after,
+.elementor-widget-ziteh-product-reviews .ziteh-pr,
+.elementor-widget-ziteh-product-reviews .ziteh-pr *,
+.elementor-widget-ziteh-product-reviews .ziteh-pr *::before,
+.elementor-widget-ziteh-product-reviews .ziteh-pr *::after,
+.elementor-widget-ziteh-store-services .ziteh-ss,
+.elementor-widget-ziteh-store-services .ziteh-ss *,
+.elementor-widget-ziteh-store-services .ziteh-ss *::before,
+.elementor-widget-ziteh-store-services .ziteh-ss *::after {
+	box-sizing: border-box;
+}
+
+/* Form controls. Themes skin bare `button` and `input` aggressively, so the
+   reset and the final appearance are declared together to avoid a
+   self-conflict. The WooCommerce cart form needs more than this and gets its
+   own armoured block further down. */
+.elementor-widget-ziteh-single-product .ziteh-sp :where(button, input, select, textarea),
+.elementor-widget-ziteh-product-details .ziteh-pd :where(button, input),
+.elementor-widget-ziteh-related-products .ziteh-rp :where(button),
+.elementor-widget-ziteh-product-reviews .ziteh-pr :where(button, input),
+.elementor-widget-ziteh-store-services .ziteh-ss :where(button) {
+	box-sizing: border-box !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	color: inherit !important;
+	background: none !important;
+	font: inherit !important;
+	line-height: 1.5 !important;
+	letter-spacing: normal !important;
+	text-transform: none !important;
+	text-shadow: none !important;
+	box-shadow: none !important;
+	min-width: 0 !important;
+	width: auto;
+	height: auto;
+	cursor: pointer;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp :where(button, a, input, select, textarea):focus-visible,
+.elementor-widget-ziteh-product-details .ziteh-pd :where(button, a):focus-visible,
+.elementor-widget-ziteh-related-products .ziteh-rp :where(button, a):focus-visible,
+.elementor-widget-ziteh-product-reviews .ziteh-pr :where(button, a):focus-visible,
+.elementor-widget-ziteh-store-services .ziteh-ss :where(a):focus-visible {
+	outline: 2px solid var(--ziteh-sp-primary, #6f7d5f);
+	outline-offset: 3px;
+	border-radius: 6px;
+}
+
+/* ==========================================================================
+   1. Hero — gallery / summary / purchase
+   ========================================================================== */
+
+.elementor-widget-ziteh-single-product .ziteh-sp {
+	--ziteh-sp-max: var(--ziteh-page);
+	--ziteh-sp-buy: 330px;
+	--ziteh-sp-info: 420px;
+	--ziteh-sp-gap: 32px;
+	--ziteh-sp-ratio: 1 / 1.07;
+	--ziteh-sp-fit: cover;
+	--ziteh-sp-radius: 22px;
+	--ziteh-sp-bg: #faf9f6;
+	--ziteh-sp-primary: #6f7d5f;
+	--ziteh-sp-heading: #333830;
+	--ziteh-sp-text: #787b74;
+	--ziteh-sp-card: #fff;
+	--ziteh-sp-border: #e9e6df;
+	--ziteh-sp-star: #efb034;
+	width: 100%;
+	padding: 28px var(--ziteh-gutter) 44px;
+	color: var(--ziteh-sp-text);
+	background: var(--ziteh-sp-bg);
+	line-height: 1.7;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__container {
+	width: min(100%, var(--ziteh-sp-max));
+	margin-inline: auto;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__hero {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, var(--ziteh-sp-info)) minmax(0, var(--ziteh-sp-buy));
+	align-items: start;
+	gap: var(--ziteh-sp-gap);
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__notice {
+	max-width: 640px;
+	margin: 32px auto;
+	padding: 22px;
+	border: 1px solid var(--ziteh-sp-border);
+	border-radius: 16px;
+	background: var(--ziteh-sp-card);
+	color: var(--ziteh-sp-heading);
+	text-align: center;
+}
+
+/* -- Gallery -------------------------------------------------------------- */
+
+.elementor-widget-ziteh-single-product .ziteh-sp__gallery {
+	min-width: 0;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__stage {
+	position: relative;
+	aspect-ratio: var(--ziteh-sp-ratio);
+	overflow: hidden;
+	border: 1px solid var(--ziteh-sp-border);
+	border-radius: var(--ziteh-sp-radius);
+	background: #f1eee9;
+	box-shadow: none;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__slide {
+	position: absolute;
+	inset: 0;
+	padding: 0;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity .28s ease, visibility .28s;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__slide.is-active {
+	opacity: 1;
+	visibility: visible;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__slide img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: var(--ziteh-sp-fit);
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__sale {
+	position: absolute;
+	z-index: 4;
+	top: 18px;
+	inset-inline-end: 18px;
+	padding: 7px 15px;
+	border-radius: 999px;
+	background: var(--ziteh-sp-primary);
+	color: #fff;
+	font-size: 13px;
+	font-weight: 700;
+	line-height: 1.5;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__gallery-arrow {
+	position: absolute;
+	z-index: 5;
+	top: 50%;
+	display: inline-grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	border: 1px solid rgba(51, 56, 48, .07) !important;
+	border-radius: 50% !important;
+	background: rgba(255, 255, 255, .94) !important;
+	color: #6f726a !important;
+	font-size: 15px;
+	transform: translateY(-50%);
+	transition: color .2s ease, background .2s ease;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__gallery-arrow:hover {
+	background: #fff !important;
+	color: var(--ziteh-sp-primary) !important;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__gallery-arrow--prev { inset-inline-start: 18px; }
+.elementor-widget-ziteh-single-product .ziteh-sp__gallery-arrow--next { inset-inline-end: 18px; }
+
+.elementor-widget-ziteh-single-product .ziteh-sp__thumbs {
+	display: grid;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	gap: 10px;
+	margin-top: 16px;
+	padding: 0;
+	overflow: visible;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__thumb {
+	width: 100%;
+	aspect-ratio: 1.15 / 1;
+	padding: 0;
+	overflow: hidden;
+	border: 2px solid transparent !important;
+	border-radius: 11px !important;
+	background: #f1eee9 !important;
+	transition: border-color .2s ease;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__thumb img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__thumb:hover,
+.elementor-widget-ziteh-single-product .ziteh-sp__thumb.is-active {
+	border-color: var(--ziteh-sp-primary) !important;
+	transform: none;
+}
+
+/* -- Summary -------------------------------------------------------------- */
+
+.elementor-widget-ziteh-single-product .ziteh-sp__summary {
+	position: static;
+	min-width: 0;
+	padding: 4px 0 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+	backdrop-filter: none;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__breadcrumbs {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin: 0 0 20px;
+	color: #a5a69f;
+	font-size: 12.5px;
+	line-height: 1.8;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__breadcrumbs a { color: #8e908a; }
+.elementor-widget-ziteh-single-product .ziteh-sp__breadcrumbs a:hover { color: var(--ziteh-sp-primary); }
+
+.elementor-widget-ziteh-single-product .ziteh-sp__eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	margin-bottom: 10px;
+	color: var(--ziteh-sp-primary);
+	font-size: 13.5px;
+	font-weight: 700;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__eyebrow .ziteh-i {
+	order: 2;
+	font-size: 16px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__title {
+	margin: 0 0 8px;
+	color: var(--ziteh-sp-heading);
+	font-size: clamp(24px, 2.3vw, 33px);
+	font-weight: 800;
+	line-height: 1.6;
+	letter-spacing: -.3px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__english {
+	margin-bottom: 14px;
+	color: #a2a39d;
+	direction: ltr;
+	font-size: 14.5px;
+	text-align: right;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__rating {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 9px;
+	margin-bottom: 18px;
+	font-size: 13px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__rating .ziteh-stars { font-size: 15px; }
+.elementor-widget-ziteh-single-product .ziteh-sp__rating-value { color: #6c6f68; }
+.elementor-widget-ziteh-single-product .ziteh-sp__rating-link { color: #a5a69f; font-size: 12.5px; }
+.elementor-widget-ziteh-single-product .ziteh-sp__rating-link:hover { color: var(--ziteh-sp-primary); }
+.elementor-widget-ziteh-single-product .ziteh-sp__no-rating { color: #a5a69f; }
+
+.elementor-widget-ziteh-single-product .ziteh-sp__excerpt {
+	margin-bottom: 22px;
+	padding: 0;
+	border: 0;
+	color: var(--ziteh-sp-text);
+	font-size: 14px;
+	line-height: 2.05;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__excerpt p { margin: 0; }
+
+.elementor-widget-ziteh-single-product .ziteh-sp__highlights {
+	display: grid;
+	gap: 14px;
+	margin: 0 0 26px;
+	padding: 0;
+	list-style: none;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__highlight {
+	display: flex;
+	align-items: center;
+	gap: 11px;
+	color: #4a4d46;
+	font-size: 13.5px;
+	font-weight: 600;
+	line-height: 1.75;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__highlight-icon {
+	display: inline-grid;
+	place-items: center;
+	flex: 0 0 20px;
+	color: #7b8073;
+	font-size: 20px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__highlight-text { min-width: 0; }
+
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping {
+	display: grid;
+	grid-template-columns: 34px minmax(0, 1fr) 20px;
+	align-items: center;
+	gap: 13px;
+	margin-top: 26px;
+	padding: 15px 18px;
+	border: 1px solid var(--ziteh-sp-border);
+	border-radius: 15px;
+	background: rgba(255, 255, 255, .6);
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping-icon {
+	display: grid;
+	place-items: center;
+	color: #61665e;
+	font-size: 28px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping-copy {
+	display: grid;
+	gap: 3px;
+	min-width: 0;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping-copy strong {
+	color: #45493f;
+	font-size: 13.5px;
+	font-weight: 700;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping-copy small {
+	color: #9a9b95;
+	font-size: 11.5px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping-chevron {
+	display: grid;
+	place-items: center;
+	color: #a5a69f;
+	font-size: 18px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__meta {
+	display: grid;
+	gap: 6px;
+	margin-top: 18px;
+	color: #9a9b95;
+	font-size: 12.5px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__meta a { color: #7b7e77; }
+
+/* -- Purchase card -------------------------------------------------------- */
+
+.elementor-widget-ziteh-single-product .ziteh-sp__purchase {
+	min-width: 0;
+	padding: 24px 22px 22px;
+	border: 1px solid var(--ziteh-sp-border);
+	border-radius: var(--ziteh-sp-radius);
+	background: var(--ziteh-sp-card);
+	box-shadow: none;
+	text-align: center;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__purchase.is-sticky {
+	position: sticky;
+	top: 92px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__recommendation {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 30px;
+	padding: 4px 18px;
+	border-radius: 999px;
+	background: var(--ziteh-sp-primary);
+	color: #fff;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__purchase-brand {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 18px;
+	color: var(--ziteh-sp-heading);
+	font-size: 17px;
+	font-weight: 700;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__purchase-brand .ziteh-i {
+	order: 2;
+	color: var(--ziteh-sp-primary);
+	font-size: 18px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__purchase-description {
+	margin: 8px 0 0;
+	color: #9a9b95;
+	font-size: 12.5px;
+	line-height: 1.9;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__purchase-separator {
+	height: 1px;
+	margin: 20px 0 18px;
+	background: var(--ziteh-sp-border);
+}
+
+/* The reference puts the discount pill and the struck-through regular price on
+   one centred row, with the payable price on the row below. `order` does that
+   without depending on where WooCommerce chooses to emit <del> and <ins>. */
+.elementor-widget-ziteh-single-product .ziteh-sp__price {
+	display: flex;
+	align-items: baseline;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 0 0 6px;
+	color: var(--ziteh-sp-heading);
+	font-size: 30px;
+	font-weight: 800;
+	line-height: 1.5;
+	text-align: center;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__purchase-discount {
+	order: 2;
+	display: inline-flex;
+	align-items: center;
+	padding: 3px 11px;
+	border-radius: 999px;
+	background: var(--ziteh-sp-primary);
+	color: #fff;
+	font-size: 11.5px;
+	font-weight: 600;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__price > del {
+	order: 1;
+	color: #a5a69f;
+	font-size: 13px;
+	font-weight: 500;
+	text-decoration: line-through;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__price > ins {
+	order: 3;
+	flex: 1 0 100%;
+	background: none;
+	text-decoration: none;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__price .woocommerce-Price-currencySymbol {
+	font-size: .55em;
+	font-weight: 600;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__stock {
+	margin: 0 0 14px;
+	color: #9a9b95;
+	font-size: 12px;
+	text-align: center;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__stock .out-of-stock { color: #c0705f; }
+
+/* -- WooCommerce add-to-cart form ----------------------------------------- */
+
+.elementor-widget-ziteh-single-product .ziteh-sp__buy form.cart {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 12px;
+	margin: 0 0 12px;
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+/* Armoured selectors.
+
+   A WooCommerce theme routinely styles the cart controls through something like
+   `.woocommerce div.product form.cart button.button` — specificity (0,4,3) —
+   and marks it `!important`. A plain three-class selector loses that fight, and
+   losing it is exactly what turned the primary call to action into a pink
+   circle with the label wrapped over three lines.
+
+   The wrapper and target classes are therefore repeated to push these rules
+   past (0,6,0). This is deliberate, and it is confined to the handful of
+   elements WooCommerce and the theme both claim. */
+
+.elementor-widget-ziteh-single-product.elementor-widget-ziteh-single-product .ziteh-sp .ziteh-sp__buy .quantity.quantity {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: none !important;
+	min-height: 46px !important;
+	margin: 0 !important;
+	padding: 0 6px !important;
+	border: 1px solid var(--ziteh-sp-border) !important;
+	border-radius: 12px !important;
+	background: #fff !important;
+	box-shadow: none !important;
+	direction: ltr !important; /* minus on the left, plus on the right, as drawn */
+	float: none !important;
+}
+
+.elementor-widget-ziteh-single-product.elementor-widget-ziteh-single-product .ziteh-sp .ziteh-sp__buy .quantity .qty.qty {
+	flex: 1 1 auto !important;
+	width: auto !important;
+	min-width: 0 !important;
+	height: 44px !important;
+	min-height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: none !important;
+	color: var(--ziteh-sp-heading) !important;
+	font-family: inherit !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
+	line-height: 1.5 !important;
+	letter-spacing: normal !important;
+	text-align: center !important;
+	box-shadow: none !important;
+	-moz-appearance: textfield;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__buy .quantity .qty::-webkit-inner-spin-button,
+.elementor-widget-ziteh-single-product .ziteh-sp__buy .quantity .qty::-webkit-outer-spin-button {
+	margin: 0;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__qty-btn {
+	display: inline-grid;
+	place-items: center;
+	width: 34px !important;
+	height: 34px !important;
+	flex: 0 0 34px;
+	border-radius: 50% !important;
+	color: #7b7e77 !important;
+	font-size: 18px !important;
+	line-height: 1 !important;
+	transition: background .2s ease, color .2s ease;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__qty-btn:hover {
+	background: #f2f0eb !important;
+	color: var(--ziteh-sp-primary) !important;
+}
+
+.elementor-widget-ziteh-single-product.elementor-widget-ziteh-single-product .ziteh-sp .ziteh-sp__buy .single_add_to_cart_button.single_add_to_cart_button,
+.elementor-widget-ziteh-single-product.elementor-widget-ziteh-single-product .ziteh-sp .ziteh-sp__buy .button.button {
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 10px !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: none !important;
+	height: auto !important;
+	min-height: 50px !important;
+	margin: 0 !important;
+	padding: 12px 20px !important;
+	border: 0 !important;
+	border-radius: 12px !important;
+	background: var(--ziteh-sp-primary) !important;
+	color: #fff !important;
+	font-family: inherit !important;
+	font-size: 15px !important;
+	font-weight: 700 !important;
+	line-height: 1.5 !important;
+	letter-spacing: normal !important;
+	text-align: center !important;
+	text-decoration: none !important;
+	text-transform: none !important;
+	text-shadow: none !important;
+	white-space: normal !important;
+	box-shadow: none !important;
+	float: none !important;
+	transition: background .2s ease, filter .2s ease;
+}
+
+/* The icon is injected as the button's first child; in RTL that lands on the
+   right, but the reference puts it on the left. */
+.elementor-widget-ziteh-single-product .ziteh-sp__buy .single_add_to_cart_button .ziteh-i,
+.elementor-widget-ziteh-single-product .ziteh-sp__buy .button .ziteh-i {
+	order: 2;
+	font-size: 19px;
+}
+
+.elementor-widget-ziteh-single-product.elementor-widget-ziteh-single-product .ziteh-sp .ziteh-sp__buy .single_add_to_cart_button.single_add_to_cart_button:hover,
+.elementor-widget-ziteh-single-product.elementor-widget-ziteh-single-product .ziteh-sp .ziteh-sp__buy .button.button:hover {
+	background: var(--ziteh-sp-primary) !important;
+	filter: brightness(.93);
+	transform: none;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__buy .single_add_to_cart_button.disabled,
+.elementor-widget-ziteh-single-product .ziteh-sp__buy .single_add_to_cart_button:disabled {
+	opacity: .55;
+	cursor: not-allowed;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__buy table.variations,
+.elementor-widget-ziteh-single-product .ziteh-sp__buy table.group_table {
+	width: 100%;
+	margin: 0 0 6px;
+	border: 0;
+	border-collapse: collapse;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__buy table.variations th,
+.elementor-widget-ziteh-single-product .ziteh-sp__buy table.variations td,
+.elementor-widget-ziteh-single-product .ziteh-sp__buy table.group_table td {
+	padding: 5px 0;
+	border: 0;
+	font-size: 13px;
+	text-align: right;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__buy table.variations select {
+	width: 100% !important;
+	min-height: 42px !important;
+	padding: 0 12px !important;
+	border: 1px solid var(--ziteh-sp-border) !important;
+	border-radius: 10px !important;
+	background: #fff !important;
+	color: var(--ziteh-sp-heading) !important;
+	font-size: 13px !important;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__buy .reset_variations {
+	display: inline-block;
+	margin-top: 6px;
+	color: #9a9b95;
+	font-size: 12px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__buy .woocommerce-variation-price {
+	margin-bottom: 8px;
+	font-size: 15px;
+}
+
+/* -- Wishlist and trust --------------------------------------------------- */
+
+.elementor-widget-ziteh-single-product .ziteh-sp__wish {
+	position: static;
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	gap: 9px;
+	width: 100% !important;
+	min-height: 40px;
+	padding: 6px 4px !important;
+	border-radius: 10px !important;
+	color: #82857e !important;
+	background: none !important;
+	font-size: 13px !important;
+	backdrop-filter: none;
+	transition: color .2s ease, background .2s ease;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__wish .ziteh-i {
+	order: 2;
+	font-size: 17px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__wish:hover,
+.elementor-widget-ziteh-single-product .ziteh-sp__wish.is-active {
+	color: var(--ziteh-sp-primary) !important;
+	background: #f6f4f0 !important;
+	transform: none;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__wish.is-active .ziteh-i {
+	color: #c0705f;
+	fill: currentColor;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__trust {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 6px;
+	margin: 18px 0 0;
+	padding: 18px 0 0;
+	border-top: 1px solid var(--ziteh-sp-border);
+	list-style: none;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__trust li {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 9px;
+	padding: 0 2px;
+	background: transparent;
+	text-align: center;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__trust-icon {
+	display: inline-grid;
+	place-items: center;
+	width: 26px;
+	height: 26px;
+	flex: 0 0 26px;
+	color: #6f7369;
+	font-size: 26px;
+	background: transparent;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__trust strong {
+	color: #7b7e77;
+	font-size: 11.5px;
+	font-weight: 500;
+	line-height: 1.6;
+	white-space: normal;
+}
+
+/* -- Legacy inline tabs and related grid ---------------------------------- */
+/* Only rendered when the isolated per-section widgets are switched off. */
+
+.elementor-widget-ziteh-single-product .ziteh-sp__details { margin-top: 48px; }
+
+.elementor-widget-ziteh-single-product .ziteh-sp__tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 30px;
+	margin-bottom: 20px;
+	border-bottom: 1px solid var(--ziteh-sp-border);
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__tab {
+	padding: 0 2px 12px !important;
+	color: #9a9b95 !important;
+	font-size: 14px !important;
+	font-weight: 600 !important;
+	border-bottom: 2px solid transparent !important;
+	border-radius: 0 !important;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__tab.is-active {
+	color: var(--ziteh-sp-heading) !important;
+	border-bottom-color: var(--ziteh-sp-primary) !important;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__panel { font-size: 14px; line-height: 2.05; }
+.elementor-widget-ziteh-single-product .ziteh-sp__panel[hidden] { display: none; }
+.elementor-widget-ziteh-single-product .ziteh-sp__panel p { margin: 0 0 12px; }
+.elementor-widget-ziteh-single-product .ziteh-sp__panel table { width: 100%; border-collapse: collapse; }
+
+.elementor-widget-ziteh-single-product .ziteh-sp__panel table th,
+.elementor-widget-ziteh-single-product .ziteh-sp__panel table td {
+	padding: 10px 12px;
+	border-bottom: 1px solid var(--ziteh-sp-border);
+	font-size: 13px;
+	text-align: right;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__reviews { display: grid; gap: 12px; }
+
+.elementor-widget-ziteh-single-product .ziteh-sp__review {
+	display: grid;
+	grid-template-columns: 52px minmax(0, 1fr);
+	gap: 12px;
+	padding: 14px;
+	border: 1px solid var(--ziteh-sp-border);
+	border-radius: 14px;
+	background: var(--ziteh-sp-card);
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__review img { border-radius: 50%; }
+.elementor-widget-ziteh-single-product .ziteh-sp__review strong { color: var(--ziteh-sp-heading); font-size: 13.5px; }
+.elementor-widget-ziteh-single-product .ziteh-sp__review p { margin: 4px 0 0; font-size: 13px; }
+.elementor-widget-ziteh-single-product .ziteh-sp__empty { padding: 22px; text-align: center; }
+
+.elementor-widget-ziteh-single-product .ziteh-sp__related { margin-top: 48px; }
+
+.elementor-widget-ziteh-single-product .ziteh-sp__related-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 20px;
+	margin-top: 18px;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__related-card {
+	display: grid;
+	overflow: hidden;
+	border: 1px solid var(--ziteh-sp-border);
+	border-radius: 15px;
+	background: var(--ziteh-sp-card);
+	text-align: center;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__related-image { display: block; aspect-ratio: 1.13 / 1; background: #f1eee9; }
+.elementor-widget-ziteh-single-product .ziteh-sp__related-image img { width: 100%; height: 100%; object-fit: cover; }
+.elementor-widget-ziteh-single-product .ziteh-sp__related-card strong { padding: 12px 12px 4px; color: var(--ziteh-sp-heading); font-size: 13.5px; font-weight: 600; }
+.elementor-widget-ziteh-single-product .ziteh-sp__related-price { padding: 0 12px 14px; font-size: 13px; }
+
+/* ==========================================================================
+   2. Details — tabs, description panel, benefits
+   ========================================================================== */
+
+.elementor-widget-ziteh-product-details .ziteh-pd {
+	--ziteh-pd-max: var(--ziteh-page);
+	--ziteh-pd-gap: 56px;
+	--ziteh-pd-image: 640px;
+	--ziteh-pd-radius: 20px;
+	--ziteh-pd-bg: #faf9f6;
+	--ziteh-pd-surface: #fdfcfa;
+	--ziteh-pd-primary: #6f7d5f;
+	--ziteh-pd-heading: #3d423a;
+	--ziteh-pd-text: #82857e;
+	--ziteh-pd-border: #ebe8e1;
+	width: 100%;
+	padding: 24px var(--ziteh-gutter);
+	color: var(--ziteh-pd-text);
+	background: var(--ziteh-pd-bg);
+	line-height: 1.7;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__container {
+	width: min(100%, var(--ziteh-pd-max));
+	margin-inline: auto;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__tabs {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: clamp(24px, 5vw, 72px);
+	margin-bottom: 18px;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__tab {
+	padding: 0 2px 10px !important;
+	border-bottom: 2px solid transparent !important;
+	border-radius: 0 !important;
+	color: #9a9b95 !important;
+	font-size: 14.5px !important;
+	font-weight: 600 !important;
+	transition: color .2s ease, border-color .2s ease;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__tab:hover { color: var(--ziteh-pd-heading) !important; }
+
+.elementor-widget-ziteh-product-details .ziteh-pd__tab.is-active {
+	color: var(--ziteh-pd-heading) !important;
+	border-bottom-color: var(--ziteh-pd-primary) !important;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__body {
+	padding: 28px;
+	border: 1px solid var(--ziteh-pd-border);
+	border-radius: var(--ziteh-pd-radius);
+	background: var(--ziteh-pd-surface);
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__panel[hidden] { display: none; }
+
+.elementor-widget-ziteh-product-details .ziteh-pd__panel--description {
+	display: grid;
+	grid-template-columns: minmax(0, var(--ziteh-pd-image)) minmax(0, 1fr);
+	align-items: center;
+	gap: var(--ziteh-pd-gap);
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__visual {
+	overflow: hidden;
+	border-radius: 15px;
+	background: #f1eee9;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__visual img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 2.19 / 1;
+	object-fit: cover;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__content { min-width: 0; }
+
+.elementor-widget-ziteh-product-details .ziteh-pd__heading {
+	margin: 0 0 16px;
+	color: var(--ziteh-pd-heading);
+	font-size: 20px;
+	font-weight: 800;
+	line-height: 1.7;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__copy {
+	color: var(--ziteh-pd-text);
+	font-size: 14px;
+	line-height: 2.1;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__copy p { margin: 0 0 16px; }
+.elementor-widget-ziteh-product-details .ziteh-pd__copy p:last-child { margin-bottom: 0; }
+
+.elementor-widget-ziteh-product-details .ziteh-pd__panel--text .ziteh-pd__copy,
+.elementor-widget-ziteh-product-details .ziteh-pd__panel--reviews { max-width: 900px; margin-inline: auto; }
+
+.elementor-widget-ziteh-product-details .ziteh-pd__reviews { display: grid; gap: 12px; }
+
+.elementor-widget-ziteh-product-details .ziteh-pd__review {
+	padding: 14px 16px;
+	border: 1px solid var(--ziteh-pd-border);
+	border-radius: 14px;
+	background: #fff;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__review-head {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 6px;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__review-head strong { color: var(--ziteh-pd-heading); font-size: 13.5px; font-weight: 700; }
+.elementor-widget-ziteh-product-details .ziteh-pd__review-head .ziteh-stars { font-size: 13px; }
+.elementor-widget-ziteh-product-details .ziteh-pd__review p { font-size: 13px; line-height: 1.95; }
+.elementor-widget-ziteh-product-details .ziteh-pd__empty { padding: 24px; text-align: center; font-size: 13.5px; }
+
+.elementor-widget-ziteh-product-details .ziteh-pd__benefits {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	margin: 28px 0 0;
+	padding: 0;
+	border: 1px solid var(--ziteh-pd-border);
+	border-radius: 15px;
+	list-style: none;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__benefit {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	min-height: 72px;
+	padding: 14px 12px;
+	text-align: center;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__benefit:not(:last-child)::after {
+	content: "";
+	position: absolute;
+	inset-inline-end: 0;
+	top: 18px;
+	bottom: 18px;
+	width: 1px;
+	background: var(--ziteh-pd-border);
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__benefit-icon {
+	display: inline-grid;
+	place-items: center;
+	flex: 0 0 34px;
+	color: var(--ziteh-pd-primary);
+	font-size: 34px;
+}
+
+.elementor-widget-ziteh-product-details .ziteh-pd__benefit strong {
+	color: #5d6455;
+	font-size: 13.5px;
+	font-weight: 600;
+}
+
+/* ==========================================================================
+   3. Related products
+   ========================================================================== */
+
+.elementor-widget-ziteh-related-products .ziteh-rp {
+	--ziteh-rp-max: var(--ziteh-page);
+	--ziteh-rp-visible: 5;
+	--ziteh-rp-gap: 20px;
+	--ziteh-rp-ratio: 1.13 / 1;
+	--ziteh-rp-fit: cover;
+	--ziteh-rp-radius: 15px;
+	--ziteh-rp-bg: #faf9f6;
+	--ziteh-rp-card: #fff;
+	--ziteh-rp-image-bg: #f1eee9;
+	--ziteh-rp-primary: #6f7d5f;
+	--ziteh-rp-heading: #434a40;
+	--ziteh-rp-text: #6c706a;
+	--ziteh-rp-border: #ebe8e1;
+	width: 100%;
+	/* The carousel track is wider than its viewport by design. `clip` keeps that
+	   overflow from reaching the document and adding a horizontal scrollbar to
+	   the whole page, without creating a scroll container of its own. */
+	overflow-x: clip;
+	padding: 26px var(--ziteh-gutter);
+	color: var(--ziteh-rp-text);
+	background: var(--ziteh-rp-bg);
+	line-height: 1.7;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__container {
+	width: min(100%, var(--ziteh-rp-max));
+	margin-inline: auto;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__head {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	margin-bottom: 18px;
+	color: var(--ziteh-rp-heading);
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__heading {
+	margin: 0;
+	color: inherit;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.6;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__leaf {
+	display: inline-grid;
+	place-items: center;
+	color: var(--ziteh-rp-primary);
+	font-size: 17px;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__head.has-lines::before,
+.elementor-widget-ziteh-related-products .ziteh-rp__head.has-lines::after {
+	content: "";
+	width: clamp(40px, 8vw, 120px);
+	height: 1px;
+	background: var(--ziteh-rp-border);
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__shell {
+	position: relative;
+	padding-inline: 46px;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__viewport {
+	overflow-x: auto;
+	scroll-behavior: smooth;
+	scroll-snap-type: x proximity;
+	scrollbar-width: none;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__viewport::-webkit-scrollbar { display: none; }
+
+.elementor-widget-ziteh-related-products .ziteh-rp__track {
+	display: flex;
+	gap: var(--ziteh-rp-gap);
+	padding-bottom: 2px;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__card {
+	flex: 0 0 calc((100% - (var(--ziteh-rp-gap) * (var(--ziteh-rp-visible) - 1))) / var(--ziteh-rp-visible));
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border: 1px solid var(--ziteh-rp-border);
+	border-radius: var(--ziteh-rp-radius);
+	background: var(--ziteh-rp-card);
+	scroll-snap-align: start;
+	transition: border-color .2s ease;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__card:hover { border-color: #ddd9d0; }
+
+.elementor-widget-ziteh-related-products .ziteh-rp__image {
+	display: block;
+	aspect-ratio: var(--ziteh-rp-ratio);
+	overflow: hidden;
+	background: var(--ziteh-rp-image-bg);
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__image img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: var(--ziteh-rp-fit);
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__content {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	flex: 1;
+	padding: 12px 14px 14px;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__title {
+	display: block;
+	overflow: hidden;
+	color: var(--ziteh-rp-heading);
+	font-size: 13.5px;
+	font-weight: 600;
+	line-height: 1.7;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-align: center;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__title:hover { color: var(--ziteh-rp-primary); }
+
+.elementor-widget-ziteh-related-products .ziteh-rp__foot {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-top: auto;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__price {
+	min-width: 0;
+	color: var(--ziteh-rp-heading);
+	font-size: 13px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__price del { color: #a5a69f; font-size: 11.5px; font-weight: 400; }
+.elementor-widget-ziteh-related-products .ziteh-rp__price ins { background: none; text-decoration: none; }
+
+/* Armoured: the card cart link also carries WooCommerce's `add_to_cart_button`
+   class, which themes skin as a full-width filled button. */
+.elementor-widget-ziteh-related-products.elementor-widget-ziteh-related-products .ziteh-rp .ziteh-rp__cart.ziteh-rp__cart {
+	display: inline-grid !important;
+	place-items: center !important;
+	width: 30px !important;
+	height: 30px !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	flex: 0 0 30px;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+	border-radius: 9px !important;
+	background: none !important;
+	color: #7b8073 !important;
+	font-size: 19px !important;
+	line-height: 1 !important;
+	letter-spacing: normal !important;
+	text-decoration: none !important;
+	box-shadow: none !important;
+	transition: color .2s ease, background .2s ease;
+}
+
+.elementor-widget-ziteh-related-products.elementor-widget-ziteh-related-products .ziteh-rp .ziteh-rp__cart.ziteh-rp__cart:hover {
+	color: var(--ziteh-rp-primary) !important;
+	background: #f4f2ed !important;
+}
+
+/* WooCommerce appends "View cart" / "added" markup after an AJAX add. */
+.elementor-widget-ziteh-related-products .ziteh-rp__foot .added_to_cart {
+	display: none;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__cart .screen-reader-text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__arrow {
+	position: absolute;
+	z-index: 3;
+	top: 50%;
+	display: inline-grid;
+	place-items: center;
+	width: 28px;
+	height: 28px;
+	border: 1px solid var(--ziteh-rp-border) !important;
+	border-radius: 50% !important;
+	background: #fff !important;
+	color: #8b8e87 !important;
+	font-size: 13px;
+	transform: translateY(-50%);
+	transition: color .2s ease, border-color .2s ease;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__arrow:hover {
+	color: var(--ziteh-rp-primary) !important;
+	border-color: var(--ziteh-rp-primary) !important;
+}
+
+.elementor-widget-ziteh-related-products .ziteh-rp__arrow--prev { inset-inline-start: 4px; }
+.elementor-widget-ziteh-related-products .ziteh-rp__arrow--next { inset-inline-end: 4px; }
+.elementor-widget-ziteh-related-products .ziteh-rp__empty { padding: 24px; text-align: center; font-size: 13.5px; }
+
+/* ==========================================================================
+   4. Customer reviews
+   ========================================================================== */
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr {
+	--ziteh-pr-max: 1240px;
+	--ziteh-pr-summary: 400px;
+	--ziteh-pr-gap: 24px;
+	--ziteh-pr-card-gap: 12px;
+	--ziteh-pr-avatar: 52px;
+	--ziteh-pr-radius: 14px;
+	--ziteh-pr-bg: #faf9f6;
+	--ziteh-pr-surface: #fff;
+	--ziteh-pr-primary: #6f7d5f;
+	--ziteh-pr-heading: #434a40;
+	--ziteh-pr-text: #787b74;
+	--ziteh-pr-muted: #a5a69f;
+	--ziteh-pr-border: #ebe8e1;
+	--ziteh-pr-star: #efb034;
+	--ziteh-pr-track: #eceae5;
+	--ziteh-star: var(--ziteh-pr-star);
+	width: 100%;
+	padding: 26px var(--ziteh-gutter);
+	color: var(--ziteh-pr-text);
+	background: var(--ziteh-pr-bg);
+	line-height: 1.7;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__container {
+	width: min(100%, var(--ziteh-pr-max));
+	margin-inline: auto;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__head {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	margin-bottom: 16px;
+	color: var(--ziteh-pr-heading);
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__heading {
+	margin: 0;
+	color: inherit;
+	font-size: 17px;
+	font-weight: 700;
+	line-height: 1.6;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__leaf {
+	display: inline-grid;
+	place-items: center;
+	color: var(--ziteh-pr-primary);
+	font-size: 16px;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, var(--ziteh-pr-summary));
+	align-items: stretch;
+	gap: var(--ziteh-pr-gap);
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__layout.is-single { grid-template-columns: minmax(0, 1fr); }
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ziteh-pr-card-gap);
+	min-width: 0;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__card,
+.elementor-widget-ziteh-product-reviews .ziteh-pr__summary {
+	border: 1px solid var(--ziteh-pr-border);
+	border-radius: var(--ziteh-pr-radius);
+	background: var(--ziteh-pr-surface);
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__card {
+	display: grid;
+	grid-template-columns: var(--ziteh-pr-avatar) minmax(0, 1fr);
+	align-items: center;
+	gap: 14px;
+	min-height: 84px;
+	padding: 14px 16px;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__avatar {
+	width: var(--ziteh-pr-avatar);
+	height: var(--ziteh-pr-avatar);
+	overflow: hidden;
+	border-radius: 50%;
+	background: #ece9e3;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__avatar img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__body { min-width: 0; }
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__meta {
+	display: flex;
+	align-items: baseline;
+	gap: 7px;
+	min-width: 0;
+	margin-bottom: 4px;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__name {
+	color: var(--ziteh-pr-heading);
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1.5;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__verified {
+	display: inline-flex;
+	color: var(--ziteh-pr-primary);
+	font-size: 13px;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__meta time {
+	color: var(--ziteh-pr-muted);
+	font-size: 10.5px;
+	line-height: 1.5;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__comment {
+	margin: 0 0 6px;
+	overflow: hidden;
+	color: var(--ziteh-pr-text);
+	font-size: 13px;
+	line-height: 1.85;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__stars { font-size: 12.5px; }
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__summary {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: 250px;
+	padding: 20px 22px 16px;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__average { color: var(--ziteh-pr-heading); line-height: 1.4; }
+.elementor-widget-ziteh-product-reviews .ziteh-pr__average strong { font-size: 26px; font-weight: 800; }
+.elementor-widget-ziteh-product-reviews .ziteh-pr__average span { font-size: 14px; font-weight: 500; }
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__summary > .ziteh-pr__stars {
+	margin-top: 8px;
+	font-size: 21px;
+	gap: .22em;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__count {
+	margin: 8px 0 14px;
+	color: var(--ziteh-pr-text);
+	font-size: 12.5px;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__distribution {
+	display: grid;
+	gap: 9px;
+	width: 100%;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__row {
+	display: grid;
+	grid-template-columns: 52px minmax(0, 1fr) 22px;
+	align-items: center;
+	gap: 10px;
+	color: var(--ziteh-pr-text);
+	font-size: 11.5px;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__row > span:first-child { white-space: nowrap; }
+.elementor-widget-ziteh-product-reviews .ziteh-pr__row b { color: var(--ziteh-pr-muted); font-size: 11px; font-weight: 500; text-align: left; }
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__track {
+	height: 7px;
+	overflow: hidden;
+	border-radius: 999px;
+	background: var(--ziteh-pr-track);
+	direction: rtl;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__track > span {
+	display: block;
+	height: 100%;
+	border-radius: inherit;
+	background: var(--ziteh-pr-primary);
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 38px;
+	margin-top: auto;
+	padding: 8px 14px;
+	border: 1px solid var(--ziteh-pr-border);
+	border-radius: 10px;
+	color: var(--ziteh-pr-text);
+	background: transparent;
+	font-size: 13px;
+	transition: color .2s ease, background .2s ease, border-color .2s ease;
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__button:hover {
+	color: #fff;
+	border-color: var(--ziteh-pr-primary);
+	background: var(--ziteh-pr-primary);
+}
+
+.elementor-widget-ziteh-product-reviews .ziteh-pr__empty,
+.elementor-widget-ziteh-product-reviews .ziteh-pr__notice {
+	margin: 0;
+	padding: 26px;
+	border: 1px solid var(--ziteh-pr-border);
+	border-radius: var(--ziteh-pr-radius);
+	background: var(--ziteh-pr-surface);
+	font-size: 13.5px;
+	text-align: center;
+}
+
+/* ==========================================================================
+   5. Store services strip
+   ========================================================================== */
+
+.elementor-widget-ziteh-store-services .ziteh-ss {
+	--ziteh-ss-max: var(--ziteh-page);
+	--ziteh-ss-height: 88px;
+	--ziteh-ss-gap: 16px;
+	--ziteh-ss-pad: 22px;
+	--ziteh-ss-icon: 34px;
+	--ziteh-ss-radius: 18px;
+	--ziteh-ss-bg: #f5f2ed;
+	--ziteh-ss-title: #5d6455;
+	--ziteh-ss-desc: #9a9b95;
+	--ziteh-ss-icon-color: #6f7d5f;
+	--ziteh-ss-divider: #e7e3dc;
+	--ziteh-ss-hover: #efece5;
+	width: 100%;
+	padding: 22px var(--ziteh-gutter) 30px;
+	line-height: 1.6;
+}
+
+.elementor-widget-ziteh-store-services .ziteh-ss__inner {
+	display: grid;
+	grid-template-columns: repeat(var(--ziteh-ss-count, 4), minmax(0, 1fr));
+	width: min(100%, var(--ziteh-ss-max));
+	min-height: var(--ziteh-ss-height);
+	margin-inline: auto;
+	overflow: hidden;
+	border-radius: var(--ziteh-ss-radius);
+	background: var(--ziteh-ss-bg);
+}
+
+.elementor-widget-ziteh-store-services .ziteh-ss__item {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--ziteh-ss-gap);
+	min-width: 0;
+	min-height: var(--ziteh-ss-height);
+	padding-inline: var(--ziteh-ss-pad);
+	color: inherit;
+	transition: background-color .2s ease;
+}
+
+.elementor-widget-ziteh-store-services .ziteh-ss__item:hover { background: var(--ziteh-ss-hover); }
+
+.elementor-widget-ziteh-store-services.ziteh-ss-dividers-yes .ziteh-ss__item:not(:last-child)::after {
+	content: "";
+	position: absolute;
+	inset-inline-end: 0;
+	top: 22px;
+	bottom: 22px;
+	width: 1px;
+	background: var(--ziteh-ss-divider);
+}
+
+.elementor-widget-ziteh-store-services .ziteh-ss__icon {
+	display: inline-grid;
+	place-items: center;
+	width: var(--ziteh-ss-icon);
+	height: var(--ziteh-ss-icon);
+	flex: 0 0 var(--ziteh-ss-icon);
+	color: var(--ziteh-ss-icon-color);
+	font-size: var(--ziteh-ss-icon);
+	line-height: 1;
+}
+
+.elementor-widget-ziteh-store-services .ziteh-ss__content {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-width: 0;
+	text-align: right;
+}
+
+.elementor-widget-ziteh-store-services .ziteh-ss__title {
+	max-width: 100%;
+	overflow: hidden;
+	color: var(--ziteh-ss-title);
+	font-size: 14px;
+	font-weight: 700;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.elementor-widget-ziteh-store-services .ziteh-ss__description {
+	max-width: 100%;
+	margin-top: 3px;
+	overflow: hidden;
+	color: var(--ziteh-ss-desc);
+	font-size: 11.5px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 1180px) {
+	.elementor-widget-ziteh-single-product .ziteh-sp__hero {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+		gap: 26px;
+	}
+
+	.elementor-widget-ziteh-single-product .ziteh-sp__purchase {
+		grid-column: 1 / -1;
+		display: grid;
+		grid-template-columns: minmax(220px, .8fr) minmax(280px, 1fr);
+		align-items: center;
+		gap: 18px 30px;
+		text-align: right;
+	}
+
+	.elementor-widget-ziteh-single-product .ziteh-sp__purchase.is-sticky { position: static; }
+
+	.elementor-widget-ziteh-single-product .ziteh-sp__recommendation,
+	.elementor-widget-ziteh-single-product .ziteh-sp__purchase-brand,
+	.elementor-widget-ziteh-single-product .ziteh-sp__purchase-description,
+	.elementor-widget-ziteh-single-product .ziteh-sp__purchase-separator { grid-column: 1; }
+
+	.elementor-widget-ziteh-single-product .ziteh-sp__purchase-discount,
+	.elementor-widget-ziteh-single-product .ziteh-sp__price,
+	.elementor-widget-ziteh-single-product .ziteh-sp__stock,
+	.elementor-widget-ziteh-single-product .ziteh-sp__buy,
+	.elementor-widget-ziteh-single-product .ziteh-sp__wish,
+	.elementor-widget-ziteh-single-product .ziteh-sp__trust { grid-column: 2; }
+
+	.elementor-widget-ziteh-single-product .ziteh-sp__trust { grid-row: 5 / span 3; align-self: end; }
+
+	.elementor-widget-ziteh-product-details .ziteh-pd__panel--description { gap: 32px; }
+	.elementor-widget-ziteh-related-products .ziteh-rp { --ziteh-rp-visible: 4; }
+	.elementor-widget-ziteh-product-reviews .ziteh-pr { --ziteh-pr-summary: 300px; }
+}
+
+@media (max-width: 900px) {
+	.elementor-widget-ziteh-product-details .ziteh-pd__panel--description {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 24px;
+	}
+
+	.elementor-widget-ziteh-product-details .ziteh-pd__visual img { aspect-ratio: 16 / 9; }
+	.elementor-widget-ziteh-product-details .ziteh-pd__benefits { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.elementor-widget-ziteh-product-details .ziteh-pd__benefit:nth-child(2n)::after { display: none; }
+	.elementor-widget-ziteh-related-products .ziteh-rp { --ziteh-rp-visible: 3; }
+}
+
+@media (max-width: 767px) {
+	.elementor-widget-ziteh-single-product .ziteh-sp { padding-bottom: 32px; }
+
+	.elementor-widget-ziteh-single-product .ziteh-sp__hero {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 24px;
+	}
+
+	.elementor-widget-ziteh-single-product .ziteh-sp__gallery { order: 1; }
+	.elementor-widget-ziteh-single-product .ziteh-sp__summary { order: 2; padding: 0; }
+
+	.elementor-widget-ziteh-single-product .ziteh-sp__purchase {
+		order: 3;
+		display: block;
+		grid-column: auto;
+		padding: 22px 18px;
+		text-align: center;
+	}
+
+	.elementor-widget-ziteh-single-product .ziteh-sp__recommendation,
+	.elementor-widget-ziteh-single-product .ziteh-sp__purchase-brand,
+	.elementor-widget-ziteh-single-product .ziteh-sp__purchase-description,
+	.elementor-widget-ziteh-single-product .ziteh-sp__purchase-separator,
+	.elementor-widget-ziteh-single-product .ziteh-sp__purchase-discount,
+	.elementor-widget-ziteh-single-product .ziteh-sp__price,
+	.elementor-widget-ziteh-single-product .ziteh-sp__stock,
+	.elementor-widget-ziteh-single-product .ziteh-sp__buy,
+	.elementor-widget-ziteh-single-product .ziteh-sp__wish,
+	.elementor-widget-ziteh-single-product .ziteh-sp__trust { grid-column: auto; grid-row: auto; }
+
+	.elementor-widget-ziteh-single-product .ziteh-sp__thumbs { gap: 7px; margin-top: 10px; }
+	.elementor-widget-ziteh-single-product .ziteh-sp__title { font-size: 23px; }
+	.elementor-widget-ziteh-single-product .ziteh-sp__related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+	.elementor-widget-ziteh-product-details .ziteh-pd__body { padding: 18px; }
+	.elementor-widget-ziteh-product-details .ziteh-pd__tabs { gap: 20px; justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
+	.elementor-widget-ziteh-product-details .ziteh-pd__tab { flex: 0 0 auto; }
+	.elementor-widget-ziteh-product-details .ziteh-pd__benefit { flex-direction: column; gap: 8px; min-height: 92px; }
+
+	.elementor-widget-ziteh-related-products .ziteh-rp { --ziteh-rp-visible: 2; --ziteh-rp-gap: 12px; }
+	.elementor-widget-ziteh-related-products .ziteh-rp__shell { padding-inline: 0; }
+	.elementor-widget-ziteh-related-products .ziteh-rp__arrow { display: none; }
+
+	.elementor-widget-ziteh-product-reviews .ziteh-pr__layout { grid-template-columns: minmax(0, 1fr); }
+	.elementor-widget-ziteh-product-reviews .ziteh-pr__summary { grid-row: 1; min-height: 0; }
+	.elementor-widget-ziteh-product-reviews .ziteh-pr__comment { white-space: normal; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+
+	.elementor-widget-ziteh-store-services .ziteh-ss { --ziteh-ss-height: 76px; --ziteh-ss-icon: 28px; --ziteh-ss-gap: 12px; }
+	.elementor-widget-ziteh-store-services.ziteh-ss-mobile-scroll .ziteh-ss__inner { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+	.elementor-widget-ziteh-store-services.ziteh-ss-mobile-scroll .ziteh-ss__item { flex: 0 0 78%; scroll-snap-align: start; }
+	.elementor-widget-ziteh-store-services.ziteh-ss-mobile-grid .ziteh-ss__inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.elementor-widget-ziteh-store-services.ziteh-ss-mobile-grid .ziteh-ss__item:nth-child(2n)::after { display: none; }
+	.elementor-widget-ziteh-store-services.ziteh-ss-mobile-stack .ziteh-ss__inner { grid-template-columns: minmax(0, 1fr); }
+	.elementor-widget-ziteh-store-services.ziteh-ss-mobile-stack .ziteh-ss__item { justify-content: flex-start; }
+	.elementor-widget-ziteh-store-services.ziteh-ss-mobile-stack .ziteh-ss__item::after { inset-inline: 18px; inset-block: auto 0; width: auto; height: 1px; }
+}
+
+@media (max-width: 560px) {
+	.elementor-widget-ziteh-related-products .ziteh-rp { --ziteh-rp-visible: 1.4; }
+	.elementor-widget-ziteh-product-reviews .ziteh-pr__card { grid-template-columns: 44px minmax(0, 1fr); gap: 10px; }
+	.elementor-widget-ziteh-product-reviews .ziteh-pr { --ziteh-pr-avatar: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.elementor-widget-ziteh-single-product .ziteh-sp *,
+	.elementor-widget-ziteh-product-details .ziteh-pd *,
+	.elementor-widget-ziteh-related-products .ziteh-rp *,
+	.elementor-widget-ziteh-product-reviews .ziteh-pr *,
+	.elementor-widget-ziteh-store-services .ziteh-ss * {
+		scroll-behavior: auto !important;
+		animation-duration: .01ms !important;
+		transition-duration: .01ms !important;
+	}
+}

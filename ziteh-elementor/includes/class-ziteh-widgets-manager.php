@@ -139,9 +139,23 @@ class Ziteh_Widgets_Manager {
 			ZITEH_EL_VERSION
 		);
 
+		/*
+		 * The single-product layer is a separate file that depends on — and so
+		 * always prints after — the shared widget stylesheet. It carries its own
+		 * scoped reset and prefixes every selector with the Elementor widget
+		 * wrapper, which is what keeps theme defaults out of the product page.
+		 */
+		wp_register_style(
+			'ziteh-single-product',
+			ZITEH_EL_URL . 'assets/css/ziteh-single-product.css',
+			array( 'ziteh-widgets' ),
+			ZITEH_EL_VERSION
+		);
+
 		if ( $this->should_load_assets() ) {
 			wp_enqueue_style( 'ziteh-fonts' );
 			wp_enqueue_style( 'ziteh-widgets' );
+			wp_enqueue_style( 'ziteh-single-product' );
 		}
 	}
 

@@ -48,7 +48,16 @@ abstract class Ziteh_Widget_Base extends Widget_Base {
 	 * @return string[]
 	 */
 	public function get_style_depends() {
-		return array( 'ziteh-fonts', 'ziteh-widgets' );
+		$handles = array( 'ziteh-fonts', 'ziteh-widgets' );
+
+		// Product-page widgets additionally need the isolated layer, including
+		// inside Theme Builder templates where the smart asset mode has not
+		// already enqueued it.
+		if ( in_array( 'ziteh-product-page', $this->get_categories(), true ) ) {
+			$handles[] = 'ziteh-single-product';
+		}
+
+		return $handles;
 	}
 
 	/**

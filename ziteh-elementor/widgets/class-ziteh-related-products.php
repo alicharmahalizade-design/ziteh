@@ -182,14 +182,14 @@ class Ziteh_Related_Products_Widget extends Ziteh_Widget_Base {
 		?>
 		<section id="<?php echo esc_attr( $widget_id ); ?>" class="ziteh-rp" data-ziteh-related-products data-ziteh-rp-step="<?php echo esc_attr( max( 1, (int) $settings['scroll_step'] ) ); ?>" aria-label="<?php echo esc_attr( $settings['section_label'] ); ?>">
 			<div class="ziteh-rp__container">
-				<div class="ziteh-rp__head<?php echo 'yes' === $settings['show_lines'] ? ' has-lines' : ''; ?>"><<?php echo esc_attr( $heading_tag ); ?> class="ziteh-rp__heading"><?php echo esc_html( $settings['title'] ); ?></<?php echo esc_attr( $heading_tag ); ?>><?php if ( 'yes' === $settings['show_leaf'] ) : ?><i class="fas fa-leaf" aria-hidden="true"></i><?php endif; ?></div>
+				<div class="ziteh-rp__head<?php echo 'yes' === $settings['show_lines'] ? ' has-lines' : ''; ?>"><<?php echo esc_attr( $heading_tag ); ?> class="ziteh-rp__heading"><?php echo esc_html( $settings['title'] ); ?></<?php echo esc_attr( $heading_tag ); ?>><?php if ( 'yes' === $settings['show_leaf'] ) : ?><span class="ziteh-rp__leaf"><?php Ziteh_Icons::render( 'leaf' ); ?></span><?php endif; ?></div>
 				<?php if ( $products ) : ?>
 					<div class="ziteh-rp__shell">
-						<?php if ( 'yes' === $settings['show_arrows'] ) : ?><button class="ziteh-rp__arrow ziteh-rp__arrow--prev" type="button" data-ziteh-rp-prev aria-label="<?php esc_attr_e( 'محصولات قبلی', 'ziteh' ); ?>"><i class="fas fa-chevron-right" aria-hidden="true"></i></button><?php endif; ?>
+						<?php if ( 'yes' === $settings['show_arrows'] ) : ?><button class="ziteh-rp__arrow ziteh-rp__arrow--prev" type="button" data-ziteh-rp-prev aria-label="<?php esc_attr_e( 'محصولات قبلی', 'ziteh' ); ?>"><?php Ziteh_Icons::render( 'chevron-right' ); ?></button><?php endif; ?>
 						<div class="ziteh-rp__viewport" data-ziteh-rp-viewport tabindex="0" aria-label="<?php echo esc_attr( $settings['section_label'] ); ?>"><div class="ziteh-rp__track">
 							<?php foreach ( $products as $index => $product ) : $this->render_card( $product, $settings, $index ); endforeach; ?>
 						</div></div>
-						<?php if ( 'yes' === $settings['show_arrows'] ) : ?><button class="ziteh-rp__arrow ziteh-rp__arrow--next" type="button" data-ziteh-rp-next aria-label="<?php esc_attr_e( 'محصولات بعدی', 'ziteh' ); ?>"><i class="fas fa-chevron-left" aria-hidden="true"></i></button><?php endif; ?>
+						<?php if ( 'yes' === $settings['show_arrows'] ) : ?><button class="ziteh-rp__arrow ziteh-rp__arrow--next" type="button" data-ziteh-rp-next aria-label="<?php esc_attr_e( 'محصولات بعدی', 'ziteh' ); ?>"><?php Ziteh_Icons::render( 'chevron-left' ); ?></button><?php endif; ?>
 					</div>
 				<?php else : ?><p class="ziteh-rp__empty"><?php echo esc_html( $settings['empty_text'] ); ?></p><?php endif; ?>
 			</div>
@@ -208,7 +208,7 @@ class Ziteh_Related_Products_Widget extends Ziteh_Widget_Base {
 			<a class="ziteh-rp__image" href="<?php echo esc_url( $product->get_permalink() ); ?>" aria-label="<?php echo esc_attr( $product->get_name() ); ?>"><?php echo $product->get_image( 'woocommerce_thumbnail', array( 'loading' => 0 === $index && 'eager' === $settings['image_loading'] ? 'eager' : 'lazy', 'decoding' => 'async', 'alt' => $product->get_name() ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a>
 			<div class="ziteh-rp__content"><a class="ziteh-rp__title" href="<?php echo esc_url( $product->get_permalink() ); ?>"><?php echo esc_html( $product->get_name() ); ?></a><div class="ziteh-rp__foot">
 				<?php if ( 'yes' === $settings['show_price'] ) : ?><span class="ziteh-rp__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span><?php endif; ?>
-				<?php if ( 'yes' === $settings['show_cart'] ) : ?><a class="<?php echo esc_attr( $cart_classes ); ?>" href="<?php echo esc_url( $product->add_to_cart_url() ); ?>" data-quantity="1" data-product_id="<?php echo esc_attr( $product->get_id() ); ?>" data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>" rel="nofollow" aria-label="<?php echo esc_attr( $product->add_to_cart_description() ); ?>"><i class="fas fa-shopping-cart" aria-hidden="true"></i><span class="screen-reader-text"><?php echo esc_html( $product->add_to_cart_text() ); ?></span></a><?php endif; ?>
+				<?php if ( 'yes' === $settings['show_cart'] ) : ?><a class="<?php echo esc_attr( $cart_classes ); ?>" href="<?php echo esc_url( $product->add_to_cart_url() ); ?>" data-quantity="1" data-product_id="<?php echo esc_attr( $product->get_id() ); ?>" data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>" rel="nofollow" aria-label="<?php echo esc_attr( $product->add_to_cart_description() ); ?>"><?php Ziteh_Icons::render( 'cart' ); ?><span class="screen-reader-text"><?php echo esc_html( $product->add_to_cart_text() ); ?></span></a><?php endif; ?>
 			</div></div>
 		</article>
 		<?php

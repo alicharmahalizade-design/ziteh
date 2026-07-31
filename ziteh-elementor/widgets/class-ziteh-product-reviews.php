@@ -92,11 +92,17 @@ class Ziteh_Product_Reviews_Widget extends Ziteh_Widget_Base {
 		return $id && function_exists( 'wc_get_product' ) ? wc_get_product( $id ) : false;
 	}
 
-	private function stars( $rating, $label = '' ) {
-		$rating = max( 0, min( 5, (float) $rating ) );
-		?><span class="ziteh-pr__stars" role="img" aria-label="<?php echo esc_attr( $label ? $label : sprintf( __( '%s از ۵ ستاره', 'ziteh' ), wc_format_decimal( $rating, 1 ) ) ); ?>"><?php
-		for ( $i = 1; $i <= 5; $i++ ) : ?><i class="<?php echo esc_attr( $i <= round( $rating ) ? 'fas' : 'far' ); ?> fa-star" aria-hidden="true"></i><?php endfor;
-		?></span><?php
+	/**
+	 * Star row as inline SVG.
+	 *
+	 * The isolated product canvas drops woocommerce-general and the theme is not
+	 * guaranteed to ship an icon font, so stars are drawn rather than typed.
+	 *
+	 * @param float $rating Rating value, 0–5.
+	 * @param int   $count  Number of ratings behind the value.
+	 */
+	private function stars( $rating, $count = 0 ) {
+		echo Ziteh_Icons::stars( $rating, $count, 'ziteh-pr__stars' ); // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 
 	protected function render() {
@@ -113,7 +119,7 @@ class Ziteh_Product_Reviews_Widget extends Ziteh_Widget_Base {
 		?>
 		<section class="ziteh-pr" dir="rtl" aria-label="<?php echo esc_attr( $s['section_label'] ); ?>">
 			<div class="ziteh-pr__container">
-				<div class="ziteh-pr__head"><<?php echo esc_attr( $tag ); ?> class="ziteh-pr__heading"><?php echo esc_html( $s['title'] ); ?></<?php echo esc_attr( $tag ); ?>><?php if ( 'yes' === $s['show_leaf'] ) : ?><i class="fas fa-leaf" aria-hidden="true"></i><?php endif; ?></div>
+				<div class="ziteh-pr__head"><<?php echo esc_attr( $tag ); ?> class="ziteh-pr__heading"><?php echo esc_html( $s['title'] ); ?></<?php echo esc_attr( $tag ); ?>><?php if ( 'yes' === $s['show_leaf'] ) : ?><span class="ziteh-pr__leaf"><?php Ziteh_Icons::render( 'leaf' ); ?></span><?php endif; ?></div>
 				<div class="ziteh-pr__layout<?php echo 'yes' !== $s['show_summary'] ? ' is-single' : ''; ?>">
 					<div class="ziteh-pr__list">
 						<?php if ( $reviews ) : foreach ( $reviews as $review ) :
@@ -121,7 +127,7 @@ class Ziteh_Product_Reviews_Widget extends Ziteh_Widget_Base {
 							$verified = function_exists( 'wc_review_is_from_verified_owner' ) && wc_review_is_from_verified_owner( $review->comment_ID ); ?>
 							<article class="ziteh-pr__card" itemprop="review" itemscope itemtype="https://schema.org/Review">
 								<?php if ( 'yes' === $s['show_avatar'] ) : ?><div class="ziteh-pr__avatar"><?php echo get_avatar( $review, 96, '', $review->comment_author, array( 'class' => 'ziteh-pr__avatar-img', 'loading' => 'lazy' ) ); ?></div><?php endif; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-								<div class="ziteh-pr__body"><div class="ziteh-pr__meta"><strong class="ziteh-pr__name" itemprop="author"><?php echo esc_html( $review->comment_author ); ?></strong><?php if ( $verified && 'yes' === $s['show_verified'] ) : ?><span class="ziteh-pr__verified" title="<?php esc_attr_e( 'خریدار تأییدشده', 'ziteh' ); ?>"><i class="fas fa-check-circle" aria-hidden="true"></i><span class="screen-reader-text"><?php esc_html_e( 'خریدار تأییدشده', 'ziteh' ); ?></span></span><?php endif; ?><?php if ( 'yes' === $s['show_date'] ) : ?><time datetime="<?php echo esc_attr( get_comment_date( DATE_W3C, $review ) ); ?>"><?php echo esc_html( get_comment_date( get_option( 'date_format' ), $review ) ); ?></time><?php endif; ?></div>
+								<div class="ziteh-pr__body"><div class="ziteh-pr__meta"><strong class="ziteh-pr__name" itemprop="author"><?php echo esc_html( $review->comment_author ); ?></strong><?php if ( $verified && 'yes' === $s['show_verified'] ) : ?><span class="ziteh-pr__verified" title="<?php esc_attr_e( 'خریدار تأییدشده', 'ziteh' ); ?>"><?php Ziteh_Icons::render( 'check-circle' ); ?><span class="screen-reader-text"><?php esc_html_e( 'خریدار تأییدشده', 'ziteh' ); ?></span></span><?php endif; ?><?php if ( 'yes' === $s['show_date'] ) : ?><time datetime="<?php echo esc_attr( get_comment_date( DATE_W3C, $review ) ); ?>"><?php echo esc_html( get_comment_date( get_option( 'date_format' ), $review ) ); ?></time><?php endif; ?></div>
 								<p class="ziteh-pr__comment" itemprop="reviewBody"><?php echo esc_html( wp_trim_words( wp_strip_all_tags( $review->comment_content ), max( 8, (int) $s['excerpt_length'] ), '…' ) ); ?></p>
 								<?php if ( 'yes' === $s['show_rating'] && $rating ) : ?><div itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating"><meta itemprop="ratingValue" content="<?php echo esc_attr( $rating ); ?>"><?php $this->stars( $rating ); ?></div><?php endif; ?></div>
 							</article>
@@ -129,7 +135,7 @@ class Ziteh_Product_Reviews_Widget extends Ziteh_Widget_Base {
 					</div>
 					<?php if ( 'yes' === $s['show_summary'] ) : ?><aside class="ziteh-pr__summary" aria-label="<?php esc_attr_e( 'خلاصه امتیاز کاربران', 'ziteh' ); ?>">
 						<div class="ziteh-pr__average"><strong><?php echo esc_html( wc_format_decimal( $average, 1 ) ); ?></strong> <span><?php esc_html_e( 'از ۵', 'ziteh' ); ?></span></div>
-						<?php $this->stars( $average, sprintf( __( 'میانگین امتیاز %s از ۵', 'ziteh' ), wc_format_decimal( $average, 1 ) ) ); ?>
+						<?php $this->stars( $average, $count ); ?>
 						<p class="ziteh-pr__count"><?php echo esc_html( sprintf( _n( 'بر اساس %s نظر', 'بر اساس %s نظر', $count, 'ziteh' ), number_format_i18n( $count ) ) ); ?></p>
 						<?php if ( 'yes' === $s['show_distribution'] ) : ?><div class="ziteh-pr__distribution"><?php for ( $rating = 5; $rating >= 1; $rating-- ) : $rating_count = isset( $counts[ $rating ] ) ? (int) $counts[ $rating ] : 0; $percent = $count ? min( 100, ( $rating_count / $count ) * 100 ) : 0; ?>
 							<div class="ziteh-pr__row"><span><?php echo esc_html( sprintf( __( '%d ستاره', 'ziteh' ), $rating ) ); ?></span><span class="ziteh-pr__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( round( $percent ) ); ?>" aria-label="<?php echo esc_attr( sprintf( __( '%d ستاره: %d نظر', 'ziteh' ), $rating, $rating_count ) ); ?>"><span style="width:<?php echo esc_attr( $percent ); ?>%"></span></span><b><?php echo esc_html( number_format_i18n( $rating_count ) ); ?></b></div>
