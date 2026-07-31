@@ -60,6 +60,9 @@ class Ziteh_Ajax {
 		add_action( 'wp_ajax_ziteh_quiz_products', array( $this, 'quiz_products' ) );
 		add_action( 'wp_ajax_nopriv_ziteh_quiz_products', array( $this, 'quiz_products' ) );
 
+		add_action( 'wp_ajax_ziteh_contact', array( $this, 'contact' ) );
+		add_action( 'wp_ajax_nopriv_ziteh_contact', array( $this, 'contact' ) );
+
 		if ( $this->wc() ) {
 			add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'cart_fragments' ) );
 		}
@@ -403,6 +406,148 @@ class Ziteh_Ajax {
 	 */
 	private function cart_svg() {
 		return '<svg class="ziteh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/><path d="M6 6 5 3H2"/></svg>';
+	}
+
+	/**
+	 * Contact form submission.
+	 *
+	 * Unlike search and quick view this one writes and sends mail, so the nonce
+	 * is required rather than soft-checked. Three cheap defences run before any
+	 * work happens: a honeypot field bots fill in and humans never see, a
+	 * minimum time-on-form, and a per-IP rate limit held in a transient. None of
+	 * them inconvenience a real visitor.
+	 */
+	public function contact() {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ziteh' ) ) {
+			wp_send_json_error( array( 'message' => __( 'درخواست نامعتبر است. صفحه را تازه کنید و دوباره تلاش کنید.', 'ziteh' ) ), 403 );
+		}
+
+		// Honeypot: a real person never sees this field, so any value is a bot.
+		// Answer with success so the bot learns nothing from the response.
+		if ( ! empty( $_POST['ziteh_website'] ) ) {
+			wp_send_json_success( array( 'message' => __( 'پیام شما ثبت شد.', 'ziteh' ) ) );
+		}
+
+		// Nobody fills a contact form in under three seconds.
+		$started = isset( $_POST['started'] ) ? absint( $_POST['started'] ) : 0;
+		if ( $started && ( time() - $started ) < 3 ) {
+			wp_send_json_error( array( 'message' => __( 'ارسال بیش از حد سریع بود. لطفاً دوباره تلاش کنید.', 'ziteh' ) ), 429 );
+		}
+
+		$bucket = 'ziteh_contact_' . md5( $this->client_ip() );
+		$sent   = (int) get_transient( $bucket );
+		if ( $sent >= 5 ) {
+			wp_send_json_error( array( 'message' => __( 'تعداد پیام‌های شما زیاد است. کمی بعد دوباره تلاش کنید.', 'ziteh' ) ), 429 );
+		}
+
+		$name    = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+		$email   = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+		$phone   = isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '';
+		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
+		$message = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
+
+		$errors = array();
+		if ( '' === $name ) {
+			$errors['name'] = __( 'نام خود را بنویسید.', 'ziteh' );
+		}
+		if ( '' === $email || ! is_email( $email ) ) {
+			$errors['email'] = __( 'ایمیل معتبر وارد کنید.', 'ziteh' );
+		}
+		if ( mb_strlen( $message ) < 10 ) {
+			$errors['message'] = __( 'متن پیام باید حداقل ۱۰ نویسه باشد.', 'ziteh' );
+		}
+		if ( '' !== $phone && ! preg_match( '/^[0-9+\\-\\s()]{7,20}$/u', $phone ) ) {
+			$errors['phone'] = __( 'شماره تماس معتبر نیست.', 'ziteh' );
+		}
+
+		if ( $errors ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'لطفاً خطاهای فرم را برطرف کنید.', 'ziteh' ),
+					'fields'  => $errors,
+				),
+				422
+			);
+		}
+
+		$to = apply_filters( 'ziteh_contact_recipient', get_option( 'admin_email' ) );
+
+		$body = sprintf(
+			/* translators: 1: name, 2: email, 3: phone, 4: subject, 5: message, 6: page url */
+			__( "پیام تازه از فرم تماس سایت\n\nنام: %1\$s\nایمیل: %2\$s\nتلفن: %3\$s\nموضوع: %4\$s\n\n%5\$s\n\n---\nارسال‌شده از: %6\$s", 'ziteh' ),
+			$name,
+			$email,
+			$phone ? $phone : '—',
+			$subject ? $subject : '—',
+			$message,
+			isset( $_POST['page'] ) ? esc_url_raw( wp_unslash( $_POST['page'] ) ) : home_url( '/' )
+		);
+
+		$headers = array(
+			'Content-Type: text/plain; charset=UTF-8',
+			// From stays on our own domain so SPF and DKIM keep passing; the
+			// visitor's address goes in Reply-To, where it belongs.
+			sprintf( 'From: %s <%s>', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ), $this->site_from_address() ),
+			sprintf( 'Reply-To: %s <%s>', $name, $email ),
+		);
+
+		$subject_line = sprintf(
+			/* translators: 1: site name, 2: subject */
+			__( '[%1$s] %2$s', 'ziteh' ),
+			wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ),
+			$subject ? $subject : __( 'پیام از فرم تماس', 'ziteh' )
+		);
+
+		$mailed = wp_mail( $to, $subject_line, $body, $headers );
+
+		/**
+		 * Fires after a contact submission passes validation, whether or not the
+		 * mail left the server. Use it to push the message into a CRM or a CPT.
+		 */
+		do_action(
+			'ziteh_contact_submitted',
+			array(
+				'name'    => $name,
+				'email'   => $email,
+				'phone'   => $phone,
+				'subject' => $subject,
+				'message' => $message,
+				'mailed'  => $mailed,
+			)
+		);
+
+		set_transient( $bucket, $sent + 1, HOUR_IN_SECONDS );
+
+		if ( ! $mailed ) {
+			// Mail failing is a server problem, not the visitor's. Say so plainly
+			// rather than pretending the message arrived.
+			wp_send_json_error(
+				array( 'message' => __( 'ارسال ایمیل روی سرور انجام نشد. لطفاً از راه‌های تماس دیگر استفاده کنید.', 'ziteh' ) ),
+				500
+			);
+		}
+
+		wp_send_json_success( array( 'message' => __( 'پیام شما ارسال شد. به‌زودی پاسخ می‌دهیم.', 'ziteh' ) ) );
+	}
+
+	/**
+	 * Best-effort client IP, used only to bucket the rate limit.
+	 *
+	 * @return string
+	 */
+	private function client_ip() {
+		return isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '0.0.0.0';
+	}
+
+	/**
+	 * A From address on the site's own domain.
+	 *
+	 * @return string
+	 */
+	private function site_from_address() {
+		$host = wp_parse_url( home_url(), PHP_URL_HOST );
+		$host = $host ? preg_replace( '/^www\\./i', '', $host ) : '';
+		return $host ? 'wordpress@' . $host : get_option( 'admin_email' );
 	}
 
 	/**

@@ -37,7 +37,24 @@ abstract class Ziteh_Widget_Base extends Widget_Base {
 			)
 		);
 
-		$category = in_array( $this->get_name(), $product_widgets, true ) ? 'ziteh-product-page' : 'ziteh';
+		$page_widgets = apply_filters(
+			'ziteh_core_page_widgets',
+			array(
+				'ziteh-contact',
+				'ziteh-articles',
+				'ziteh-post',
+				'ziteh-team',
+				'ziteh-milestones',
+			)
+		);
+
+		if ( in_array( $this->get_name(), $product_widgets, true ) ) {
+			$category = 'ziteh-product-page';
+		} elseif ( in_array( $this->get_name(), $page_widgets, true ) ) {
+			$category = 'ziteh-pages';
+		} else {
+			$category = 'ziteh';
+		}
 
 		return array( apply_filters( 'ziteh_core_widget_category', $category, $this->get_name() ) );
 	}
@@ -55,6 +72,10 @@ abstract class Ziteh_Widget_Base extends Widget_Base {
 		// already enqueued it.
 		if ( in_array( 'ziteh-product-page', $this->get_categories(), true ) ) {
 			$handles[] = 'ziteh-single-product';
+		}
+
+		if ( in_array( 'ziteh-pages', $this->get_categories(), true ) ) {
+			$handles[] = 'ziteh-pages';
 		}
 
 		return $handles;

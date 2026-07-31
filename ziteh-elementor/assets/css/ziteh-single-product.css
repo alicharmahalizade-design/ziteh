@@ -19,58 +19,9 @@
  * sections rendered at roughly two-thirds size.
  */
 
-/* ==========================================================================
-   Icon and star primitives
-   ========================================================================== */
-
-.ziteh-i {
-	display: block;
-	width: 1em;
-	height: 1em;
-	flex: 0 0 auto;
-	overflow: visible;
-	vertical-align: middle;
-}
-
-.ziteh-stars {
-	display: inline-flex;
-	align-items: center;
-	gap: .18em;
-	direction: ltr;
-	line-height: 1;
-	color: var(--ziteh-star, #efb034);
-}
-
-.ziteh-stars__star {
-	position: relative;
-	display: block;
-	width: 1em;
-	height: 1em;
-	flex: 0 0 auto;
-}
-
-.ziteh-stars__star.is-empty {
-	color: #ddd9d0;
-}
-
-.ziteh-stars__star .ziteh-i {
-	width: 100%;
-	height: 100%;
-}
-
-/* Fractional star: a clipped full-colour copy laid over the empty glyph. */
-.ziteh-stars__fill {
-	position: absolute;
-	inset-block: 0;
-	inset-inline-start: 0;
-	overflow: hidden;
-	color: var(--ziteh-star, #efb034);
-}
-
-.ziteh-stars__fill .ziteh-i {
-	width: 1em;
-	height: 1em;
-}
+/* Icon and star primitives live in ziteh-widgets.css: every Ziteh widget uses
+   them, not just the product page, and a primitive that only ships with one
+   layer breaks the moment another layer is loaded without it. */
 
 /* ==========================================================================
    Shared tokens

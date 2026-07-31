@@ -42,6 +42,11 @@ class Ziteh_Widgets_Manager {
 		'related-products',
 		'product-reviews',
 		'store-services',
+		'contact',
+		'articles',
+		'post',
+		'team',
+		'milestones',
 		'offers',
 		'quiz',
 		'brands',
@@ -117,6 +122,14 @@ class Ziteh_Widgets_Manager {
 		);
 
 		$elements_manager->add_category(
+			'ziteh-pages',
+			array(
+				'title' => esc_html__( 'صفحات زیته', 'ziteh' ),
+				'icon'  => 'eicon-document-file',
+			)
+		);
+
+		$elements_manager->add_category(
 			'ziteh',
 			array(
 				'title' => esc_html__( 'هسته زیته', 'ziteh' ),
@@ -150,6 +163,15 @@ class Ziteh_Widgets_Manager {
 		 * scoped reset and prefixes every selector with the Elementor widget
 		 * wrapper, which is what keeps theme defaults out of the product page.
 		 */
+		/* Page widgets share the product layer's architecture but ship separately
+		   so a product page never downloads article styling, and vice versa. */
+		wp_register_style(
+			'ziteh-pages',
+			ZITEH_EL_URL . 'assets/css/ziteh-pages.css',
+			array( 'ziteh-widgets' ),
+			ZITEH_EL_VERSION
+		);
+
 		wp_register_style(
 			'ziteh-single-product',
 			ZITEH_EL_URL . 'assets/css/ziteh-single-product.css',
@@ -161,6 +183,7 @@ class Ziteh_Widgets_Manager {
 			wp_enqueue_style( 'ziteh-fonts' );
 			wp_enqueue_style( 'ziteh-widgets' );
 			wp_enqueue_style( 'ziteh-single-product' );
+			wp_enqueue_style( 'ziteh-pages' );
 		}
 	}
 

@@ -1,0 +1,1241 @@
+/**
+ * Ziteh page widgets — contact, articles, single article, team, milestones.
+ *
+ * Same architecture as ziteh-single-product.css and for the same reason: every
+ * selector carries its `.elementor-widget-ziteh-*` wrapper so the lowest
+ * specificity here is (0,2,0), and a scoped reset neutralises the theme's
+ * defaults for the bare elements these widgets rely on. Tokens match the
+ * product page so a visitor moving between sections sees one design.
+ */
+
+/* ==========================================================================
+   Shared tokens
+   ========================================================================== */
+
+.elementor-widget-ziteh-contact .ziteh-ct,
+.elementor-widget-ziteh-articles .ziteh-ar,
+.elementor-widget-ziteh-post .ziteh-po,
+.elementor-widget-ziteh-team .ziteh-tm,
+.elementor-widget-ziteh-milestones .ziteh-ms {
+	--ziteh-gutter: clamp(16px, 3vw, 40px);
+	--ziteh-ease: cubic-bezier(.22, .68, .28, 1);
+	width: 100%;
+	direction: rtl;
+	font-family: var(--ziteh-font, "Vazirmatn", Tahoma, sans-serif);
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 400;
+	letter-spacing: normal;
+	line-height: 1.75;
+	text-align: right;
+	text-transform: none;
+}
+
+/* ==========================================================================
+   Scoped reset
+   ========================================================================== */
+
+.elementor-widget-ziteh-contact .ziteh-ct :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, figcaption, blockquote, small, strong, b, em, time, label, fieldset, legend),
+.elementor-widget-ziteh-articles .ziteh-ar :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, figcaption, small, strong, b, em, time),
+.elementor-widget-ziteh-post .ziteh-po :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, blockquote, pre, table, thead, tbody, tr, th, td, small, strong, b, em, time, figure, figcaption),
+.elementor-widget-ziteh-team .ziteh-tm :where(h1, h2, h3, p, ul, ol, li, small, strong, b, em),
+.elementor-widget-ziteh-milestones .ziteh-ms :where(h1, h2, h3, p, ul, ol, li, small, strong, b, em) {
+	all: revert;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	font-style: inherit;
+	letter-spacing: normal;
+	line-height: inherit;
+	list-style: none;
+	text-align: inherit;
+	text-transform: none;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct :where(a),
+.elementor-widget-ziteh-articles .ziteh-ar :where(a),
+.elementor-widget-ziteh-post .ziteh-po :where(a),
+.elementor-widget-ziteh-team .ziteh-tm :where(a),
+.elementor-widget-ziteh-milestones .ziteh-ms :where(a) {
+	box-sizing: border-box;
+	background: none;
+	box-shadow: none;
+	color: inherit;
+	font: inherit;
+	letter-spacing: normal;
+	text-decoration: none;
+	text-transform: none;
+	transition: color .2s ease;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct :where(img, svg, iframe),
+.elementor-widget-ziteh-articles .ziteh-ar :where(img, svg),
+.elementor-widget-ziteh-post .ziteh-po :where(img, svg),
+.elementor-widget-ziteh-team .ziteh-tm :where(img, svg),
+.elementor-widget-ziteh-milestones .ziteh-ms :where(img, svg) {
+	max-width: 100%;
+	margin: 0;
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+	vertical-align: middle;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct,
+.elementor-widget-ziteh-contact .ziteh-ct *,
+.elementor-widget-ziteh-contact .ziteh-ct *::before,
+.elementor-widget-ziteh-contact .ziteh-ct *::after,
+.elementor-widget-ziteh-articles .ziteh-ar,
+.elementor-widget-ziteh-articles .ziteh-ar *,
+.elementor-widget-ziteh-articles .ziteh-ar *::before,
+.elementor-widget-ziteh-articles .ziteh-ar *::after,
+.elementor-widget-ziteh-post .ziteh-po,
+.elementor-widget-ziteh-post .ziteh-po *,
+.elementor-widget-ziteh-post .ziteh-po *::before,
+.elementor-widget-ziteh-post .ziteh-po *::after,
+.elementor-widget-ziteh-team .ziteh-tm,
+.elementor-widget-ziteh-team .ziteh-tm *,
+.elementor-widget-ziteh-team .ziteh-tm *::before,
+.elementor-widget-ziteh-team .ziteh-tm *::after,
+.elementor-widget-ziteh-milestones .ziteh-ms,
+.elementor-widget-ziteh-milestones .ziteh-ms *,
+.elementor-widget-ziteh-milestones .ziteh-ms *::before,
+.elementor-widget-ziteh-milestones .ziteh-ms *::after {
+	box-sizing: border-box;
+}
+
+/* Form controls: themes skin these hardest, so the reset and the final look are
+   declared together to avoid the file fighting itself. */
+.elementor-widget-ziteh-contact .ziteh-ct :where(input, textarea, select, button) {
+	box-sizing: border-box !important;
+	width: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: none !important;
+	box-shadow: none !important;
+	color: inherit !important;
+	font: inherit !important;
+	letter-spacing: normal !important;
+	line-height: 1.6 !important;
+	min-width: 0 !important;
+	text-shadow: none !important;
+	text-transform: none !important;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct :where(a, button, input, textarea):focus-visible,
+.elementor-widget-ziteh-articles .ziteh-ar :where(a):focus-visible,
+.elementor-widget-ziteh-post .ziteh-po :where(a):focus-visible,
+.elementor-widget-ziteh-team .ziteh-tm :where(a):focus-visible,
+.elementor-widget-ziteh-milestones .ziteh-ms :where(a):focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+	border-radius: 6px;
+}
+
+/* Shared section heading treatment. */
+.elementor-widget-ziteh-contact .ziteh-ct__eyebrow,
+.elementor-widget-ziteh-articles .ziteh-ar__eyebrow,
+.elementor-widget-ziteh-team .ziteh-tm__eyebrow,
+.elementor-widget-ziteh-milestones .ziteh-ms__eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	margin-bottom: 10px;
+	font-size: 13.5px;
+	font-weight: 700;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__eyebrow .ziteh-i,
+.elementor-widget-ziteh-articles .ziteh-ar__eyebrow .ziteh-i,
+.elementor-widget-ziteh-team .ziteh-tm__eyebrow .ziteh-i,
+.elementor-widget-ziteh-milestones .ziteh-ms__eyebrow .ziteh-i {
+	order: 2;
+	font-size: 16px;
+}
+
+/* ==========================================================================
+   Contact
+   ========================================================================== */
+
+.elementor-widget-ziteh-contact .ziteh-ct {
+	--ziteh-ct-max: 1240px;
+	--ziteh-ct-form: 520px;
+	--ziteh-ct-gap: 40px;
+	--ziteh-ct-cols: 2;
+	--ziteh-ct-map: 340px;
+	--ziteh-ct-bg: #faf9f6;
+	--ziteh-ct-surface: #fff;
+	--ziteh-ct-primary: #6f7d5f;
+	--ziteh-ct-heading: #333830;
+	--ziteh-ct-text: #787b74;
+	--ziteh-ct-border: #e9e6df;
+	--ziteh-ct-radius: 18px;
+	padding: 40px var(--ziteh-gutter);
+	background: var(--ziteh-ct-bg);
+	color: var(--ziteh-ct-text);
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__container {
+	width: min(100%, var(--ziteh-ct-max));
+	margin-inline: auto;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__head { margin-bottom: 28px; max-width: 680px; }
+.elementor-widget-ziteh-contact .ziteh-ct__eyebrow { color: var(--ziteh-ct-primary); }
+
+.elementor-widget-ziteh-contact .ziteh-ct__title {
+	margin: 0 0 10px;
+	color: var(--ziteh-ct-heading);
+	font-size: clamp(24px, 2.6vw, 34px);
+	font-weight: 800;
+	line-height: 1.55;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__description { font-size: 14.5px; line-height: 2; }
+
+.elementor-widget-ziteh-contact .ziteh-ct__layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, var(--ziteh-ct-form));
+	align-items: start;
+	gap: var(--ziteh-ct-gap);
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__layout.is-single { grid-template-columns: minmax(0, 1fr); }
+
+.elementor-widget-ziteh-contact .ziteh-ct__channels {
+	display: grid;
+	grid-template-columns: repeat(var(--ziteh-ct-cols), minmax(0, 1fr));
+	gap: 14px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__card {
+	display: grid;
+	grid-template-columns: 44px minmax(0, 1fr);
+	align-items: start;
+	gap: 14px;
+	height: 100%;
+	padding: 18px;
+	border: 1px solid var(--ziteh-ct-border);
+	border-radius: var(--ziteh-ct-radius);
+	background: var(--ziteh-ct-surface);
+	transition: border-color .2s ease, transform .2s var(--ziteh-ease);
+}
+
+.elementor-widget-ziteh-contact a.ziteh-ct__card:hover {
+	border-color: var(--ziteh-ct-primary);
+	transform: translateY(-2px);
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__card-icon {
+	display: inline-grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border-radius: 13px;
+	background: #f2f0ea;
+	color: var(--ziteh-ct-primary);
+	font-size: 22px;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__card-body { display: grid; gap: 3px; min-width: 0; }
+.elementor-widget-ziteh-contact .ziteh-ct__card-title { color: var(--ziteh-ct-heading); font-size: 14px; font-weight: 700; }
+.elementor-widget-ziteh-contact .ziteh-ct__card-value { color: var(--ziteh-ct-primary); font-size: 14.5px; font-weight: 600; overflow-wrap: anywhere; }
+.elementor-widget-ziteh-contact .ziteh-ct__card-body small { color: #a5a69f; font-size: 12px; }
+
+/* -- Form ------------------------------------------------------------------ */
+
+.elementor-widget-ziteh-contact .ziteh-ct__form {
+	display: grid;
+	gap: 14px;
+	padding: 24px;
+	border: 1px solid var(--ziteh-ct-border);
+	border-radius: var(--ziteh-ct-radius);
+	background: var(--ziteh-ct-surface);
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__form-title {
+	margin: 0;
+	color: var(--ziteh-ct-heading);
+	font-size: 17px;
+	font-weight: 700;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__row {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__field { display: grid; gap: 6px; min-width: 0; }
+
+.elementor-widget-ziteh-contact .ziteh-ct__field label {
+	color: var(--ziteh-ct-heading);
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__field label span { color: #c0705f; margin-inline-start: 3px; }
+
+.elementor-widget-ziteh-contact .ziteh-ct__field :where(input, textarea) {
+	width: 100% !important;
+	min-height: 46px !important;
+	padding: 11px 14px !important;
+	border: 1px solid var(--ziteh-ct-border) !important;
+	border-radius: 12px !important;
+	background: #fcfbf9 !important;
+	color: var(--ziteh-ct-heading) !important;
+	font-size: 14px !important;
+	transition: border-color .2s ease, background .2s ease;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__field textarea {
+	min-height: 128px !important;
+	resize: vertical;
+	line-height: 1.9 !important;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__field :where(input, textarea):focus {
+	border-color: var(--ziteh-ct-primary) !important;
+	background: #fff !important;
+	outline: none;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__field :where(input, textarea)[aria-invalid="true"] {
+	border-color: #c0705f !important;
+	background: #fdf7f5 !important;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__error {
+	color: #c0705f;
+	font-size: 12px;
+	font-style: normal;
+}
+
+/* Honeypot: off-screen rather than display:none, because some bots skip
+   anything that is not rendered. */
+.elementor-widget-ziteh-contact .ziteh-ct__trap {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__submit {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	width: 100% !important;
+	min-height: 50px !important;
+	padding: 12px 20px !important;
+	border-radius: 12px !important;
+	background: var(--ziteh-ct-primary) !important;
+	color: #fff !important;
+	cursor: pointer;
+	font-size: 15px !important;
+	font-weight: 700 !important;
+	transition: filter .2s ease, transform .18s var(--ziteh-ease);
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__submit:hover { filter: brightness(.93); }
+.elementor-widget-ziteh-contact .ziteh-ct__submit:active { transform: scale(.98); }
+.elementor-widget-ziteh-contact .ziteh-ct__submit:disabled { opacity: .6; cursor: progress; }
+
+.elementor-widget-ziteh-contact .ziteh-ct__spinner {
+	display: none;
+	width: 16px;
+	height: 16px;
+	border: 2px solid rgba(255, 255, 255, .45);
+	border-top-color: #fff;
+	border-radius: 50%;
+	animation: ziteh-ct-spin .7s linear infinite;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__form.is-busy .ziteh-ct__spinner { display: block; }
+
+@keyframes ziteh-ct-spin { to { transform: rotate(360deg); } }
+
+.elementor-widget-ziteh-contact .ziteh-ct__consent { color: #a5a69f; font-size: 11.5px; line-height: 1.8; }
+
+.elementor-widget-ziteh-contact .ziteh-ct__status {
+	margin: 0;
+	padding: 12px 14px;
+	border-radius: 12px;
+	font-size: 13.5px;
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__status.is-ok { background: #eef2e8; color: #4c5a3c; }
+.elementor-widget-ziteh-contact .ziteh-ct__status.is-error { background: #fbeeea; color: #9d4f3f; }
+.elementor-widget-ziteh-contact .ziteh-ct__status[hidden] { display: none; }
+
+.elementor-widget-ziteh-contact .ziteh-ct__map {
+	margin-top: 28px;
+	overflow: hidden;
+	border: 1px solid var(--ziteh-ct-border);
+	border-radius: var(--ziteh-ct-radius);
+}
+
+.elementor-widget-ziteh-contact .ziteh-ct__map iframe {
+	display: block;
+	width: 100%;
+	height: var(--ziteh-ct-map);
+	border: 0;
+}
+
+/* ==========================================================================
+   Articles archive
+   ========================================================================== */
+
+.elementor-widget-ziteh-articles .ziteh-ar {
+	--ziteh-ar-max: 1240px;
+	--ziteh-ar-cols: 3;
+	--ziteh-ar-gap: 22px;
+	--ziteh-ar-ratio: 3 / 2;
+	--ziteh-ar-bg: #faf9f6;
+	--ziteh-ar-surface: #fff;
+	--ziteh-ar-primary: #6f7d5f;
+	--ziteh-ar-heading: #333830;
+	--ziteh-ar-text: #787b74;
+	--ziteh-ar-border: #e9e6df;
+	--ziteh-ar-radius: 16px;
+	padding: 40px var(--ziteh-gutter);
+	background: var(--ziteh-ar-bg);
+	color: var(--ziteh-ar-text);
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__container {
+	width: min(100%, var(--ziteh-ar-max));
+	margin-inline: auto;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__head { margin-bottom: 22px; max-width: 720px; }
+.elementor-widget-ziteh-articles .ziteh-ar__eyebrow { color: var(--ziteh-ar-primary); }
+
+.elementor-widget-ziteh-articles .ziteh-ar__title {
+	margin: 0 0 10px;
+	color: var(--ziteh-ar-heading);
+	font-size: clamp(24px, 2.6vw, 34px);
+	font-weight: 800;
+	line-height: 1.55;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__description { font-size: 14.5px; line-height: 2; }
+
+.elementor-widget-ziteh-articles .ziteh-ar__filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 22px;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__chip {
+	display: inline-flex;
+	align-items: center;
+	min-height: 36px;
+	padding: 7px 16px;
+	border: 1px solid var(--ziteh-ar-border);
+	border-radius: 999px;
+	background: var(--ziteh-ar-surface);
+	color: var(--ziteh-ar-text);
+	font-size: 13px;
+	font-weight: 600;
+	transition: color .2s ease, background .2s ease, border-color .2s ease;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__chip:hover { border-color: var(--ziteh-ar-primary); color: var(--ziteh-ar-primary); }
+
+.elementor-widget-ziteh-articles .ziteh-ar__chip.is-active {
+	border-color: var(--ziteh-ar-primary);
+	background: var(--ziteh-ar-primary);
+	color: #fff;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__grid {
+	display: grid;
+	grid-template-columns: repeat(var(--ziteh-ar-cols), minmax(0, 1fr));
+	gap: var(--ziteh-ar-gap);
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__card {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border: 1px solid var(--ziteh-ar-border);
+	border-radius: var(--ziteh-ar-radius);
+	background: var(--ziteh-ar-surface);
+	transition: border-color .2s ease, transform .2s var(--ziteh-ease);
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__card:hover { border-color: #ddd9d0; transform: translateY(-3px); }
+
+/* The first card spans the full row on a multi-column grid and turns into a
+   two-up composition, which gives the newest article the weight it deserves
+   without a second template. */
+.elementor-widget-ziteh-articles .ziteh-ar__grid.has-feature .ziteh-ar__card.is-feature {
+	grid-column: 1 / -1;
+	flex-direction: row;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__grid.has-feature .ziteh-ar__card.is-feature .ziteh-ar__thumb { flex: 0 0 46%; aspect-ratio: auto; }
+.elementor-widget-ziteh-articles .ziteh-ar__grid.has-feature .ziteh-ar__card.is-feature .ziteh-ar__body { padding: 26px; gap: 12px; justify-content: center; }
+.elementor-widget-ziteh-articles .ziteh-ar__grid.has-feature .ziteh-ar__card.is-feature .ziteh-ar__card-title { font-size: 21px; }
+
+.elementor-widget-ziteh-articles .ziteh-ar__thumb {
+	display: block;
+	aspect-ratio: var(--ziteh-ar-ratio);
+	overflow: hidden;
+	background: #f1eee9;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__thumb img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform .4s var(--ziteh-ease);
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__card:hover .ziteh-ar__thumb img { transform: scale(1.04); }
+
+.elementor-widget-ziteh-articles .ziteh-ar__thumb-fallback {
+	display: grid;
+	place-items: center;
+	width: 100%;
+	height: 100%;
+	color: #c8c4bb;
+	font-size: 38px;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__body {
+	display: flex;
+	flex-direction: column;
+	gap: 9px;
+	flex: 1;
+	padding: 16px 18px 18px;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__meta {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	color: #a5a69f;
+	font-size: 11.5px;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__category { color: var(--ziteh-ar-primary); font-weight: 700; }
+.elementor-widget-ziteh-articles .ziteh-ar__category:hover { text-decoration: underline; }
+
+.elementor-widget-ziteh-articles .ziteh-ar__card-title {
+	margin: 0;
+	color: var(--ziteh-ar-heading);
+	font-size: 15.5px;
+	font-weight: 700;
+	line-height: 1.75;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__card-title a:hover { color: var(--ziteh-ar-primary); }
+.elementor-widget-ziteh-articles .ziteh-ar__excerpt { font-size: 13.5px; line-height: 1.95; }
+
+.elementor-widget-ziteh-articles .ziteh-ar__more {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: auto;
+	color: var(--ziteh-ar-primary);
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__more .ziteh-i { font-size: 15px; transition: transform .2s var(--ziteh-ease); }
+.elementor-widget-ziteh-articles .ziteh-ar__more:hover .ziteh-i { transform: translateX(-3px); }
+
+.elementor-widget-ziteh-articles .ziteh-ar__empty {
+	margin: 0;
+	padding: 40px 24px;
+	border: 1px dashed var(--ziteh-ar-border);
+	border-radius: var(--ziteh-ar-radius);
+	font-size: 14px;
+	text-align: center;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 7px;
+	margin-top: 30px;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__pagination :where(a, span) {
+	display: inline-grid;
+	place-items: center;
+	min-width: 40px;
+	height: 40px;
+	padding: 0 10px;
+	border: 1px solid var(--ziteh-ar-border);
+	border-radius: 11px;
+	background: var(--ziteh-ar-surface);
+	color: var(--ziteh-ar-text);
+	font-size: 13.5px;
+	font-weight: 600;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__pagination a:hover { border-color: var(--ziteh-ar-primary); color: var(--ziteh-ar-primary); }
+
+.elementor-widget-ziteh-articles .ziteh-ar__pagination .current {
+	border-color: var(--ziteh-ar-primary);
+	background: var(--ziteh-ar-primary);
+	color: #fff;
+}
+
+.elementor-widget-ziteh-articles .ziteh-ar__pagination .dots { border-color: transparent; background: none; }
+.elementor-widget-ziteh-articles .ziteh-ar__pagination .ziteh-i { font-size: 16px; }
+
+/* ==========================================================================
+   Single article
+   ========================================================================== */
+
+.elementor-widget-ziteh-post .ziteh-po {
+	--ziteh-po-max: 1120px;
+	--ziteh-po-content: 720px;
+	--ziteh-po-aside: 300px;
+	--ziteh-po-hero: 21 / 9;
+	--ziteh-po-bg: #faf9f6;
+	--ziteh-po-surface: #fff;
+	--ziteh-po-primary: #6f7d5f;
+	--ziteh-po-heading: #333830;
+	--ziteh-po-text: #5f625b;
+	--ziteh-po-border: #e9e6df;
+	--ziteh-po-radius: 18px;
+	padding: 32px var(--ziteh-gutter) 48px;
+	background: var(--ziteh-po-bg);
+	color: var(--ziteh-po-text);
+}
+
+.elementor-widget-ziteh-post .ziteh-po__container {
+	width: min(100%, var(--ziteh-po-max));
+	margin-inline: auto;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__notice {
+	max-width: 620px;
+	margin: 32px auto;
+	padding: 22px;
+	border: 1px dashed #e9e6df;
+	border-radius: 16px;
+	text-align: center;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__head { margin-bottom: 22px; }
+
+.elementor-widget-ziteh-post .ziteh-po__breadcrumbs {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-bottom: 16px;
+	color: #a5a69f;
+	font-size: 12.5px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__breadcrumbs a:hover { color: var(--ziteh-po-primary); }
+
+.elementor-widget-ziteh-post .ziteh-po__category {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	margin-bottom: 12px;
+	color: var(--ziteh-po-primary);
+	font-size: 13.5px;
+	font-weight: 700;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__category .ziteh-i { order: 2; font-size: 16px; }
+
+.elementor-widget-ziteh-post .ziteh-po__title {
+	margin: 0 0 16px;
+	color: var(--ziteh-po-heading);
+	font-size: clamp(26px, 3.2vw, 40px);
+	font-weight: 800;
+	line-height: 1.5;
+	letter-spacing: -.3px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__meta {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 16px;
+	color: #8f918a;
+	font-size: 13px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__author { display: inline-flex; align-items: center; gap: 8px; }
+
+.elementor-widget-ziteh-post .ziteh-po__author img {
+	width: 34px;
+	height: 34px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__hero {
+	margin: 0 0 30px;
+	overflow: hidden;
+	border-radius: var(--ziteh-po-radius);
+	background: #f1eee9;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__hero img {
+	display: block;
+	width: 100%;
+	aspect-ratio: var(--ziteh-po-hero);
+	object-fit: cover;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__hero figcaption {
+	padding: 10px 16px;
+	color: #a5a69f;
+	font-size: 12px;
+	text-align: center;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, var(--ziteh-po-aside));
+	align-items: start;
+	gap: 36px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__layout.is-single { grid-template-columns: minmax(0, 1fr); }
+
+/* -- Article body ---------------------------------------------------------- */
+
+.elementor-widget-ziteh-post .ziteh-po__content {
+	max-width: var(--ziteh-po-content);
+	font-size: 15.5px;
+	line-height: 2.15;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__content > :first-child { margin-top: 0; }
+
+.elementor-widget-ziteh-post .ziteh-po__content :where(h2, h3, h4) {
+	margin: 34px 0 12px;
+	color: var(--ziteh-po-heading);
+	font-weight: 800;
+	line-height: 1.6;
+	/* Anchor links from the contents list must not land under a sticky header. */
+	scroll-margin-top: 96px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__content h2 { font-size: 22px; }
+.elementor-widget-ziteh-post .ziteh-po__content h3 { font-size: 18px; }
+.elementor-widget-ziteh-post .ziteh-po__content h4 { font-size: 16px; }
+.elementor-widget-ziteh-post .ziteh-po__content p { margin: 0 0 18px; }
+
+/* `li` is in the reset now, and its own list-style declaration beats anything
+   inherited from the list, so the revert has to name it too. */
+.elementor-widget-ziteh-post .ziteh-po__content :where(ul, ol) {
+	margin: 0 0 18px;
+	padding-inline-start: 22px;
+	list-style: revert;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__content :where(ul, ol) li { list-style: revert; }
+
+.elementor-widget-ziteh-post .ziteh-po__content li { margin-bottom: 8px; }
+.elementor-widget-ziteh-post .ziteh-po__content a { color: var(--ziteh-po-primary); text-decoration: underline; text-underline-offset: 3px; }
+
+.elementor-widget-ziteh-post .ziteh-po__content blockquote {
+	margin: 24px 0;
+	padding: 18px 22px;
+	border-inline-start: 3px solid var(--ziteh-po-primary);
+	border-radius: 12px;
+	background: #f3f1ec;
+	color: var(--ziteh-po-heading);
+	font-size: 15px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__content :where(img, figure) { margin: 24px 0; border-radius: 14px; }
+.elementor-widget-ziteh-post .ziteh-po__content img { display: block; height: auto; }
+
+.elementor-widget-ziteh-post .ziteh-po__content :where(table) {
+	width: 100%;
+	margin: 24px 0;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__content :where(th, td) {
+	padding: 10px 12px;
+	border: 1px solid var(--ziteh-po-border);
+	text-align: right;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__content th { background: #f3f1ec; font-weight: 700; }
+
+.elementor-widget-ziteh-post .ziteh-po__content :where(code, pre) {
+	background: #f1efe9;
+	border-radius: 8px;
+	direction: ltr;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 13px;
+	text-align: left;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__content code { padding: 2px 6px; }
+.elementor-widget-ziteh-post .ziteh-po__content pre { margin: 22px 0; padding: 16px; overflow-x: auto; }
+
+.elementor-widget-ziteh-post .ziteh-po__tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 30px;
+	padding-top: 22px;
+	border-top: 1px solid var(--ziteh-po-border);
+}
+
+.elementor-widget-ziteh-post .ziteh-po__tags a {
+	padding: 6px 13px;
+	border: 1px solid var(--ziteh-po-border);
+	border-radius: 999px;
+	background: var(--ziteh-po-surface);
+	font-size: 12.5px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__tags a:hover { border-color: var(--ziteh-po-primary); color: var(--ziteh-po-primary); }
+
+/* -- Aside ----------------------------------------------------------------- */
+
+.elementor-widget-ziteh-post .ziteh-po__aside {
+	position: sticky;
+	top: 92px;
+	display: grid;
+	gap: 16px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__toc,
+.elementor-widget-ziteh-post .ziteh-po__share {
+	padding: 18px 20px;
+	border: 1px solid var(--ziteh-po-border);
+	border-radius: var(--ziteh-po-radius);
+	background: var(--ziteh-po-surface);
+}
+
+.elementor-widget-ziteh-post .ziteh-po__toc-title,
+.elementor-widget-ziteh-post .ziteh-po__share-title {
+	margin: 0 0 12px;
+	color: var(--ziteh-po-heading);
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__toc ol {
+	display: grid;
+	gap: 9px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: ziteh-toc;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__toc li { font-size: 13px; line-height: 1.8; }
+.elementor-widget-ziteh-post .ziteh-po__toc li.is-level-3 { padding-inline-start: 14px; font-size: 12.5px; }
+.elementor-widget-ziteh-post .ziteh-po__toc a { color: var(--ziteh-po-text); }
+.elementor-widget-ziteh-post .ziteh-po__toc a:hover { color: var(--ziteh-po-primary); }
+
+.elementor-widget-ziteh-post .ziteh-po__share-links { display: grid; gap: 8px; }
+
+.elementor-widget-ziteh-post .ziteh-po__share-link {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	min-height: 40px;
+	padding: 8px 12px;
+	border: 1px solid var(--ziteh-po-border);
+	border-radius: 11px;
+	font-size: 13px;
+	transition: border-color .2s ease, color .2s ease;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__share-link:hover { border-color: var(--ziteh-po-primary); color: var(--ziteh-po-primary); }
+.elementor-widget-ziteh-post .ziteh-po__share-link .ziteh-i { font-size: 17px; }
+
+/* -- Author, nav, related -------------------------------------------------- */
+
+.elementor-widget-ziteh-post .ziteh-po__author-card {
+	display: grid;
+	grid-template-columns: 72px minmax(0, 1fr);
+	align-items: center;
+	gap: 18px;
+	margin-top: 36px;
+	padding: 20px 22px;
+	border: 1px solid var(--ziteh-po-border);
+	border-radius: var(--ziteh-po-radius);
+	background: var(--ziteh-po-surface);
+}
+
+.elementor-widget-ziteh-post .ziteh-po__author-card img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; }
+.elementor-widget-ziteh-post .ziteh-po__author-label { display: block; color: #a5a69f; font-size: 11.5px; }
+.elementor-widget-ziteh-post .ziteh-po__author-card strong { display: block; margin-bottom: 5px; color: var(--ziteh-po-heading); font-size: 16px; font-weight: 700; }
+.elementor-widget-ziteh-post .ziteh-po__author-card p { font-size: 13.5px; line-height: 1.9; }
+
+.elementor-widget-ziteh-post .ziteh-po__nav {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px;
+	margin-top: 20px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__nav-link {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 16px 18px;
+	border: 1px solid var(--ziteh-po-border);
+	border-radius: var(--ziteh-po-radius);
+	background: var(--ziteh-po-surface);
+	transition: border-color .2s ease;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__nav-link:hover { border-color: var(--ziteh-po-primary); }
+.elementor-widget-ziteh-post .ziteh-po__nav-link.is-next { justify-content: flex-end; text-align: left; }
+.elementor-widget-ziteh-post .ziteh-po__nav-link .ziteh-i { flex: 0 0 auto; color: var(--ziteh-po-primary); font-size: 18px; }
+.elementor-widget-ziteh-post .ziteh-po__nav-link small { display: block; color: #a5a69f; font-size: 11.5px; }
+.elementor-widget-ziteh-post .ziteh-po__nav-link strong { display: block; color: var(--ziteh-po-heading); font-size: 14px; font-weight: 700; line-height: 1.7; }
+
+.elementor-widget-ziteh-post .ziteh-po__related { margin-top: 40px; }
+
+.elementor-widget-ziteh-post .ziteh-po__related-title {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 9px;
+	margin: 0 0 18px;
+	color: var(--ziteh-po-heading);
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__related-title .ziteh-i { order: 2; color: var(--ziteh-po-primary); font-size: 17px; }
+
+.elementor-widget-ziteh-post .ziteh-po__related-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 16px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__related-card {
+	display: grid;
+	gap: 10px;
+	overflow: hidden;
+	padding-bottom: 16px;
+	border: 1px solid var(--ziteh-po-border);
+	border-radius: var(--ziteh-po-radius);
+	background: var(--ziteh-po-surface);
+	transition: border-color .2s ease, transform .2s var(--ziteh-ease);
+}
+
+.elementor-widget-ziteh-post .ziteh-po__related-card:hover { border-color: var(--ziteh-po-primary); transform: translateY(-3px); }
+
+.elementor-widget-ziteh-post .ziteh-po__related-thumb {
+	display: block;
+	aspect-ratio: 16 / 10;
+	overflow: hidden;
+	background: #f1eee9;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__related-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.elementor-widget-ziteh-post .ziteh-po__related-fallback {
+	display: grid;
+	place-items: center;
+	width: 100%;
+	height: 100%;
+	color: #c8c4bb;
+	font-size: 30px;
+}
+
+.elementor-widget-ziteh-post .ziteh-po__related-card strong { padding-inline: 16px; color: var(--ziteh-po-heading); font-size: 14px; font-weight: 700; line-height: 1.75; }
+.elementor-widget-ziteh-post .ziteh-po__related-card time { padding-inline: 16px; color: #a5a69f; font-size: 11.5px; }
+
+/* ==========================================================================
+   Team
+   ========================================================================== */
+
+.elementor-widget-ziteh-team .ziteh-tm {
+	--ziteh-tm-max: 1240px;
+	--ziteh-tm-cols: 4;
+	--ziteh-tm-gap: 20px;
+	--ziteh-tm-ratio: 1 / 1;
+	--ziteh-tm-bg: #faf9f6;
+	--ziteh-tm-surface: #fff;
+	--ziteh-tm-primary: #6f7d5f;
+	--ziteh-tm-heading: #333830;
+	--ziteh-tm-text: #787b74;
+	--ziteh-tm-border: #e9e6df;
+	--ziteh-tm-radius: 16px;
+	padding: 40px var(--ziteh-gutter);
+	background: var(--ziteh-tm-bg);
+	color: var(--ziteh-tm-text);
+}
+
+.elementor-widget-ziteh-team .ziteh-tm__container {
+	width: min(100%, var(--ziteh-tm-max));
+	margin-inline: auto;
+}
+
+.elementor-widget-ziteh-team .ziteh-tm__head { margin-bottom: 24px; max-width: 700px; }
+.elementor-widget-ziteh-team .ziteh-tm__eyebrow { color: var(--ziteh-tm-primary); }
+
+.elementor-widget-ziteh-team .ziteh-tm__title {
+	margin: 0 0 10px;
+	color: var(--ziteh-tm-heading);
+	font-size: clamp(22px, 2.4vw, 30px);
+	font-weight: 800;
+	line-height: 1.6;
+}
+
+.elementor-widget-ziteh-team .ziteh-tm__description { font-size: 14.5px; line-height: 2; }
+
+.elementor-widget-ziteh-team .ziteh-tm__grid {
+	display: grid;
+	grid-template-columns: repeat(var(--ziteh-tm-cols), minmax(0, 1fr));
+	gap: var(--ziteh-tm-gap);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.elementor-widget-ziteh-team .ziteh-tm__card {
+	display: block;
+	height: 100%;
+	overflow: hidden;
+	border: 1px solid var(--ziteh-tm-border);
+	border-radius: var(--ziteh-tm-radius);
+	background: var(--ziteh-tm-surface);
+	transition: border-color .2s ease, transform .2s var(--ziteh-ease);
+}
+
+.elementor-widget-ziteh-team a.ziteh-tm__card:hover { border-color: var(--ziteh-tm-primary); transform: translateY(-3px); }
+
+.elementor-widget-ziteh-team .ziteh-tm__photo {
+	display: block;
+	aspect-ratio: var(--ziteh-tm-ratio);
+	overflow: hidden;
+	background: #f1eee9;
+}
+
+.elementor-widget-ziteh-team .ziteh-tm__photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.elementor-widget-ziteh-team .ziteh-tm__photo-fallback {
+	display: grid;
+	place-items: center;
+	width: 100%;
+	height: 100%;
+	color: #c8c4bb;
+	font-size: 44px;
+}
+
+.elementor-widget-ziteh-team .ziteh-tm__body { display: grid; gap: 5px; padding: 16px 18px 18px; }
+.elementor-widget-ziteh-team .ziteh-tm__name { color: var(--ziteh-tm-heading); font-size: 15px; font-weight: 700; }
+.elementor-widget-ziteh-team .ziteh-tm__role { color: var(--ziteh-tm-primary); font-size: 12.5px; font-weight: 600; }
+.elementor-widget-ziteh-team .ziteh-tm__bio { font-size: 12.5px; line-height: 1.9; }
+
+/* ==========================================================================
+   Milestones
+   ========================================================================== */
+
+.elementor-widget-ziteh-milestones .ziteh-ms {
+	--ziteh-ms-max: 980px;
+	--ziteh-ms-gap: 22px;
+	--ziteh-ms-bg: #faf9f6;
+	--ziteh-ms-surface: #fff;
+	--ziteh-ms-primary: #6f7d5f;
+	--ziteh-ms-heading: #333830;
+	--ziteh-ms-text: #787b74;
+	--ziteh-ms-border: #e9e6df;
+	--ziteh-ms-radius: 16px;
+	padding: 40px var(--ziteh-gutter);
+	background: var(--ziteh-ms-bg);
+	color: var(--ziteh-ms-text);
+}
+
+.elementor-widget-ziteh-milestones .ziteh-ms__container {
+	width: min(100%, var(--ziteh-ms-max));
+	margin-inline: auto;
+}
+
+.elementor-widget-ziteh-milestones .ziteh-ms__head { margin-bottom: 26px; }
+.elementor-widget-ziteh-milestones .ziteh-ms__eyebrow { color: var(--ziteh-ms-primary); }
+
+.elementor-widget-ziteh-milestones .ziteh-ms__title {
+	margin: 0;
+	color: var(--ziteh-ms-heading);
+	font-size: clamp(22px, 2.4vw, 30px);
+	font-weight: 800;
+	line-height: 1.6;
+}
+
+.elementor-widget-ziteh-milestones .ziteh-ms__list {
+	position: relative;
+	display: grid;
+	gap: var(--ziteh-ms-gap);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.elementor-widget-ziteh-milestones .ziteh-ms__item {
+	position: relative;
+	display: grid;
+	grid-template-columns: 46px minmax(0, 1fr);
+	align-items: start;
+	gap: 16px;
+}
+
+.elementor-widget-ziteh-milestones .ziteh-ms__marker {
+	position: relative;
+	z-index: 1;
+	display: inline-grid;
+	place-items: center;
+	width: 46px;
+	height: 46px;
+	border: 1px solid var(--ziteh-ms-border);
+	border-radius: 50%;
+	background: var(--ziteh-ms-surface);
+	color: var(--ziteh-ms-primary);
+	font-size: 22px;
+}
+
+/* The connecting rail is drawn from each marker to the next, so it stops
+   naturally at the last item instead of trailing into empty space. */
+.elementor-widget-ziteh-milestones .ziteh-ms__item:not(:last-child)::before {
+	content: "";
+	position: absolute;
+	z-index: 0;
+	top: 46px;
+	bottom: calc(var(--ziteh-ms-gap) * -1);
+	inset-inline-start: 22px;
+	width: 1px;
+	background: var(--ziteh-ms-border);
+}
+
+.elementor-widget-ziteh-milestones .ziteh-ms__card {
+	padding: 16px 20px;
+	border: 1px solid var(--ziteh-ms-border);
+	border-radius: var(--ziteh-ms-radius);
+	background: var(--ziteh-ms-surface);
+}
+
+.elementor-widget-ziteh-milestones .ziteh-ms__year {
+	display: inline-block;
+	margin-bottom: 6px;
+	padding: 3px 11px;
+	border-radius: 999px;
+	background: #f0eee8;
+	color: var(--ziteh-ms-primary);
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.elementor-widget-ziteh-milestones .ziteh-ms__item-title { display: block; margin-bottom: 6px; color: var(--ziteh-ms-heading); font-size: 15.5px; font-weight: 700; }
+.elementor-widget-ziteh-milestones .ziteh-ms__card p { font-size: 13.5px; line-height: 1.95; }
+
+/* Horizontal card variant. */
+.elementor-widget-ziteh-milestones.ziteh-ms-layout-cards .ziteh-ms__list {
+	grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.elementor-widget-ziteh-milestones.ziteh-ms-layout-cards .ziteh-ms__item {
+	grid-template-columns: minmax(0, 1fr);
+	gap: 12px;
+}
+
+.elementor-widget-ziteh-milestones.ziteh-ms-layout-cards .ziteh-ms__item::before { display: none; }
+.elementor-widget-ziteh-milestones.ziteh-ms-layout-cards .ziteh-ms__card { height: 100%; }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+	.elementor-widget-ziteh-contact .ziteh-ct__layout { grid-template-columns: minmax(0, 1fr); }
+	.elementor-widget-ziteh-post .ziteh-po__layout { grid-template-columns: minmax(0, 1fr); }
+	.elementor-widget-ziteh-post .ziteh-po__aside { position: static; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+	.elementor-widget-ziteh-articles .ziteh-ar { --ziteh-ar-cols: 2; }
+	.elementor-widget-ziteh-team .ziteh-tm { --ziteh-tm-cols: 3; }
+}
+
+@media (max-width: 767px) {
+	.elementor-widget-ziteh-contact .ziteh-ct,
+	.elementor-widget-ziteh-articles .ziteh-ar,
+	.elementor-widget-ziteh-team .ziteh-tm,
+	.elementor-widget-ziteh-milestones .ziteh-ms { padding-block: 28px; }
+
+	.elementor-widget-ziteh-contact .ziteh-ct { --ziteh-ct-cols: 1; }
+	.elementor-widget-ziteh-contact .ziteh-ct__row { grid-template-columns: minmax(0, 1fr); }
+	.elementor-widget-ziteh-contact .ziteh-ct__form { padding: 18px; }
+
+	.elementor-widget-ziteh-articles .ziteh-ar { --ziteh-ar-cols: 1; }
+
+	/* The feature card has no room to sit side by side on a phone. */
+	.elementor-widget-ziteh-articles .ziteh-ar__grid.has-feature .ziteh-ar__card.is-feature { flex-direction: column; }
+	.elementor-widget-ziteh-articles .ziteh-ar__grid.has-feature .ziteh-ar__card.is-feature .ziteh-ar__thumb { flex: 0 0 auto; aspect-ratio: var(--ziteh-ar-ratio); }
+	.elementor-widget-ziteh-articles .ziteh-ar__grid.has-feature .ziteh-ar__card.is-feature .ziteh-ar__body { padding: 16px 18px 18px; }
+	.elementor-widget-ziteh-articles .ziteh-ar__grid.has-feature .ziteh-ar__card.is-feature .ziteh-ar__card-title { font-size: 17px; }
+
+	.elementor-widget-ziteh-articles .ziteh-ar__filters {
+		flex-wrap: nowrap;
+		margin-inline: calc(var(--ziteh-gutter) * -1);
+		padding-inline: var(--ziteh-gutter);
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+
+	.elementor-widget-ziteh-articles .ziteh-ar__filters::-webkit-scrollbar { display: none; }
+	.elementor-widget-ziteh-articles .ziteh-ar__chip { flex: 0 0 auto; }
+
+	.elementor-widget-ziteh-post .ziteh-po { padding-block: 24px 36px; }
+	.elementor-widget-ziteh-post .ziteh-po__content { font-size: 15px; line-height: 2.05; }
+	.elementor-widget-ziteh-post .ziteh-po__nav { grid-template-columns: minmax(0, 1fr); }
+	.elementor-widget-ziteh-post .ziteh-po__author-card { grid-template-columns: 56px minmax(0, 1fr); gap: 14px; padding: 16px; }
+	.elementor-widget-ziteh-post .ziteh-po__author-card img { width: 56px; height: 56px; }
+
+	.elementor-widget-ziteh-team .ziteh-tm { --ziteh-tm-cols: 2; --ziteh-tm-gap: 12px; }
+	.elementor-widget-ziteh-milestones .ziteh-ms__item { grid-template-columns: 38px minmax(0, 1fr); gap: 12px; }
+	.elementor-widget-ziteh-milestones .ziteh-ms__marker { width: 38px; height: 38px; font-size: 18px; }
+	.elementor-widget-ziteh-milestones .ziteh-ms__item:not(:last-child)::before { top: 38px; inset-inline-start: 18px; }
+}
+
+@media (max-width: 480px) {
+	.elementor-widget-ziteh-team .ziteh-tm { --ziteh-tm-cols: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.elementor-widget-ziteh-contact .ziteh-ct *,
+	.elementor-widget-ziteh-articles .ziteh-ar *,
+	.elementor-widget-ziteh-post .ziteh-po *,
+	.elementor-widget-ziteh-team .ziteh-tm *,
+	.elementor-widget-ziteh-milestones .ziteh-ms * {
+		animation-duration: .01ms !important;
+		transition-duration: .01ms !important;
+	}
+}

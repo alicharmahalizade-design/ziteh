@@ -1007,6 +1007,7 @@
 		safe(function () { scope.querySelectorAll('[data-ziteh-single-product]').forEach(function (n) { safe(initSingleProduct, n); }); });
 		safe(function () { scope.querySelectorAll('[data-ziteh-product-details]').forEach(function (n) { safe(initProductDetails, n); }); });
 		safe(function () { scope.querySelectorAll('[data-ziteh-related-products]').forEach(function (n) { safe(initRelatedProducts, n); }); });
+		safe(function () { scope.querySelectorAll('[data-ziteh-contact-form]').forEach(function (n) { safe(initContactForm, n); }); });
 
 		// Document-level features (run once).
 		if (enabled('cartDrawer')) { safe(initDrawer); }
@@ -1024,6 +1025,101 @@
 	document.addEventListener('keydown', function (e) {
 		if (e.key === 'Escape') { closeShell(); }
 	});
+
+	/**
+	 * Contact form.
+	 *
+	 * Submits over AJAX so the reader keeps their scroll position, but the form
+	 * is a real <form> with real required attributes: with JS unavailable the
+	 * browser still validates and the POST still reaches WordPress.
+	 */
+	function initContactForm(form) {
+		if (form.dataset.zitehContactReady === '1') { return; }
+		form.dataset.zitehContactReady = '1';
+
+		var status = form.querySelector('[data-ziteh-contact-status]');
+		var submit = form.querySelector('.ziteh-ct__submit');
+		var opened = Math.floor(Date.now() / 1000);
+
+		function setStatus(text, kind) {
+			if (!status) { return; }
+			status.textContent = text;
+			status.hidden = !text;
+			status.className = 'ziteh-ct__status' + (kind ? ' is-' + kind : '');
+		}
+
+		function clearErrors() {
+			form.querySelectorAll('[data-error-for]').forEach(function (el) {
+				el.textContent = '';
+				el.hidden = true;
+			});
+			form.querySelectorAll('[aria-invalid]').forEach(function (el) {
+				el.removeAttribute('aria-invalid');
+			});
+		}
+
+		function showErrors(fields) {
+			var first = null;
+			Object.keys(fields || {}).forEach(function (name) {
+				var slot = form.querySelector('[data-error-for="' + name + '"]');
+				var input = form.querySelector('[name="' + name + '"]');
+				if (slot) { slot.textContent = fields[name]; slot.hidden = false; }
+				if (input) { input.setAttribute('aria-invalid', 'true'); first = first || input; }
+			});
+			if (first) { first.focus(); }
+		}
+
+		form.addEventListener('submit', function (event) {
+			event.preventDefault();
+			if (form.dataset.busy === '1') { return; }
+
+			clearErrors();
+
+			// Let the browser's own validation speak first — it is localised and
+			// the visitor already knows how it behaves.
+			if (!form.checkValidity()) {
+				form.reportValidity();
+				return;
+			}
+
+			var data = new FormData(form);
+			data.append('action', 'ziteh_contact');
+			data.append('nonce', (window.zitehData && window.zitehData.nonce) || '');
+			data.append('started', String(opened));
+			data.append('page', window.location.href);
+
+			form.dataset.busy = '1';
+			if (submit) { submit.disabled = true; }
+			form.classList.add('is-busy');
+			setStatus('', '');
+
+			fetch((window.zitehData && window.zitehData.ajaxUrl) || '/wp-admin/admin-ajax.php', {
+				method: 'POST',
+				credentials: 'same-origin',
+				body: data
+			}).then(function (response) {
+				return response.json().then(function (payload) {
+					return { ok: response.ok, payload: payload };
+				});
+			}).then(function (result) {
+				var body = (result.payload && result.payload.data) || {};
+				if (result.payload && result.payload.success) {
+					form.reset();
+					opened = Math.floor(Date.now() / 1000);
+					setStatus(body.message || 'پیام شما ارسال شد.', 'ok');
+					return;
+				}
+				if (body.fields) { showErrors(body.fields); }
+				setStatus(body.message || 'ارسال انجام نشد. دوباره تلاش کنید.', 'error');
+			}).catch(function () {
+				setStatus('ارتباط با سرور برقرار نشد. اتصال خود را بررسی کنید.', 'error');
+			}).then(function () {
+				form.dataset.busy = '0';
+				if (submit) { submit.disabled = false; }
+				form.classList.remove('is-busy');
+			});
+		});
+	}
 
 	if (document.readyState === 'loading') {
 		document.addEventListener('DOMContentLoaded', function () {
