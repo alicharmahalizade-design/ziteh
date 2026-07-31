@@ -1,0 +1,284 @@
+{
+	"version": "0.4",
+	"title": "زیته | تماس با ما",
+	"type": "page",
+	"content": [
+		{
+			"id": "361a16d6",
+			"elType": "section",
+			"settings": {
+				"layout": "full_width",
+				"gap": "no",
+				"content_position": "top",
+				"padding": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				},
+				"margin": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				}
+			},
+			"elements": [
+				{
+					"id": "53f640fd",
+					"elType": "column",
+					"settings": {
+						"_column_size": 100,
+						"_inline_size": null,
+						"padding": {
+							"unit": "px",
+							"top": "0",
+							"right": "0",
+							"bottom": "0",
+							"left": "0",
+							"isLinked": true
+						}
+					},
+					"elements": [
+						{
+							"id": "997bf2ba",
+							"elType": "widget",
+							"widgetType": "ziteh-topbar",
+							"settings": {},
+							"elements": []
+						}
+					],
+					"isInner": false
+				}
+			],
+			"isInner": false
+		},
+		{
+			"id": "178a4933",
+			"elType": "section",
+			"settings": {
+				"layout": "full_width",
+				"gap": "no",
+				"content_position": "top",
+				"padding": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				},
+				"margin": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				}
+			},
+			"elements": [
+				{
+					"id": "c848a6a4",
+					"elType": "column",
+					"settings": {
+						"_column_size": 100,
+						"_inline_size": null,
+						"padding": {
+							"unit": "px",
+							"top": "0",
+							"right": "0",
+							"bottom": "0",
+							"left": "0",
+							"isLinked": true
+						}
+					},
+					"elements": [
+						{
+							"id": "280bd230",
+							"elType": "widget",
+							"widgetType": "ziteh-header",
+							"settings": {},
+							"elements": []
+						}
+					],
+					"isInner": false
+				}
+			],
+			"isInner": false
+		},
+		{
+			"id": "b845b7bb",
+			"elType": "section",
+			"settings": {
+				"layout": "full_width",
+				"gap": "no",
+				"content_position": "top",
+				"padding": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				},
+				"margin": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				}
+			},
+			"elements": [
+				{
+					"id": "5fdb3316",
+					"elType": "column",
+					"settings": {
+						"_column_size": 100,
+						"_inline_size": null,
+						"padding": {
+							"unit": "px",
+							"top": "0",
+							"right": "0",
+							"bottom": "0",
+							"left": "0",
+							"isLinked": true
+						}
+					},
+					"elements": [
+						{
+							"id": "19bf8b00",
+							"elType": "widget",
+							"widgetType": "ziteh-contact",
+							"settings": {},
+							"elements": []
+						}
+					],
+					"isInner": false
+				}
+			],
+			"isInner": false
+		},
+		{
+			"id": "08a03852",
+			"elType": "section",
+			"settings": {
+				"layout": "full_width",
+				"gap": "no",
+				"content_position": "top",
+				"padding": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				},
+				"margin": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				}
+			},
+			"elements": [
+				{
+					"id": "a4fb32a4",
+					"elType": "column",
+					"settings": {
+						"_column_size": 100,
+						"_inline_size": null,
+						"padding": {
+							"unit": "px",
+							"top": "0",
+							"right": "0",
+							"bottom": "0",
+							"left": "0",
+							"isLinked": true
+						}
+					},
+					"elements": [
+						{
+							"id": "66ebdba6",
+							"elType": "widget",
+							"widgetType": "ziteh-store-services",
+							"settings": {},
+							"elements": []
+						}
+					],
+					"isInner": false
+				}
+			],
+			"isInner": false
+		},
+		{
+			"id": "bcfa17ef",
+			"elType": "section",
+			"settings": {
+				"layout": "full_width",
+				"gap": "no",
+				"content_position": "top",
+				"padding": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				},
+				"margin": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				}
+			},
+			"elements": [
+				{
+					"id": "5e0fc9bb",
+					"elType": "column",
+					"settings": {
+						"_column_size": 100,
+						"_inline_size": null,
+						"padding": {
+							"unit": "px",
+							"top": "0",
+							"right": "0",
+							"bottom": "0",
+							"left": "0",
+							"isLinked": true
+						}
+					},
+					"elements": [
+						{
+							"id": "2762da0d",
+							"elType": "widget",
+							"widgetType": "ziteh-footer",
+							"settings": {},
+							"elements": []
+						}
+					],
+					"isInner": false
+				}
+			],
+			"isInner": false
+		}
+	],
+	"metadata": {
+		"template_type": "page"
+	},
+	"page_settings": {
+		"hide_title": "yes",
+		"template": "elementor_canvas"
+	}
+}

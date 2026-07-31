@@ -1,0 +1,64 @@
+{
+	"version": "0.4",
+	"title": "زیته | فوتر سایت",
+	"type": "footer",
+	"content": [
+		{
+			"id": "795060d9",
+			"elType": "section",
+			"settings": {
+				"layout": "full_width",
+				"gap": "no",
+				"content_position": "top",
+				"padding": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				},
+				"margin": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				}
+			},
+			"elements": [
+				{
+					"id": "ba8ebca4",
+					"elType": "column",
+					"settings": {
+						"_column_size": 100,
+						"_inline_size": null,
+						"padding": {
+							"unit": "px",
+							"top": "0",
+							"right": "0",
+							"bottom": "0",
+							"left": "0",
+							"isLinked": true
+						}
+					},
+					"elements": [
+						{
+							"id": "173176ea",
+							"elType": "widget",
+							"widgetType": "ziteh-footer",
+							"settings": {},
+							"elements": []
+						}
+					],
+					"isInner": false
+				}
+			],
+			"isInner": false
+		}
+	],
+	"metadata": {
+		"template_type": "footer"
+	}
+}

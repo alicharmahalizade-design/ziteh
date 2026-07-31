@@ -1,0 +1,118 @@
+{
+	"version": "0.4",
+	"title": "زیته | هدر سایت",
+	"type": "header",
+	"content": [
+		{
+			"id": "7f1b77fb",
+			"elType": "section",
+			"settings": {
+				"layout": "full_width",
+				"gap": "no",
+				"content_position": "top",
+				"padding": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				},
+				"margin": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				}
+			},
+			"elements": [
+				{
+					"id": "b3e19129",
+					"elType": "column",
+					"settings": {
+						"_column_size": 100,
+						"_inline_size": null,
+						"padding": {
+							"unit": "px",
+							"top": "0",
+							"right": "0",
+							"bottom": "0",
+							"left": "0",
+							"isLinked": true
+						}
+					},
+					"elements": [
+						{
+							"id": "f66c61fa",
+							"elType": "widget",
+							"widgetType": "ziteh-topbar",
+							"settings": {},
+							"elements": []
+						}
+					],
+					"isInner": false
+				}
+			],
+			"isInner": false
+		},
+		{
+			"id": "52306304",
+			"elType": "section",
+			"settings": {
+				"layout": "full_width",
+				"gap": "no",
+				"content_position": "top",
+				"padding": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				},
+				"margin": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				}
+			},
+			"elements": [
+				{
+					"id": "3994ee3c",
+					"elType": "column",
+					"settings": {
+						"_column_size": 100,
+						"_inline_size": null,
+						"padding": {
+							"unit": "px",
+							"top": "0",
+							"right": "0",
+							"bottom": "0",
+							"left": "0",
+							"isLinked": true
+						}
+					},
+					"elements": [
+						{
+							"id": "f98199d5",
+							"elType": "widget",
+							"widgetType": "ziteh-header",
+							"settings": {},
+							"elements": []
+						}
+					],
+					"isInner": false
+				}
+			],
+			"isInner": false
+		}
+	],
+	"metadata": {
+		"template_type": "header"
+	}
+}

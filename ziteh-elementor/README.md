@@ -42,14 +42,33 @@
 
 ### روش ۱ (پیشنهادی): ساخت خودکار صفحه آماده — یک کلیک
 
-پس از فعال‌سازی، به منوی **المنتور ← «قالب آماده زیته»** بروید و دکمه‌ی **«ساخت صفحه اصلی زیته»** را بزنید. یک برگه‌ی کامل Elementor شامل ۱۷ سکشن، دقیقاً به ترتیب طرح ساخته می‌شود؛ سپس می‌توانید آن را با Elementor ویرایش کنید.
+پس از فعال‌سازی، به منوی **المنتور ← «قالب آماده زیته»** بروید. شش چیدمان کامل آنجاست و هرکدام با یک کلیک ساخته می‌شود:
+
+| قالب | خروجی | نکته |
+| --- | --- | --- |
+| صفحه اصلی | برگه المنتور (Canvas) | ۱۷ سکشن از تاپ‌بار تا فوتر |
+| درباره ما | برگه المنتور (Canvas) | مسیر برند، داستان، مزیت‌ها، تیم، نظرات، مشاوره |
+| تماس با ما | برگه المنتور (Canvas) | راه‌های ارتباطی، فرم AJAX، نقشه، خدمات فروشگاه |
+| آرشیو مقالات | برگه المنتور (Canvas) | کارت‌های مقاله + خبرنامه |
+| تک مقاله | سند کتابخانه (`single-post`) | نیازمند المنتور پرو |
+| هدر / فوتر سایت | سند کتابخانه (`header` / `footer`) | نیازمند المنتور پرو |
+
+سه قالب آخر برای اینکه به سایت وصل شوند به **سازنده قالب المنتور پرو** نیاز دارند و بدون آن ساخته نمی‌شوند. شرط نمایششان از پیش تنظیم نمی‌شود؛ تا وقتی خودتان در سازنده قالب شرط را نگذارید، هیچ تغییری در سایت دیده نمی‌شود.
+
+اگر پرو ندارید، مثل قبل ویجت‌های تاپ‌بار، هدر و فوتر را داخل خود برگه‌ها نگه دارید. قالب وردپرسی زیته هم بدون پرو هدر و فوتر پیش‌فرض خودش را نشان می‌دهد.
 
 ### روش ۲: ایمپورت دستی قالب
 
-در المنتور به **«قالب‌ها ← قالب‌های ذخیره‌شده ← ایمپورت»** بروید و فایل زیر را بارگذاری کنید:
+در المنتور به **«قالب‌ها ← قالب‌های ذخیره‌شده ← ایمپورت»** بروید و هرکدام از فایل‌های زیر را بارگذاری کنید:
 
 ```
 wp-content/plugins/ziteh-elementor/templates/ziteh-home.json
+wp-content/plugins/ziteh-elementor/templates/ziteh-about.json
+wp-content/plugins/ziteh-elementor/templates/ziteh-contact.json
+wp-content/plugins/ziteh-elementor/templates/ziteh-articles.json
+wp-content/plugins/ziteh-elementor/templates/ziteh-single-post.json
+wp-content/plugins/ziteh-elementor/templates/ziteh-header.json
+wp-content/plugins/ziteh-elementor/templates/ziteh-footer.json
 ```
 
 ### روش ۳: چیدن دستی ویجت‌ها
@@ -110,12 +129,16 @@ ziteh-elementor/
 ├── ziteh-elementor.php              # فایل اصلی افزونه (bootstrap + بررسی سازگاری)
 ├── includes/
 │   ├── class-ziteh-widgets-manager.php   # ثبت دسته‌بندی، بارگذاری اسکریپت/استایل و ویجت‌ها
-│   └── class-ziteh-template-importer.php # ایمپورتر یک‌کلیکی صفحه آماده
+│   └── class-ziteh-template-importer.php # ایمپورتر یک‌کلیکی قالب‌های آماده
 ├── widgets/
 │   ├── class-ziteh-widget-base.php  # کلاس پایه مشترک + آیکون‌های SVG
 │   └── class-ziteh-*.php            # یک فایل برای هر سکشن
 ├── templates/
-│   └── ziteh-home.json              # قالب صفحه اصلی (چیدمان ۱۷ ویجت)
+│   ├── ziteh-home.json              # قالب صفحه اصلی (چیدمان ۱۷ ویجت)
+│   ├── ziteh-about.json             # قالب صفحه درباره ما
+│   ├── ziteh-contact.json           # قالب صفحه تماس با ما
+│   ├── ziteh-articles.json          # قالب آرشیو مقالات
+│   └── ziteh-single-post.json, ziteh-header.json, ziteh-footer.json  # اسناد سازنده قالب (پرو)
 └── assets/
     ├── css/ziteh-widgets.css        # استایل پیکسل‌پرفکت همه سکشن‌ها (RTL)
     ├── js/ziteh-widgets.js          # اسلایدر، تاگل صبح/شب، منوی موبایل

@@ -1,0 +1,64 @@
+{
+	"version": "0.4",
+	"title": "زیته | تک مقاله",
+	"type": "single-post",
+	"content": [
+		{
+			"id": "c3862012",
+			"elType": "section",
+			"settings": {
+				"layout": "full_width",
+				"gap": "no",
+				"content_position": "top",
+				"padding": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				},
+				"margin": {
+					"unit": "px",
+					"top": "0",
+					"right": "0",
+					"bottom": "0",
+					"left": "0",
+					"isLinked": true
+				}
+			},
+			"elements": [
+				{
+					"id": "f04110c8",
+					"elType": "column",
+					"settings": {
+						"_column_size": 100,
+						"_inline_size": null,
+						"padding": {
+							"unit": "px",
+							"top": "0",
+							"right": "0",
+							"bottom": "0",
+							"left": "0",
+							"isLinked": true
+						}
+					},
+					"elements": [
+						{
+							"id": "07183898",
+							"elType": "widget",
+							"widgetType": "ziteh-post",
+							"settings": {},
+							"elements": []
+						}
+					],
+					"isInner": false
+				}
+			],
+			"isInner": false
+		}
+	],
+	"metadata": {
+		"template_type": "single-post"
+	}
+}

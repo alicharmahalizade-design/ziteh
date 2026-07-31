@@ -38,7 +38,7 @@ class Ziteh_Milestones_Widget extends Ziteh_Widget_Base {
 		$this->start_controls_section( 'section_head', array( 'label' => esc_html__( 'سرتیتر', 'ziteh' ), 'tab' => Controls_Manager::TAB_CONTENT ) );
 		$this->add_control( 'eyebrow', array( 'label' => esc_html__( 'پیش‌عنوان', 'ziteh' ), 'type' => Controls_Manager::TEXT, 'default' => esc_html__( 'مسیر زیته', 'ziteh' ) ) );
 		$this->add_control( 'title', array( 'label' => esc_html__( 'عنوان', 'ziteh' ), 'type' => Controls_Manager::TEXT, 'default' => esc_html__( 'از یک ایده تا فروشگاه امروز', 'ziteh' ), 'label_block' => true ) );
-		$this->add_control( 'heading_tag', array( 'label' => esc_html__( 'تگ عنوان', 'ziteh' ), 'type' => Controls_Manager::SELECT, 'default' => 'h2', 'options' => array( 'h2' => 'H2', 'h3' => 'H3', 'div' => 'DIV' ) ) );
+		$this->add_control( 'heading_tag', array( 'label' => esc_html__( 'تگ عنوان', 'ziteh' ), 'type' => Controls_Manager::SELECT, 'default' => 'h2', 'options' => array( 'h1' => 'H1', 'h2' => 'H2', 'h3' => 'H3', 'div' => 'DIV' ) ) );
 		$this->add_control( 'layout', array( 'label' => esc_html__( 'چیدمان', 'ziteh' ), 'type' => Controls_Manager::SELECT, 'default' => 'timeline', 'options' => array( 'timeline' => esc_html__( 'خط زمانی عمودی', 'ziteh' ), 'cards' => esc_html__( 'کارت‌های افقی', 'ziteh' ) ), 'prefix_class' => 'ziteh-ms-layout-' ) );
 		$this->end_controls_section();
 
@@ -96,7 +96,7 @@ class Ziteh_Milestones_Widget extends Ziteh_Widget_Base {
 		if ( empty( $settings['items'] ) ) {
 			return;
 		}
-		$tag = in_array( $settings['heading_tag'], array( 'h2', 'h3', 'div' ), true ) ? $settings['heading_tag'] : 'h2';
+		$tag = in_array( $settings['heading_tag'], array( 'h1', 'h2', 'h3', 'div' ), true ) ? $settings['heading_tag'] : 'h2';
 		?>
 		<section class="ziteh-ms" dir="rtl" data-ziteh-milestones>
 			<div class="ziteh-ms__container">
