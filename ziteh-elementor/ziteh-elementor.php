@@ -3,7 +3,7 @@
  * Plugin Name: هسته زیته
  * Plugin URI:  https://ziteh.com
  * Description: هسته مرکزی زیته برای مدیریت ویجت‌های المنتور، امکانات فروشگاهی، طراحی، تعاملات، کارایی و توسعه‌های آینده.
- * Version:     4.1.1
+ * Version:     4.2.0
  * Author:      Ziteh
  * Text Domain: ziteh
  * Domain Path: /languages
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'ZITEH_EL_VERSION', '4.1.1' );
+define( 'ZITEH_EL_VERSION', '4.2.0' );
 define( 'ZITEH_CORE_VERSION', ZITEH_EL_VERSION );
 define( 'ZITEH_EL_FILE', __FILE__ );
 define( 'ZITEH_EL_PATH', plugin_dir_path( __FILE__ ) );
@@ -89,6 +89,10 @@ final class Ziteh_Elementor_Plugin {
 		// Product-page visual isolation: prevents theme and Woo styles leaking in.
 		require_once ZITEH_EL_PATH . 'includes/class-ziteh-product-canvas.php';
 		Ziteh_Product_Canvas::instance();
+
+		// Technical output that complements the site's SEO plugin.
+		require_once ZITEH_EL_PATH . 'includes/class-ziteh-seo.php';
+		Ziteh_Seo::instance();
 
 		// Auto cache purging (on update / settings save / manual button).
 		require_once ZITEH_EL_PATH . 'includes/class-ziteh-cache.php';

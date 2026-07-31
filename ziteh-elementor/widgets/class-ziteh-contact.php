@@ -44,6 +44,16 @@ class Ziteh_Contact_Widget extends Ziteh_Widget_Base {
 		$this->end_controls_section();
 
 		$this->start_controls_section( 'section_channels', array( 'label' => esc_html__( 'راه‌های ارتباطی', 'ziteh' ), 'tab' => Controls_Manager::TAB_CONTENT ) );
+		$this->add_control(
+			'use_global',
+			array(
+				'label'        => esc_html__( 'استفاده از اطلاعات تماس سراسری', 'ziteh' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'return_value' => 'yes',
+				'default'      => '',
+				'description'  => esc_html__( 'به‌جای فهرست زیر، تلفن، ایمیل، نشانی و ساعات کاری را از «هسته زیته ← محتوای سراسری» می‌خواند. موارد خالی نمایش داده نمی‌شوند.', 'ziteh' ),
+			)
+		);
 		$channel = new Repeater();
 		$channel->add_control( 'icon', array( 'label' => esc_html__( 'آیکن', 'ziteh' ), 'type' => Controls_Manager::ICONS, 'default' => array( 'value' => 'fas fa-phone', 'library' => 'fa-solid' ) ) );
 		$channel->add_control( 'title', array( 'label' => esc_html__( 'عنوان', 'ziteh' ), 'type' => Controls_Manager::TEXT, 'default' => esc_html__( 'تلفن پشتیبانی', 'ziteh' ), 'label_block' => true ) );
@@ -125,10 +135,58 @@ class Ziteh_Contact_Widget extends Ziteh_Widget_Base {
 		$this->end_controls_section();
 	}
 
+	/**
+	 * Contact channels assembled from the shop-wide settings.
+	 *
+	 * Only the entries the site owner actually filled in are returned, so an
+	 * unset address does not leave an empty card on the page.
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
+	private function global_channels() {
+		if ( ! class_exists( 'Ziteh_Settings' ) ) {
+			return array();
+		}
+
+		$hours = Ziteh_Settings::content( 'hours' );
+		$map   = array(
+			array( 'phone', __( 'تلفن پشتیبانی', 'ziteh' ), 'chat', 'tel:' ),
+			array( 'email', __( 'ایمیل', 'ziteh' ), 'chat', 'mailto:' ),
+			array( 'address', __( 'نشانی', 'ziteh' ), 'chat', '' ),
+		);
+
+		$channels = array();
+		foreach ( $map as $row ) {
+			$value = Ziteh_Settings::content( $row[0] );
+			if ( '' === $value ) {
+				continue;
+			}
+
+			$link = '';
+			if ( $row[3] ) {
+				// tel: needs the digits unspaced; mailto: takes the address as-is.
+				$link = 'tel:' === $row[3]
+					? 'tel:' . preg_replace( '/[^0-9+]/u', '', $value )
+					: $row[3] . $value;
+			}
+
+			$channels[] = array(
+				'icon'  => array( 'value' => '', 'library' => '' ),
+				'title' => $row[1],
+				'value' => $value,
+				'note'  => $hours,
+				'link'  => array( 'url' => $link, 'is_external' => '', 'nofollow' => '' ),
+			);
+		}
+
+		return $channels;
+	}
+
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		$tag      = in_array( $settings['heading_tag'], array( 'h1', 'h2', 'h3', 'div' ), true ) ? $settings['heading_tag'] : 'h1';
 		$uid      = 'ziteh-ct-' . $this->get_id();
+		$channels = 'yes' === $settings['use_global'] ? $this->global_channels() : (array) $settings['channels'];
 		?>
 		<section class="ziteh-ct" dir="rtl" data-ziteh-contact>
 			<div class="ziteh-ct__container">
@@ -143,10 +201,10 @@ class Ziteh_Contact_Widget extends Ziteh_Widget_Base {
 				</header>
 
 				<div class="ziteh-ct__layout<?php echo 'yes' === $settings['show_form'] ? '' : ' is-single'; ?>">
-					<?php if ( ! empty( $settings['channels'] ) ) : ?>
+					<?php if ( ! empty( $channels ) ) : ?>
 						<ul class="ziteh-ct__channels">
 							<?php
-							foreach ( $settings['channels'] as $item ) :
+							foreach ( $channels as $item ) :
 								$has_link = ! empty( $item['link']['url'] );
 								$tag_name = $has_link ? 'a' : 'div';
 								?>
@@ -232,10 +290,16 @@ class Ziteh_Contact_Widget extends Ziteh_Widget_Base {
 					<?php endif; ?>
 				</div>
 
-				<?php if ( 'yes' === $settings['show_map'] && ! empty( $settings['map_embed']['url'] ) ) : ?>
+				<?php
+				$map = ! empty( $settings['map_embed']['url'] ) ? $settings['map_embed']['url'] : '';
+				if ( ! $map && class_exists( 'Ziteh_Settings' ) ) {
+					$map = Ziteh_Settings::content( 'map' );
+				}
+				?>
+				<?php if ( 'yes' === $settings['show_map'] && $map ) : ?>
 					<div class="ziteh-ct__map">
 						<iframe
-							src="<?php echo esc_url( $settings['map_embed']['url'] ); ?>"
+							src="<?php echo esc_url( $map ); ?>"
 							title="<?php esc_attr_e( 'نقشه محل زیته', 'ziteh' ); ?>"
 							loading="lazy"
 							referrerpolicy="no-referrer-when-downgrade"

@@ -70,6 +70,35 @@ class Ziteh_Settings {
 			'auto_cache_purge' => 'on',
 			'product_isolation' => 'on',
 			'product_app'       => 'on',
+
+			// Global content. Widgets fall back to these when their own field is
+			// left empty, so a phone number or shipping promise is edited once.
+			'c_brand_name'       => '',
+			'c_brand_tagline'    => '',
+			'c_phone'            => '',
+			'c_email'            => '',
+			'c_address'          => '',
+			'c_hours'            => '',
+			'c_map'              => '',
+			'c_instagram'        => '',
+			'c_telegram'         => '',
+			'c_whatsapp'         => '',
+			'c_shipping_title'   => '',
+			'c_shipping_text'    => '',
+			'c_shipping_details' => '',
+			'c_copyright'        => '',
+
+			// Technical SEO. Both schema switches default to off because an SEO
+			// plugin almost certainly emits the same markup already, and two
+			// copies of Product or BreadcrumbList schema on one page is worse
+			// than none.
+			'seo_product_schema'    => 'off',
+			'seo_breadcrumb_schema' => 'off',
+			'seo_preload_lcp'       => 'on',
+
+			// Design scale.
+			'container'   => '1360',
+			'base_size'   => '16',
 		);
 
 		/**
@@ -103,6 +132,70 @@ class Ziteh_Settings {
 			return (bool) $default;
 		}
 		return 'off' !== $s[ $feature ];
+	}
+
+	/**
+	 * A global content value, or an empty string.
+	 *
+	 * @param string $key     Key without the `c_` prefix.
+	 * @param string $default Value to use when nothing is stored.
+	 * @return string
+	 */
+	public static function content( $key, $default = '' ) {
+		$s   = self::get();
+		$key = 'c_' . $key;
+		$val = isset( $s[ $key ] ) ? trim( (string) $s[ $key ] ) : '';
+		return '' !== $val ? $val : $default;
+	}
+
+	/**
+	 * Detect an SEO plugin that owns titles, meta and structured data.
+	 *
+	 * Ziteh has no business emitting a second canonical tag or a second Product
+	 * schema block. Where one of these is active, the plugin steps back and says
+	 * so in the panel rather than quietly competing.
+	 *
+	 * @return string Human-readable plugin name, or an empty string.
+	 */
+	public static function seo_plugin() {
+		$known = array(
+			'RankMath\\Helper'                  => 'Rank Math SEO',
+			'WPSEO_Options'                      => 'Yoast SEO',
+			'SEOPress'                           => 'SEOPress',
+			'AIOSEO\\Plugin\\AIOSEO'            => 'All in One SEO',
+			'The_SEO_Framework\\Load'            => 'The SEO Framework',
+		);
+
+		foreach ( $known as $marker => $label ) {
+			if ( class_exists( $marker ) ) {
+				return $label;
+			}
+		}
+
+		// Rank Math also exposes a plain constant, checked separately because the
+		// namespaced class is not loaded on every request.
+		if ( defined( 'RANK_MATH_VERSION' ) ) {
+			return 'Rank Math SEO';
+		}
+
+		if ( defined( 'SEOPRESS_VERSION' ) ) {
+			return 'SEOPress';
+		}
+
+		return '';
+	}
+
+	/**
+	 * Whether Ziteh may emit its own structured data.
+	 *
+	 * @param string $type Either `product` or `breadcrumb`.
+	 * @return bool
+	 */
+	public static function may_emit_schema( $type ) {
+		if ( self::seo_plugin() ) {
+			return false;
+		}
+		return self::feature_enabled( 'seo_' . $type . '_schema', false );
 	}
 
 	/**
@@ -189,6 +282,32 @@ class Ziteh_Settings {
 		foreach ( array( 'animations', 'shell', 'quickview', 'live_search', 'cart_drawer', 'wishlist', 'quiz_products', 'sticky_header', 'external_font', 'auto_cache_purge', 'product_isolation', 'product_app' ) as $flag ) {
 			$out[ $flag ] = ( isset( $input[ $flag ] ) && 'on' === $input[ $flag ] ) ? 'on' : 'off';
 		}
+		foreach ( array( 'seo_preload_lcp', 'seo_product_schema', 'seo_breadcrumb_schema' ) as $flag ) {
+			$out[ $flag ] = ( isset( $input[ $flag ] ) && 'on' === $input[ $flag ] ) ? 'on' : 'off';
+		}
+
+		// An active SEO plugin owns structured data. Storing "on" here would let
+		// a later plugin deactivation silently start emitting duplicates, so the
+		// value is forced down at save time rather than only hidden in the UI.
+		if ( self::seo_plugin() ) {
+			$out['seo_product_schema']    = 'off';
+			$out['seo_breadcrumb_schema'] = 'off';
+		}
+
+		foreach ( array( 'c_brand_name', 'c_brand_tagline', 'c_phone', 'c_hours', 'c_shipping_title', 'c_shipping_text', 'c_copyright' ) as $key ) {
+			$out[ $key ] = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : '';
+		}
+		foreach ( array( 'c_address', 'c_shipping_details' ) as $key ) {
+			$out[ $key ] = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : '';
+		}
+		$out['c_email'] = isset( $input['c_email'] ) ? sanitize_email( $input['c_email'] ) : '';
+		foreach ( array( 'c_map', 'c_instagram', 'c_telegram', 'c_whatsapp' ) as $key ) {
+			$out[ $key ] = isset( $input[ $key ] ) ? esc_url_raw( trim( $input[ $key ] ) ) : '';
+		}
+
+		$out['container'] = isset( $input['container'] ) ? (string) max( 960, min( 1680, (int) $input['container'] ) ) : $defaults['container'];
+		$out['base_size'] = isset( $input['base_size'] ) ? (string) max( 14, min( 20, (int) $input['base_size'] ) ) : $defaults['base_size'];
+
 		$out['asset_mode'] = ( isset( $input['asset_mode'] ) && in_array( $input['asset_mode'], array( 'smart', 'global' ), true ) ) ? $input['asset_mode'] : 'smart';
 		$fonts             = self::fonts();
 		$out['font']       = ( isset( $input['font'] ) && isset( $fonts[ $input['font'] ] ) ) ? $input['font'] : $defaults['font'];
@@ -229,6 +348,11 @@ class Ziteh_Settings {
 			.ziteh-switch{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;cursor:pointer}.ziteh-switch input{position:absolute;opacity:0;pointer-events:none}.ziteh-switch__rail{position:relative;flex:0 0 44px;width:44px;height:24px;margin-top:1px;border-radius:999px;background:#b8beb1;transition:.2s}.ziteh-switch__rail:after{content:"";position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.22);transition:.2s}.ziteh-switch input:checked+.ziteh-switch__rail{background:var(--zc-primary)}.ziteh-switch input:checked+.ziteh-switch__rail:after{transform:translateX(-20px)}.ziteh-switch input:focus-visible+.ziteh-switch__rail{outline:3px solid rgba(100,113,74,.28);outline-offset:2px}.ziteh-switch__copy{flex:1}.ziteh-switch__copy strong{display:block;margin-bottom:3px}.ziteh-switch__copy small{display:block;color:var(--zc-muted);line-height:1.65}
 			.ziteh-core__save{position:sticky;bottom:0;z-index:2;display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding:14px 18px;background:rgba(255,255,255,.94);border:1px solid var(--zc-border);border-radius:14px;backdrop-filter:blur(10px)}.ziteh-core__save p{margin:0;color:var(--zc-muted)}.ziteh-core__save .button-primary{min-height:42px;padding:0 22px;border-color:var(--zc-primary-dark);background:var(--zc-primary-dark)}.ziteh-system{width:100%;border-collapse:collapse}.ziteh-system td{padding:11px 5px;border-bottom:1px solid #edf0e9}.ziteh-system td:last-child{text-align:left;direction:ltr}.ziteh-core__tools{margin:18px 0 0;padding:18px 24px;background:#fff;border:1px solid var(--zc-border);border-radius:16px}.ziteh-core__tools hr,.ziteh-core__tools h2{display:none}.ziteh-core__tools form{margin-top:10px}
 			@media(max-width:782px){.ziteh-core{margin-left:10px}.ziteh-core__hero{align-items:flex-start;padding:22px}.ziteh-core__version{display:none}.ziteh-core__stats{grid-template-columns:1fr}.ziteh-core__layout{grid-template-columns:1fr}.ziteh-core__nav{position:static;display:flex;overflow:auto}.ziteh-core__tab{width:auto;white-space:nowrap}.ziteh-grid{grid-template-columns:1fr}.ziteh-core__save{position:static;align-items:flex-start;gap:10px;flex-direction:column}.ziteh-core__save .button{width:100%}}
+			.ziteh-switch__copy{min-width:0}.ziteh-switch__copy strong{overflow-wrap:anywhere}
+			.ziteh-core__layout>main{padding-bottom:74px}
+			.ziteh-field textarea,.ziteh-field input[type=text],.ziteh-field input[type=email],.ziteh-field input[type=url]{width:100%;min-height:40px;padding:8px 11px;border:1px solid #cbd1c4;border-radius:8px;font:inherit;background:#fff}.ziteh-field textarea{min-height:78px;line-height:1.8;resize:vertical}
+			.ziteh-field.is-locked{opacity:.55}.ziteh-field.is-locked .ziteh-switch{cursor:not-allowed}
+			.ziteh-notice{margin:0 0 18px;padding:14px 16px;border:1px solid #e0d9c2;border-radius:12px;background:#fdfbf3}.ziteh-notice--ok{border-color:#cfdcc6;background:#f2f7ee}.ziteh-notice strong{display:block;margin-bottom:5px}.ziteh-notice p{margin:0;color:var(--zc-muted);line-height:1.8}
 			@media(prefers-reduced-motion:reduce){.ziteh-core *{transition:none!important}}
 		</style>
 		<div class="wrap ziteh-core" dir="rtl">
@@ -250,16 +374,20 @@ class Ziteh_Settings {
 					<nav class="ziteh-core__nav" aria-label="<?php esc_attr_e( 'بخش‌های تنظیمات', 'ziteh' ); ?>">
 						<button type="button" class="ziteh-core__tab is-active" data-ziteh-tab="general"><?php esc_html_e( 'نمای کلی', 'ziteh' ); ?></button>
 						<button type="button" class="ziteh-core__tab" data-ziteh-tab="design"><?php esc_html_e( 'طراحی و هویت', 'ziteh' ); ?></button>
+						<button type="button" class="ziteh-core__tab" data-ziteh-tab="content"><?php esc_html_e( 'محتوای سراسری', 'ziteh' ); ?></button>
 						<button type="button" class="ziteh-core__tab" data-ziteh-tab="features"><?php esc_html_e( 'امکانات', 'ziteh' ); ?></button>
+						<button type="button" class="ziteh-core__tab" data-ziteh-tab="seo"><?php esc_html_e( 'سئو و ساختار', 'ziteh' ); ?></button>
 						<button type="button" class="ziteh-core__tab" data-ziteh-tab="performance"><?php esc_html_e( 'کارایی و سازگاری', 'ziteh' ); ?></button>
 						<button type="button" class="ziteh-core__tab" data-ziteh-tab="system"><?php esc_html_e( 'اطلاعات سیستم', 'ziteh' ); ?></button>
 					</nav>
 					<main>
 						<section class="ziteh-panel is-active" data-ziteh-panel="general"><div class="ziteh-card"><h2><?php esc_html_e( 'هسته مرکزی زیته', 'ziteh' ); ?></h2><p class="ziteh-card__lead"><?php esc_html_e( 'این پنل نقطه واحد مدیریت ماژول‌های فعلی و توسعه‌های آینده زیته است. تنظیمات جدید از طریق API داخلی هسته قابل افزودن هستند.', 'ziteh' ); ?></p><div class="ziteh-grid"><?php $this->render_toggle( 'shell', $s, __( 'پوسته تعاملی', 'ziteh' ), __( 'زیرساخت مشترک مودال، جستجو و سبد کشویی را فعال می‌کند.', 'ziteh' ) ); ?><div class="ziteh-field"><strong><?php esc_html_e( 'معماری توسعه‌پذیر', 'ziteh' ); ?></strong><p><?php esc_html_e( 'ماژول‌های آینده می‌توانند تنظیمات، اعتبارسنجی و اطلاعات وضعیت خود را با هوک‌های هسته ثبت کنند.', 'ziteh' ); ?></p></div></div></div></section>
-						<section class="ziteh-panel" data-ziteh-panel="design"><div class="ziteh-card"><h2><?php esc_html_e( 'سیستم طراحی', 'ziteh' ); ?></h2><p class="ziteh-card__lead"><?php esc_html_e( 'توکن‌های ظاهری تمام ویجت‌ها را یکجا تنظیم کنید.', 'ziteh' ); ?></p><div class="ziteh-grid"><?php foreach ( $fields as $key => $label ) : ?><div class="ziteh-field"><label for="ziteh-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label><input type="color" id="ziteh-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( self::OPTION ); ?>[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $s[ $key ] ); ?>"><code class="ziteh-color-value"><?php echo esc_html( $s[ $key ] ); ?></code></div><?php endforeach; ?><div class="ziteh-field"><label for="ziteh-font"><?php esc_html_e( 'خانواده فونت', 'ziteh' ); ?></label><select id="ziteh-font" name="<?php echo esc_attr( self::OPTION ); ?>[font]"><?php foreach ( array_keys( self::fonts() ) as $font ) : ?><option value="<?php echo esc_attr( $font ); ?>" <?php selected( $font, $s['font'] ); ?>><?php echo esc_html( $font ); ?></option><?php endforeach; ?></select><p><?php esc_html_e( 'فونت‌های غیر از وزیرمتن باید توسط قالب یا سایت بارگذاری شوند.', 'ziteh' ); ?></p></div><div class="ziteh-field"><label for="ziteh-radius"><?php esc_html_e( 'گردی کارت‌ها', 'ziteh' ); ?></label><input type="number" id="ziteh-radius" min="0" max="40" name="<?php echo esc_attr( self::OPTION ); ?>[radius]" value="<?php echo esc_attr( $s['radius'] ); ?>"><p><?php esc_html_e( 'مقدار بین ۰ تا ۴۰ پیکسل', 'ziteh' ); ?></p></div><?php $this->render_toggle( 'external_font', $s, __( 'بارگذاری وزیرمتن از CDN', 'ziteh' ), __( 'در صورت میزبانی محلی فونت یا محدودیت حریم خصوصی، خاموش کنید.', 'ziteh' ) ); ?></div></div></section>
+						<section class="ziteh-panel" data-ziteh-panel="design"><div class="ziteh-card"><h2><?php esc_html_e( 'سیستم طراحی', 'ziteh' ); ?></h2><p class="ziteh-card__lead"><?php esc_html_e( 'توکن‌های ظاهری تمام ویجت‌ها را یکجا تنظیم کنید.', 'ziteh' ); ?></p><div class="ziteh-grid"><?php foreach ( $fields as $key => $label ) : ?><div class="ziteh-field"><label for="ziteh-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label><input type="color" id="ziteh-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( self::OPTION ); ?>[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $s[ $key ] ); ?>"><code class="ziteh-color-value"><?php echo esc_html( $s[ $key ] ); ?></code></div><?php endforeach; ?><div class="ziteh-field"><label for="ziteh-font"><?php esc_html_e( 'خانواده فونت', 'ziteh' ); ?></label><select id="ziteh-font" name="<?php echo esc_attr( self::OPTION ); ?>[font]"><?php foreach ( array_keys( self::fonts() ) as $font ) : ?><option value="<?php echo esc_attr( $font ); ?>" <?php selected( $font, $s['font'] ); ?>><?php echo esc_html( $font ); ?></option><?php endforeach; ?></select><p><?php esc_html_e( 'فونت‌های غیر از وزیرمتن باید توسط قالب یا سایت بارگذاری شوند.', 'ziteh' ); ?></p></div><div class="ziteh-field"><label for="ziteh-radius"><?php esc_html_e( 'گردی کارت‌ها', 'ziteh' ); ?></label><input type="number" id="ziteh-radius" min="0" max="40" name="<?php echo esc_attr( self::OPTION ); ?>[radius]" value="<?php echo esc_attr( $s['radius'] ); ?>"><p><?php esc_html_e( 'مقدار بین ۰ تا ۴۰ پیکسل', 'ziteh' ); ?></p></div><div class="ziteh-field"><label for="ziteh-container"><?php esc_html_e( 'عرض محتوای سایت', 'ziteh' ); ?></label><input type="number" id="ziteh-container" min="960" max="1680" step="20" name="<?php echo esc_attr( self::OPTION ); ?>[container]" value="<?php echo esc_attr( $s['container'] ); ?>"><p><?php esc_html_e( 'بین ۹۶۰ تا ۱۶۸۰ پیکسل. ویجت‌های صفحه محصول و صفحات از همین مقدار استفاده می‌کنند.', 'ziteh' ); ?></p></div><div class="ziteh-field"><label for="ziteh-base-size"><?php esc_html_e( 'اندازه پایه متن', 'ziteh' ); ?></label><input type="number" id="ziteh-base-size" min="14" max="20" name="<?php echo esc_attr( self::OPTION ); ?>[base_size]" value="<?php echo esc_attr( $s['base_size'] ); ?>"><p><?php esc_html_e( 'بین ۱۴ تا ۲۰ پیکسل.', 'ziteh' ); ?></p></div><?php $this->render_toggle( 'external_font', $s, __( 'بارگذاری وزیرمتن از CDN', 'ziteh' ), __( 'در صورت میزبانی محلی فونت یا محدودیت حریم خصوصی، خاموش کنید.', 'ziteh' ) ); ?></div></div></section>
 						<section class="ziteh-panel" data-ziteh-panel="features"><div class="ziteh-card"><h2><?php esc_html_e( 'مدیریت امکانات', 'ziteh' ); ?></h2><p class="ziteh-card__lead"><?php esc_html_e( 'هر قابلیت را مستقل از بقیه فعال یا غیرفعال کنید.', 'ziteh' ); ?></p><div class="ziteh-grid"><?php $this->render_toggle( 'quickview', $s, __( 'مشاهده سریع محصول', 'ziteh' ), __( 'نمایش جزئیات محصول در مودال AJAX.', 'ziteh' ) ); ?><?php $this->render_toggle( 'live_search', $s, __( 'جستجوی زنده', 'ziteh' ), __( 'نمایش نتایج محصولات یا نوشته‌ها هنگام تایپ.', 'ziteh' ) ); ?><?php $this->render_toggle( 'cart_drawer', $s, __( 'سبد خرید کشویی', 'ziteh' ), __( 'نمایش و بروزرسانی سبد WooCommerce بدون ترک صفحه.', 'ziteh' ) ); ?><?php $this->render_toggle( 'wishlist', $s, __( 'علاقه‌مندی مرورگر', 'ziteh' ), __( 'ذخیره محصولات منتخب کاربر در localStorage.', 'ziteh' ) ); ?><?php $this->render_toggle( 'quiz_products', $s, __( 'پیشنهاد محصول در کوییز', 'ziteh' ), __( 'پس از پایان کوییز، محصولات مرتبط را با AJAX پیشنهاد می‌دهد.', 'ziteh' ) ); ?><?php $this->render_toggle( 'sticky_header', $s, __( 'هدر چسبان', 'ziteh' ), __( 'هدر زیته هنگام اسکرول جمع و ثابت شود.', 'ziteh' ) ); ?><?php $this->render_toggle( 'animations', $s, __( 'انیمیشن ورود سکشن‌ها', 'ziteh' ), __( 'نمایش تدریجی سکشن‌ها با رعایت prefers-reduced-motion.', 'ziteh' ) ); ?></div></div></section>
 						<section class="ziteh-panel" data-ziteh-panel="performance"><div class="ziteh-card"><h2><?php esc_html_e( 'بارگذاری و کارایی', 'ziteh' ); ?></h2><p class="ziteh-card__lead"><?php esc_html_e( 'رفتار assets و کش را متناسب با زیرساخت سایت انتخاب کنید.', 'ziteh' ); ?></p><div class="ziteh-grid"><div class="ziteh-field"><label for="ziteh-asset-mode"><?php esc_html_e( 'شیوه بارگذاری فایل‌ها', 'ziteh' ); ?></label><select id="ziteh-asset-mode" name="<?php echo esc_attr( self::OPTION ); ?>[asset_mode]"><option value="smart" <?php selected( 'smart', $s['asset_mode'] ); ?>><?php esc_html_e( 'هوشمند — فقط در صفحات موردنیاز', 'ziteh' ); ?></option><option value="global" <?php selected( 'global', $s['asset_mode'] ); ?>><?php esc_html_e( 'سراسری — بیشترین سازگاری', 'ziteh' ); ?></option></select><p><?php esc_html_e( 'حالت سراسری برای قالب‌های سفارشی یا Theme Builderهای پیچیده مناسب‌تر است.', 'ziteh' ); ?></p></div><?php $this->render_toggle( 'auto_cache_purge', $s, __( 'پاک‌سازی خودکار کش', 'ziteh' ), __( 'با ذخیره تنظیمات و تغییر نسخه اجرا می‌شود.', 'ziteh' ) ); ?><?php $this->render_toggle( 'product_isolation', $s, __( 'حالت ایزوله صفحه محصول', 'ziteh' ), __( 'استایل‌های پیش‌فرض WooCommerce و کانتینر قالب را فقط در صفحه محصول غیرفعال می‌کند تا UI کاملاً توسط زیته کنترل شود.', 'ziteh' ) ); ?><?php $this->render_toggle( 'product_app', $s, __( 'تجربه اپلیکیشنی صفحه محصول', 'ziteh' ), __( 'در موبایل گالری را قابل کشیدن می‌کند و نوار خرید چسبان، نمایشگر تمام‌صفحه تصاویر و تب‌های سگمنتی را فعال می‌کند.', 'ziteh' ) ); ?></div></div></section>
 						<section class="ziteh-panel" data-ziteh-panel="system"><div class="ziteh-card"><h2><?php esc_html_e( 'وضعیت سیستم', 'ziteh' ); ?></h2><p class="ziteh-card__lead"><?php esc_html_e( 'اطلاعات پایه برای عیب‌یابی و پشتیبانی.', 'ziteh' ); ?></p><table class="ziteh-system"><tr><td>WordPress</td><td><?php echo esc_html( get_bloginfo( 'version' ) ); ?></td></tr><tr><td>PHP</td><td><?php echo esc_html( PHP_VERSION ); ?></td></tr><tr><td>Elementor</td><td><?php echo defined( 'ELEMENTOR_VERSION' ) ? esc_html( ELEMENTOR_VERSION ) : esc_html__( 'در دسترس نیست', 'ziteh' ); ?></td></tr><tr><td>WooCommerce</td><td><?php echo defined( 'WC_VERSION' ) ? esc_html( WC_VERSION ) : esc_html__( 'غیرفعال', 'ziteh' ); ?></td></tr><tr><td><?php esc_html_e( 'نسخه هسته زیته', 'ziteh' ); ?></td><td><?php echo esc_html( ZITEH_EL_VERSION ); ?></td></tr><tr><td><?php esc_html_e( 'حالت بارگذاری', 'ziteh' ); ?></td><td><?php echo esc_html( $s['asset_mode'] ); ?></td></tr></table><?php do_action( 'ziteh_core_settings_system', $s ); ?></div></section>
+						<?php $this->render_content_panel( $s ); ?>
+						<?php $this->render_seo_panel( $s ); ?>
 						<?php do_action( 'ziteh_core_settings_panels', $s ); ?>
 					</main>
 				</div>
@@ -274,6 +402,135 @@ class Ziteh_Settings {
 	}
 
 	/**
+	 * Text or textarea field bound to a settings key.
+	 *
+	 * @param string              $key         Setting key.
+	 * @param array<string,mixed> $settings    Current settings.
+	 * @param string              $label       Field label.
+	 * @param string              $description Helper text.
+	 * @param string              $type        text|email|url|textarea.
+	 * @param string              $placeholder Placeholder text.
+	 */
+	private function render_text( $key, $settings, $label, $description = '', $type = 'text', $placeholder = '' ) {
+		$value = isset( $settings[ $key ] ) ? $settings[ $key ] : '';
+		$name  = self::OPTION . '[' . $key . ']';
+		?>
+		<div class="ziteh-field">
+			<label for="ziteh-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label>
+			<?php if ( 'textarea' === $type ) : ?>
+				<textarea id="ziteh-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $name ); ?>" rows="3" placeholder="<?php echo esc_attr( $placeholder ); ?>"><?php echo esc_textarea( $value ); ?></textarea>
+			<?php else : ?>
+				<input type="<?php echo esc_attr( $type ); ?>" id="ziteh-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>">
+			<?php endif; ?>
+			<?php if ( $description ) : ?><p><?php echo esc_html( $description ); ?></p><?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Global content panel.
+	 *
+	 * One place for the details that otherwise get retyped into every widget:
+	 * phone number, address, shipping promise. Widgets treat these as fallbacks,
+	 * so anything already filled in on a widget keeps winning.
+	 *
+	 * @param array<string,mixed> $s Current settings.
+	 */
+	private function render_content_panel( $s ) {
+		?>
+		<section class="ziteh-panel" data-ziteh-panel="content">
+			<div class="ziteh-card">
+				<h2><?php esc_html_e( 'هویت و تماس', 'ziteh' ); ?></h2>
+				<p class="ziteh-card__lead"><?php esc_html_e( 'این مقادیر یک‌بار اینجا نوشته می‌شوند و ویجت‌ها وقتی فیلد خودشان خالی باشد از همین‌ها استفاده می‌کنند. هرچه در خود ویجت نوشته باشید، اولویت دارد.', 'ziteh' ); ?></p>
+				<div class="ziteh-grid">
+					<?php
+					$this->render_text( 'c_brand_name', $s, __( 'نام برند', 'ziteh' ), __( 'خالی بماند از نام سایت استفاده می‌شود.', 'ziteh' ), 'text', get_bloginfo( 'name' ) );
+					$this->render_text( 'c_brand_tagline', $s, __( 'شعار کوتاه', 'ziteh' ), '', 'text', __( 'مراقبت از پوست و مو، با انتخاب درست', 'ziteh' ) );
+					$this->render_text( 'c_phone', $s, __( 'تلفن پشتیبانی', 'ziteh' ), '', 'text', '۰۲۱-۱۲۳۴۵۶۷۸' );
+					$this->render_text( 'c_email', $s, __( 'ایمیل', 'ziteh' ), __( 'فرم تماس مستقل از این مقدار به ایمیل مدیر سایت ارسال می‌کند.', 'ziteh' ), 'email', 'info@example.com' );
+					$this->render_text( 'c_hours', $s, __( 'ساعات پاسخگویی', 'ziteh' ), '', 'text', __( 'شنبه تا چهارشنبه، ۹ تا ۱۷', 'ziteh' ) );
+					$this->render_text( 'c_address', $s, __( 'نشانی', 'ziteh' ), '', 'textarea' );
+					$this->render_text( 'c_map', $s, __( 'نشانی embed نقشه', 'ziteh' ), __( 'فقط لینک embed؛ بدون اسکریپت خارجی درج می‌شود.', 'ziteh' ), 'url', 'https://www.google.com/maps/embed?...' );
+					$this->render_text( 'c_copyright', $s, __( 'متن کپی‌رایت', 'ziteh' ), '', 'text' );
+					?>
+				</div>
+			</div>
+
+			<div class="ziteh-card">
+				<h2><?php esc_html_e( 'شبکه‌های اجتماعی', 'ziteh' ); ?></h2>
+				<p class="ziteh-card__lead"><?php esc_html_e( 'نشانی کامل صفحه را وارد کنید. موارد خالی نمایش داده نمی‌شوند.', 'ziteh' ); ?></p>
+				<div class="ziteh-grid">
+					<?php
+					$this->render_text( 'c_instagram', $s, __( 'اینستاگرام', 'ziteh' ), '', 'url', 'https://instagram.com/…' );
+					$this->render_text( 'c_telegram', $s, __( 'تلگرام', 'ziteh' ), '', 'url', 'https://t.me/…' );
+					$this->render_text( 'c_whatsapp', $s, __( 'واتساپ', 'ziteh' ), '', 'url', 'https://wa.me/…' );
+					?>
+				</div>
+			</div>
+
+			<div class="ziteh-card">
+				<h2><?php esc_html_e( 'قول ارسال', 'ziteh' ); ?></h2>
+				<p class="ziteh-card__lead"><?php esc_html_e( 'ردیف ارسال در صفحه محصول وقتی فیلدهای خودش را خالی بگذارید از این متن‌ها استفاده می‌کند — یعنی شرایط ارسال را یک‌بار برای کل فروشگاه می‌نویسید.', 'ziteh' ); ?></p>
+				<div class="ziteh-grid">
+					<?php
+					$this->render_text( 'c_shipping_title', $s, __( 'عنوان', 'ziteh' ), '', 'text', __( 'ارسال سریع و مطمئن', 'ziteh' ) );
+					$this->render_text( 'c_shipping_text', $s, __( 'توضیح کوتاه', 'ziteh' ), '', 'text', __( 'ارسال به سراسر ایران در ۲ تا ۳ روز کاری', 'ziteh' ) );
+					$this->render_text( 'c_shipping_details', $s, __( 'جزئیات بازشونده', 'ziteh' ), '', 'textarea' );
+					?>
+				</div>
+			</div>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Technical SEO panel.
+	 *
+	 * @param array<string,mixed> $s Current settings.
+	 */
+	private function render_seo_panel( $s ) {
+		$plugin = self::seo_plugin();
+		?>
+		<section class="ziteh-panel" data-ziteh-panel="seo">
+			<div class="ziteh-card">
+				<h2><?php esc_html_e( 'داده‌های ساختاریافته', 'ziteh' ); ?></h2>
+
+				<?php if ( $plugin ) : ?>
+					<div class="ziteh-notice ziteh-notice--ok">
+						<strong><?php echo esc_html( sprintf( /* translators: %s: plugin name */ __( '%s روی سایت فعال است.', 'ziteh' ), $plugin ) ); ?></strong>
+						<p><?php esc_html_e( 'عنوان، توضیح متا، کنونیکال، نقشه سایت و داده‌های ساختاریافته کار همان افزونه است و زیته دستی به آن نمی‌زند. دو کلید زیر قفل شده‌اند چون خروجی دومِ Product یا BreadcrumbList روی یک صفحه، از نبودشان بدتر است.', 'ziteh' ); ?></p>
+					</div>
+				<?php else : ?>
+					<div class="ziteh-notice">
+						<strong><?php esc_html_e( 'هیچ افزونه سئویی شناسایی نشد.', 'ziteh' ); ?></strong>
+						<p><?php esc_html_e( 'زیته یک افزونه سئو نیست و عنوان و متا تولید نمی‌کند. اگر افزونه‌ای مثل Rank Math یا Yoast نصب کنید، همین بخش خودش کنار می‌رود. تا آن زمان می‌توانید داده ساختاریافته زیته را روشن کنید.', 'ziteh' ); ?></p>
+					</div>
+				<?php endif; ?>
+
+				<div class="ziteh-grid">
+					<?php
+					$this->render_toggle( 'seo_product_schema', $s, __( 'Product schema زیته', 'ziteh' ), __( 'فقط زمانی روشن کنید که هیچ افزونه سئویی روی سایت نیست.', 'ziteh' ), (bool) $plugin );
+					$this->render_toggle( 'seo_breadcrumb_schema', $s, __( 'BreadcrumbList schema زیته', 'ziteh' ), __( 'مسیر راهنمای ویجت‌های زیته را به‌صورت داده ساختاریافته منتشر می‌کند.', 'ziteh' ), (bool) $plugin );
+					?>
+				</div>
+			</div>
+
+			<div class="ziteh-card">
+				<h2><?php esc_html_e( 'سرعت و تجربه', 'ziteh' ); ?></h2>
+				<p class="ziteh-card__lead"><?php esc_html_e( 'این موارد با افزونه سئو تداخل ندارند؛ کاری است که افزونه‌های سئو انجام نمی‌دهند.', 'ziteh' ); ?></p>
+				<div class="ziteh-grid">
+					<?php $this->render_toggle( 'seo_preload_lcp', $s, __( 'پیش‌بارگذاری تصویر اصلی محصول', 'ziteh' ), __( 'تصویر شاخص محصول معمولاً بزرگ‌ترین عنصر قابل رنگ صفحه است. اعلام زودهنگام آن به مرورگر، معیار LCP را بهتر می‌کند.', 'ziteh' ) ); ?>
+					<div class="ziteh-field">
+						<strong><?php esc_html_e( 'چیزی که زیته انجام نمی‌دهد', 'ziteh' ); ?></strong>
+						<p><?php esc_html_e( 'تولید عنوان و توضیح متا، ریدایرکت، نقشه سایت و تحلیل کلمه کلیدی. این‌ها کار افزونه سئوی شماست و دوباره‌کاری در آن‌ها به رتبه سایت آسیب می‌زند.', 'ziteh' ); ?></p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<?php
+	}
+
+	/**
 	 * Render an accessible switch field used across settings panels.
 	 *
 	 * @param string              $key         Setting key.
@@ -281,9 +538,9 @@ class Ziteh_Settings {
 	 * @param string              $title       Field title.
 	 * @param string              $description Helper text.
 	 */
-	private function render_toggle( $key, $settings, $title, $description ) {
+	private function render_toggle( $key, $settings, $title, $description, $locked = false ) {
 		?>
-		<div class="ziteh-field"><label class="ziteh-switch"><input type="checkbox" name="<?php echo esc_attr( self::OPTION ); ?>[<?php echo esc_attr( $key ); ?>]" value="on" <?php checked( 'on', isset( $settings[ $key ] ) ? $settings[ $key ] : 'off' ); ?>><span class="ziteh-switch__rail" aria-hidden="true"></span><span class="ziteh-switch__copy"><strong><?php echo esc_html( $title ); ?></strong><small><?php echo esc_html( $description ); ?></small></span></label></div>
+		<div class="ziteh-field<?php echo $locked ? ' is-locked' : ''; ?>"><label class="ziteh-switch"><input type="checkbox" name="<?php echo esc_attr( self::OPTION ); ?>[<?php echo esc_attr( $key ); ?>]" value="on" <?php checked( 'on', isset( $settings[ $key ] ) ? $settings[ $key ] : 'off' ); ?> <?php disabled( true, $locked ); ?>><span class="ziteh-switch__rail" aria-hidden="true"></span><span class="ziteh-switch__copy"><strong><?php echo esc_html( $title ); ?></strong><small><?php echo esc_html( $description ); ?></small></span></label></div>
 		<?php
 	}
 
@@ -302,6 +559,8 @@ class Ziteh_Settings {
 		$css .= '--ziteh-ink:' . $s['ink'] . ';';
 		$css .= '--ziteh-sale:' . $s['sale'] . ';';
 		$css .= '--ziteh-radius:' . (int) $s['radius'] . 'px;';
+		$css .= '--ziteh-page:' . (int) $s['container'] . 'px;';
+		$css .= '--ziteh-base-size:' . (int) $s['base_size'] . 'px;';
 		$fonts = self::fonts();
 		if ( isset( $fonts[ $s['font'] ] ) ) {
 			$css .= '--ziteh-font:' . $fonts[ $s['font'] ] . ';';

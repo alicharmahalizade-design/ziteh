@@ -212,7 +212,7 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 		$this->add_control( 'heading_tag', array( 'label' => esc_html__( 'تگ عنوان محصول', 'ziteh' ), 'type' => Controls_Manager::SELECT, 'default' => 'h1', 'options' => array( 'h1' => 'H1', 'h2' => 'H2', 'h3' => 'H3', 'div' => 'DIV' ) ) );
 		$this->add_control( 'image_alt', array( 'label' => esc_html__( 'متن جایگزین تصویر اصلی', 'ziteh' ), 'type' => Controls_Manager::TEXT, 'description' => esc_html__( 'خالی باشد از نام محصول استفاده می‌شود.', 'ziteh' ) ) );
 		$this->add_control( 'main_image_loading', array( 'label' => esc_html__( 'اولویت بارگذاری تصویر اصلی', 'ziteh' ), 'type' => Controls_Manager::SELECT, 'default' => 'eager', 'options' => array( 'eager' => esc_html__( 'بالا — eager', 'ziteh' ), 'lazy' => esc_html__( 'عادی — lazy', 'ziteh' ) ) ) );
-		$this->add_control( 'enable_schema', array( 'label' => esc_html__( 'Product Schema خارج از صفحه محصول', 'ziteh' ), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => '', 'description' => esc_html__( 'در صفحه اصلی محصول خاموش بماند چون WooCommerce اسکیما را تولید می‌کند.', 'ziteh' ) ) );
+		$this->add_control( 'enable_schema', array( 'label' => esc_html__( 'Product Schema خارج از صفحه محصول', 'ziteh' ), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => '', 'description' => esc_html__( 'در صفحه اصلی محصول خاموش بماند چون WooCommerce اسکیما را تولید می‌کند. اگر افزونه سئویی مثل Rank Math فعال باشد، این گزینه به‌صورت خودکار بی‌اثر می‌شود تا خروجی دوم ساخته نشود.', 'ziteh' ) ) );
 		$this->add_control( 'show_meta', array( 'label' => esc_html__( 'نمایش SKU و دسته‌بندی', 'ziteh' ), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => '' ) );
 		$this->end_controls_section();
 	}
@@ -421,7 +421,19 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 								<?php endforeach; ?>
 							</ul>
 						<?php endif; ?>
-						<?php $shipping_details = trim( (string) $settings['shipping_details'] ); ?>
+						<?php
+						// Empty widget fields fall back to the shop-wide promise set in
+						// Ziteh Core, so shipping terms are written once rather than on
+						// every product. Anything typed into the widget still wins.
+						$shipping_title   = trim( (string) $settings['shipping_title'] );
+						$shipping_text    = trim( (string) $settings['shipping_text'] );
+						$shipping_details = trim( (string) $settings['shipping_details'] );
+						if ( class_exists( 'Ziteh_Settings' ) ) {
+							$shipping_title   = $shipping_title ? $shipping_title : Ziteh_Settings::content( 'shipping_title' );
+							$shipping_text    = $shipping_text ? $shipping_text : Ziteh_Settings::content( 'shipping_text' );
+							$shipping_details = $shipping_details ? $shipping_details : Ziteh_Settings::content( 'shipping_details' );
+						}
+						?>
 						<?php $shipping_panel = 'ziteh-sp-shipping-' . $this->get_id(); ?>
 						<div class="ziteh-sp__shipping<?php echo $shipping_details ? ' is-collapsible' : ''; ?>">
 							<?php
@@ -431,7 +443,7 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 							?>
 							<<?php echo esc_attr( $shipping_tag ); ?> class="ziteh-sp__shipping-head"<?php echo $shipping_details ? ' type="button" data-ziteh-sp-disclosure aria-expanded="false" aria-controls="' . esc_attr( $shipping_panel ) . '"' : ''; ?>>
 								<span class="ziteh-sp__shipping-icon"><?php Ziteh_Icons::render_control( $settings['shipping_icon'], 'truck' ); ?></span>
-								<span class="ziteh-sp__shipping-copy"><strong><?php echo esc_html( $settings['shipping_title'] ); ?></strong><small><?php echo esc_html( $settings['shipping_text'] ); ?></small></span>
+								<span class="ziteh-sp__shipping-copy"><strong><?php echo esc_html( $shipping_title ); ?></strong><small><?php echo esc_html( $shipping_text ); ?></small></span>
 								<span class="ziteh-sp__shipping-chevron"><?php Ziteh_Icons::render( 'chevron-down' ); ?></span>
 							</<?php echo esc_attr( $shipping_tag ); ?>>
 							<?php if ( $shipping_details ) : ?>
@@ -487,7 +499,18 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 			</div>
 			<?php $this->render_app_bar( $product, $settings ); ?>
 			<?php $this->render_lightbox( $product, $gallery_ids ); ?>
-			<?php if ( 'yes' === $settings['enable_schema'] && ( ! function_exists( 'is_product' ) || ! is_product() ) ) : ?><?php $this->render_schema( $product, $gallery_ids ); ?><?php endif; ?>
+			<?php
+			/*
+			 * Three gates before emitting Product JSON-LD, because a second copy
+			 * on a page is worse for search than none: the widget switch, the
+			 * core setting (which an active SEO plugin forces off), and the
+			 * native product page where WooCommerce already provides it.
+			 */
+			$emit_schema = 'yes' === $settings['enable_schema']
+				&& ( ! function_exists( 'is_product' ) || ! is_product() )
+				&& ( ! class_exists( 'Ziteh_Settings' ) || Ziteh_Settings::may_emit_schema( 'product' ) );
+			?>
+			<?php if ( $emit_schema ) : ?><?php $this->render_schema( $product, $gallery_ids ); ?><?php endif; ?>
 		</article>
 		<?php
 		$product = $previous_product;
