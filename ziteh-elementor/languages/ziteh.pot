@@ -1,8 +1,8 @@
-# Ziteh Elementor Widgets - translation template.
+# Ziteh Core - translation template.
 # Copyright (C) Ziteh
 msgid ""
 msgstr ""
-"Project-Id-Version: Ziteh Elementor Widgets 2.0.1\n"
+"Project-Id-Version: Ziteh Core 3.8.0\n"
 "Report-Msgid-Bugs-To: https://ziteh.com\n"
 "POT-Creation-Date: 2026-07-14 07:55+0000\n"
 "MIME-Version: 1.0\n"
@@ -305,7 +305,7 @@ msgid "تنظیمات اسلایدر"
 msgstr ""
 
 #: includes/class-ziteh-settings.php:109
-msgid "تنظیمات زیته"
+msgid "تنظیمات هسته زیته"
 msgstr ""
 
 #: includes/class-ziteh-settings.php:167
@@ -753,7 +753,7 @@ msgid "صفحه اصلی زیته"
 msgstr ""
 
 #: includes/class-ziteh-template-importer.php:88
-msgid "صفحه اصلی زیته با موفقیت ساخته شد. هر ۱۴ سکشن به ترتیب طرح چیده شده‌اند."
+msgid "صفحه اصلی زیته با موفقیت ساخته شد. هر ۱۷ سکشن به ترتیب طرح چیده شده‌اند."
 msgstr ""
 
 #: widgets/class-ziteh-header.php:138
@@ -1397,15 +1397,15 @@ msgid "پشتیبانی عالی و بسته‌بندی شیک. حس خاصی ب
 msgstr ""
 
 #: ziteh-elementor.php:134
-msgid "پلاگین «ویجت‌های زیته» برای کار کردن به المنتور نیاز دارد. لطفاً ابتدا المنتور را نصب و فعال کنید."
+msgid "افزونه «هسته زیته» برای کار کردن به المنتور نیاز دارد. لطفاً ابتدا المنتور را نصب و فعال کنید."
 msgstr ""
 
 #: ziteh-elementor.php:162
-msgid "پلاگین «ویجت‌های زیته» به PHP نسخه %s یا بالاتر نیاز دارد."
+msgid "افزونه «هسته زیته» به PHP نسخه %s یا بالاتر نیاز دارد."
 msgstr ""
 
 #: ziteh-elementor.php:147
-msgid "پلاگین «ویجت‌های زیته» به المنتور نسخه %s یا بالاتر نیاز دارد."
+msgid "افزونه «هسته زیته» به المنتور نسخه %s یا بالاتر نیاز دارد."
 msgstr ""
 
 #: widgets/class-ziteh-routine.php:180

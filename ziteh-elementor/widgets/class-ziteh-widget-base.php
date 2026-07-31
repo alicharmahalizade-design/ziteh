@@ -20,12 +20,26 @@ use Elementor\Widget_Base;
 abstract class Ziteh_Widget_Base extends Widget_Base {
 
 	/**
-	 * All Ziteh widgets live in the "ziteh" category.
+	 * Place product-page widgets in their own Elementor category while keeping
+	 * every public widget ID unchanged for backward compatibility.
 	 *
 	 * @return string[]
 	 */
 	public function get_categories() {
-		return array( 'ziteh' );
+		$product_widgets = apply_filters(
+			'ziteh_core_single_product_widgets',
+			array(
+				'ziteh-single-product',
+				'ziteh-product-details',
+				'ziteh-related-products',
+				'ziteh-product-reviews',
+				'ziteh-store-services',
+			)
+		);
+
+		$category = in_array( $this->get_name(), $product_widgets, true ) ? 'ziteh-product-page' : 'ziteh';
+
+		return array( apply_filters( 'ziteh_core_widget_category', $category, $this->get_name() ) );
 	}
 
 	/**

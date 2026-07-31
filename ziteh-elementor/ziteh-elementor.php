@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Ziteh Elementor Widgets
+ * Plugin Name: هسته زیته
  * Plugin URI:  https://ziteh.com
- * Description: مجموعه ویجت‌های اختصاصی المنتور برای پیاده‌سازی پیکسل‌به‌پیکسل صفحه اصلی فروشگاه زیته (تاپ‌بار، هدر، هیرو، دسته‌بندی، روتین، محصولات، برندها، مجله، مشاوره، نظرات، اینستاگرام، خبرنامه و فوتر).
- * Version:     2.1.3
+ * Description: هسته مرکزی زیته برای مدیریت ویجت‌های المنتور، امکانات فروشگاهی، طراحی، تعاملات، کارایی و توسعه‌های آینده.
+ * Version:     3.8.0
  * Author:      Ziteh
  * Text Domain: ziteh
  * Domain Path: /languages
@@ -17,7 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'ZITEH_EL_VERSION', '2.1.3' );
+define( 'ZITEH_EL_VERSION', '3.8.0' );
+define( 'ZITEH_CORE_VERSION', ZITEH_EL_VERSION );
 define( 'ZITEH_EL_FILE', __FILE__ );
 define( 'ZITEH_EL_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ZITEH_EL_URL', plugin_dir_url( __FILE__ ) );
@@ -82,6 +83,10 @@ final class Ziteh_Elementor_Plugin {
 		require_once ZITEH_EL_PATH . 'includes/class-ziteh-settings.php';
 		Ziteh_Settings::instance();
 
+		// Product-page visual isolation: prevents theme and Woo styles leaking in.
+		require_once ZITEH_EL_PATH . 'includes/class-ziteh-product-canvas.php';
+		Ziteh_Product_Canvas::instance();
+
 		// Auto cache purging (on update / settings save / manual button).
 		require_once ZITEH_EL_PATH . 'includes/class-ziteh-cache.php';
 		Ziteh_Cache::instance();
@@ -135,7 +140,7 @@ final class Ziteh_Elementor_Plugin {
 		if ( isset( $_GET['activate'] ) ) {
 			unset( $_GET['activate'] );
 		}
-		$message = esc_html__( 'پلاگین «ویجت‌های زیته» برای کار کردن به المنتور نیاز دارد. لطفاً ابتدا المنتور را نصب و فعال کنید.', 'ziteh' );
+		$message = esc_html__( 'افزونه «هسته زیته» برای کار کردن به المنتور نیاز دارد. لطفاً ابتدا المنتور را نصب و فعال کنید.', 'ziteh' );
 		printf( '<div class="notice notice-warning is-dismissible"><p>%s</p></div>', esc_html( $message ) );
 	}
 
@@ -148,7 +153,7 @@ final class Ziteh_Elementor_Plugin {
 		}
 		$message = sprintf(
 			/* translators: %s: minimum Elementor version */
-			esc_html__( 'پلاگین «ویجت‌های زیته» به المنتور نسخه %s یا بالاتر نیاز دارد.', 'ziteh' ),
+			esc_html__( 'افزونه «هسته زیته» به المنتور نسخه %s یا بالاتر نیاز دارد.', 'ziteh' ),
 			ZITEH_EL_MIN_ELEMENTOR
 		);
 		printf( '<div class="notice notice-warning is-dismissible"><p>%s</p></div>', esc_html( $message ) );
@@ -163,7 +168,7 @@ final class Ziteh_Elementor_Plugin {
 		}
 		$message = sprintf(
 			/* translators: %s: minimum PHP version */
-			esc_html__( 'پلاگین «ویجت‌های زیته» به PHP نسخه %s یا بالاتر نیاز دارد.', 'ziteh' ),
+			esc_html__( 'افزونه «هسته زیته» به PHP نسخه %s یا بالاتر نیاز دارد.', 'ziteh' ),
 			ZITEH_EL_MIN_PHP
 		);
 		printf( '<div class="notice notice-warning is-dismissible"><p>%s</p></div>', esc_html( $message ) );

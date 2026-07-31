@@ -37,6 +37,11 @@ class Ziteh_Widgets_Manager {
 		'categories',
 		'routine',
 		'products',
+		'single-product',
+		'product-details',
+		'related-products',
+		'product-reviews',
+		'store-services',
 		'offers',
 		'quiz',
 		'brands',
@@ -99,9 +104,17 @@ class Ziteh_Widgets_Manager {
 	 */
 	public function register_category( $elements_manager ) {
 		$elements_manager->add_category(
+			'ziteh-product-page',
+			array(
+				'title' => esc_html__( 'محصول تکی زیته', 'ziteh' ),
+				'icon'  => 'eicon-single-product',
+			)
+		);
+
+		$elements_manager->add_category(
 			'ziteh',
 			array(
-				'title' => esc_html__( 'زیته', 'ziteh' ),
+				'title' => esc_html__( 'هسته زیته', 'ziteh' ),
 				'icon'  => 'eicon-leaf',
 			)
 		);
@@ -111,19 +124,25 @@ class Ziteh_Widgets_Manager {
 	 * Register shared frontend/editor styles (fonts + widgets stylesheet).
 	 */
 	public function enqueue_styles() {
-		wp_enqueue_style(
+		$external_font = ! class_exists( 'Ziteh_Settings' ) || Ziteh_Settings::feature_enabled( 'external_font' );
+		wp_register_style(
 			'ziteh-fonts',
-			ZITEH_EL_URL . 'assets/fonts/vazirmatn.css',
+			$external_font ? ZITEH_EL_URL . 'assets/fonts/vazirmatn.css' : false,
 			array(),
 			ZITEH_EL_VERSION
 		);
 
-		wp_enqueue_style(
+		wp_register_style(
 			'ziteh-widgets',
 			ZITEH_EL_URL . 'assets/css/ziteh-widgets.css',
 			array( 'ziteh-fonts' ),
 			ZITEH_EL_VERSION
 		);
+
+		if ( $this->should_load_assets() ) {
+			wp_enqueue_style( 'ziteh-fonts' );
+			wp_enqueue_style( 'ziteh-widgets' );
+		}
 	}
 
 	/**
@@ -144,6 +163,9 @@ class Ziteh_Widgets_Manager {
 	 * Make sure the widgets JS is available on the front-end too.
 	 */
 	public function enqueue_frontend_scripts() {
+		if ( ! $this->should_load_assets() ) {
+			return;
+		}
 		wp_enqueue_script(
 			'ziteh-widgets',
 			ZITEH_EL_URL . 'assets/js/ziteh-widgets.js',
@@ -151,6 +173,38 @@ class Ziteh_Widgets_Manager {
 			ZITEH_EL_VERSION,
 			true
 		);
+	}
+
+	/**
+	 * Decide whether shared assets should be loaded before Elementor discovers a
+	 * widget dependency. Smart mode covers normal pages while widget-level
+	 * dependencies remain the safety net for Theme Builder templates.
+	 *
+	 * @return bool
+	 */
+	private function should_load_assets() {
+		if ( is_admin() || ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->editor->is_edit_mode() ) ) {
+			return true;
+		}
+
+		$settings = class_exists( 'Ziteh_Settings' ) ? Ziteh_Settings::get() : array( 'asset_mode' => 'global' );
+		if ( 'global' === ( isset( $settings['asset_mode'] ) ? $settings['asset_mode'] : 'global' ) ) {
+			return true;
+		}
+
+		if ( function_exists( 'is_product' ) && is_product() ) {
+			return true;
+		}
+
+		$post_id = get_queried_object_id();
+		if ( $post_id ) {
+			$data = (string) get_post_meta( $post_id, '_elementor_data', true );
+			if ( false !== strpos( $data, 'ziteh-' ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

@@ -298,14 +298,48 @@
 		if (!menu) {
 			return;
 		}
+
+		function setOpen(open) {
+			menu.classList.toggle('is-open', open);
+			burger.classList.toggle('is-open', open);
+			burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+		}
+
 		burger.addEventListener('click', function () {
-			menu.classList.toggle('is-open');
+			setOpen(!menu.classList.contains('is-open'));
+		});
+
+		menu.addEventListener('click', function (event) {
+			if (event.target.closest('a')) {
+				setOpen(false);
+			}
+		});
+
+		document.addEventListener('click', function (event) {
+			if (!header.contains(event.target)) {
+				setOpen(false);
+			}
+		});
+
+		document.addEventListener('keydown', function (event) {
+			if ('Escape' === event.key && menu.classList.contains('is-open')) {
+				setOpen(false);
+				burger.focus();
+			}
+		});
+
+		window.addEventListener('resize', function () {
+			if (window.innerWidth > 860) {
+				setOpen(false);
+			}
 		});
 	}
 
 	/* ===================== v2: shell (drawer / modal / search) ============== */
 
 	var DATA = window.zitehData || {};
+	var FEATURES = DATA.features || {};
+	function enabled(name) { return FEATURES[name] !== false; }
 
 	/** Show the shared dimming overlay. */
 	function showOverlay() {
@@ -476,7 +510,7 @@
 			// SVG/markup nesting the page inside a wish <button>, which would
 			// otherwise make every link match [data-ziteh-wish].
 			if (e.target.closest('a[href]')) { return; }
-			var btn = e.target.closest('.ziteh-product-card__wish[data-ziteh-wish]');
+			var btn = e.target.closest('.ziteh-product-card__wish[data-ziteh-wish],.ziteh-sp__wish[data-ziteh-wish]');
 			if (!btn) { return; }
 			e.preventDefault();
 			var id = btn.getAttribute('data-ziteh-wish');
@@ -576,7 +610,7 @@
 		function loadProducts() {
 			var wrap = root.querySelector('[data-quiz-products-wrap]');
 			var grid = root.querySelector('[data-quiz-products]');
-			if (!wrap || !grid || !DATA.ajaxUrl || DATA.hasWc === false) { return; }
+			if (!wrap || !grid || !DATA.ajaxUrl || DATA.hasWc === false || !enabled('quizProducts')) { return; }
 
 			var chosen = cats.filter(function (c) { return c; });
 			var count = root.getAttribute('data-quiz-count') || '4';
@@ -726,6 +760,214 @@
 		}
 	}
 
+	/** Advanced single-product gallery, tabs and WooCommerce quantity inputs. */
+	function initSingleProduct(root) {
+		if (root.dataset.zitehSingleProductReady === '1') { return; }
+		root.dataset.zitehSingleProductReady = '1';
+
+		function showSlide(index) {
+			root.querySelectorAll('[data-ziteh-sp-slide]').forEach(function (slide) {
+				var active = slide.getAttribute('data-ziteh-sp-slide') === index;
+				slide.classList.toggle('is-active', active);
+				slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+			});
+			root.querySelectorAll('[data-ziteh-sp-thumb]').forEach(function (thumb) {
+				var active = thumb.getAttribute('data-ziteh-sp-thumb') === index;
+				thumb.classList.toggle('is-active', active);
+				thumb.setAttribute('aria-selected', active ? 'true' : 'false');
+				thumb.setAttribute('tabindex', active ? '0' : '-1');
+			});
+		}
+
+		function moveSlide(direction) {
+			var slides = Array.prototype.slice.call(root.querySelectorAll('[data-ziteh-sp-slide]'));
+			if (slides.length < 2) { return; }
+			var current = slides.findIndex(function (slide) { return slide.classList.contains('is-active'); });
+			var next = (Math.max(0, current) + direction + slides.length) % slides.length;
+			showSlide(slides[next].getAttribute('data-ziteh-sp-slide'));
+		}
+
+		function showPanel(name) {
+			root.querySelectorAll('[data-ziteh-sp-tab]').forEach(function (tab) {
+				var active = tab.getAttribute('data-ziteh-sp-tab') === name;
+				tab.classList.toggle('is-active', active);
+				tab.setAttribute('aria-selected', active ? 'true' : 'false');
+				tab.setAttribute('tabindex', active ? '0' : '-1');
+			});
+			root.querySelectorAll('[data-ziteh-sp-panel]').forEach(function (panel) {
+				var active = panel.getAttribute('data-ziteh-sp-panel') === name;
+				panel.classList.toggle('is-active', active);
+				panel.hidden = !active;
+			});
+		}
+
+		root.addEventListener('click', function (event) {
+			if (event.target.closest('[data-ziteh-sp-prev]')) {
+				moveSlide(-1);
+				return;
+			}
+
+			if (event.target.closest('[data-ziteh-sp-next]')) {
+				moveSlide(1);
+				return;
+			}
+
+			var thumb = event.target.closest('[data-ziteh-sp-thumb]');
+			if (thumb) {
+				showSlide(thumb.getAttribute('data-ziteh-sp-thumb'));
+				return;
+			}
+
+			var tab = event.target.closest('[data-ziteh-sp-tab]');
+			if (tab) {
+				showPanel(tab.getAttribute('data-ziteh-sp-tab'));
+				return;
+			}
+
+			var reviewLink = event.target.closest('[data-ziteh-sp-reviews-link]');
+			if (reviewLink) {
+				showPanel('reviews');
+			}
+
+			var quantityButton = event.target.closest('[data-ziteh-sp-qty]');
+			if (quantityButton) {
+				var quantity = quantityButton.closest('.quantity');
+				var input = quantity && quantity.querySelector('input.qty');
+				if (!input) { return; }
+				var step = parseFloat(input.getAttribute('step')) || 1;
+				var min = parseFloat(input.getAttribute('min'));
+				var max = parseFloat(input.getAttribute('max'));
+				var value = parseFloat(input.value) || (isNaN(min) ? 1 : min);
+				value += quantityButton.getAttribute('data-ziteh-sp-qty') === 'plus' ? step : -step;
+				if (!isNaN(min)) { value = Math.max(min, value); }
+				if (!isNaN(max)) { value = Math.min(max, value); }
+				input.value = value;
+				input.dispatchEvent(new Event('input', { bubbles: true }));
+				input.dispatchEvent(new Event('change', { bubbles: true }));
+			}
+		});
+
+		root.querySelectorAll('.quantity input.qty').forEach(function (input) {
+			var quantity = input.closest('.quantity');
+			if (!quantity || quantity.dataset.zitehSpQtyReady === '1') { return; }
+			quantity.dataset.zitehSpQtyReady = '1';
+			var minus = document.createElement('button');
+			var plus = document.createElement('button');
+			minus.type = plus.type = 'button';
+			minus.className = plus.className = 'ziteh-sp__qty-btn';
+			minus.setAttribute('data-ziteh-sp-qty', 'minus');
+			plus.setAttribute('data-ziteh-sp-qty', 'plus');
+			minus.setAttribute('aria-label', 'کاهش تعداد');
+			plus.setAttribute('aria-label', 'افزایش تعداد');
+			minus.textContent = '−';
+			plus.textContent = '+';
+			quantity.insertBefore(minus, input);
+			quantity.appendChild(plus);
+		});
+
+		root.querySelectorAll('.single_add_to_cart_button').forEach(function (button) {
+			if (button.dataset.zitehSpIconReady === '1') { return; }
+			button.dataset.zitehSpIconReady = '1';
+			var icon = document.createElement('i');
+			icon.className = 'fas fa-shopping-bag';
+			icon.setAttribute('aria-hidden', 'true');
+			button.insertBefore(icon, button.firstChild);
+		});
+
+		var thumbs = Array.prototype.slice.call(root.querySelectorAll('[data-ziteh-sp-thumb]'));
+		thumbs.forEach(function (thumb, index) {
+			thumb.addEventListener('keydown', function (event) {
+				if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') { return; }
+				event.preventDefault();
+				var direction = event.key === 'ArrowLeft' ? 1 : -1;
+				var next = thumbs[(index + direction + thumbs.length) % thumbs.length];
+				showSlide(next.getAttribute('data-ziteh-sp-thumb'));
+				next.focus();
+			});
+		});
+
+		var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-ziteh-sp-tab]'));
+		tabs.forEach(function (tab, index) {
+			tab.addEventListener('keydown', function (event) {
+				if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') { return; }
+				event.preventDefault();
+				var direction = event.key === 'ArrowLeft' ? 1 : -1;
+				var next = tabs[(index + direction + tabs.length) % tabs.length];
+				showPanel(next.getAttribute('data-ziteh-sp-tab'));
+				next.focus();
+			});
+		});
+	}
+
+	/** Accessible product-details tabs with RTL keyboard navigation. */
+	function initProductDetails(root) {
+		if (root.dataset.zitehProductDetailsReady === '1') { return; }
+		root.dataset.zitehProductDetailsReady = '1';
+
+		var tabs = Array.prototype.slice.call(root.querySelectorAll('[data-ziteh-pd-tab]'));
+
+		function activate(name, focusTab) {
+			tabs.forEach(function (tab) {
+				var active = tab.getAttribute('data-ziteh-pd-tab') === name;
+				tab.classList.toggle('is-active', active);
+				tab.setAttribute('aria-selected', active ? 'true' : 'false');
+				tab.setAttribute('tabindex', active ? '0' : '-1');
+				if (active && focusTab) { tab.focus(); }
+			});
+			root.querySelectorAll('[data-ziteh-pd-panel]').forEach(function (panel) {
+				var active = panel.getAttribute('data-ziteh-pd-panel') === name;
+				panel.classList.toggle('is-active', active);
+				panel.hidden = !active;
+			});
+		}
+
+		root.addEventListener('click', function (event) {
+			var tab = event.target.closest('[data-ziteh-pd-tab]');
+			if (tab && root.contains(tab)) { activate(tab.getAttribute('data-ziteh-pd-tab'), false); }
+		});
+
+		tabs.forEach(function (tab, index) {
+			tab.addEventListener('keydown', function (event) {
+				if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Home' && event.key !== 'End') { return; }
+				event.preventDefault();
+				var nextIndex = index;
+				if (event.key === 'Home') { nextIndex = 0; }
+				else if (event.key === 'End') { nextIndex = tabs.length - 1; }
+				else { nextIndex = (index + (event.key === 'ArrowLeft' ? 1 : -1) + tabs.length) % tabs.length; }
+				activate(tabs[nextIndex].getAttribute('data-ziteh-pd-tab'), true);
+			});
+		});
+	}
+
+	/** Compact related-products carousel with mouse, touch and keyboard control. */
+	function initRelatedProducts(root) {
+		if (root.dataset.zitehRelatedProductsReady === '1') { return; }
+		root.dataset.zitehRelatedProductsReady = '1';
+		var viewport = root.querySelector('[data-ziteh-rp-viewport]');
+		if (!viewport) { return; }
+		var stepCount = Math.max(1, parseInt(root.getAttribute('data-ziteh-rp-step'), 10) || 1);
+
+		function move(direction) {
+			var card = viewport.querySelector('.ziteh-rp__card');
+			if (!card) { return; }
+			var track = viewport.querySelector('.ziteh-rp__track');
+			var gap = track ? parseFloat(window.getComputedStyle(track).columnGap || window.getComputedStyle(track).gap) || 0 : 0;
+			var amount = (card.getBoundingClientRect().width + gap) * stepCount;
+			viewport.scrollBy({ left: direction * -amount, behavior: 'smooth' });
+		}
+
+		root.addEventListener('click', function (event) {
+			if (event.target.closest('[data-ziteh-rp-prev]')) { move(-1); }
+			if (event.target.closest('[data-ziteh-rp-next]')) { move(1); }
+		});
+
+		viewport.addEventListener('keydown', function (event) {
+			if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') { return; }
+			event.preventDefault();
+			move(event.key === 'ArrowLeft' ? 1 : -1);
+		});
+	}
+
 	/**
 	 * (Re)initialise every widget within a scope.
 	 *
@@ -750,15 +992,17 @@
 		safe(function () { scope.querySelectorAll('[data-ziteh-routine]').forEach(function (n) { safe(initRoutine, n); }); });
 		safe(function () { scope.querySelectorAll('[data-ziteh-burger]').forEach(function (n) { safe(initBurger, n); }); });
 		safe(function () { scope.querySelectorAll('[data-ziteh-quiz]').forEach(function (n) { safe(initQuiz, n); }); });
+		safe(function () { scope.querySelectorAll('[data-ziteh-single-product]').forEach(function (n) { safe(initSingleProduct, n); }); });
+		safe(function () { scope.querySelectorAll('[data-ziteh-product-details]').forEach(function (n) { safe(initProductDetails, n); }); });
+		safe(function () { scope.querySelectorAll('[data-ziteh-related-products]').forEach(function (n) { safe(initRelatedProducts, n); }); });
 
 		// Document-level features (run once).
-		safe(initDrawer);
-		safe(initQuickView);
-		safe(initQvControls);
-		safe(initSearch);
-		safe(initWishlist);
-		safe(initStickyHeader);
-		safe(initReveal);
+		if (enabled('cartDrawer')) { safe(initDrawer); }
+		if (enabled('quickview')) { safe(initQuickView); safe(initQvControls); }
+		if (enabled('liveSearch')) { safe(initSearch); }
+		if (enabled('wishlist')) { safe(initWishlist); }
+		if (enabled('stickyHeader')) { safe(initStickyHeader); }
+		if (enabled('animations')) { safe(initReveal); }
 	}
 
 	// Global: overlay click + Esc close the shell.
@@ -783,7 +1027,7 @@
 			if (!window.elementorFrontend || !window.elementorFrontend.hooks) {
 				return;
 			}
-			var slugs = ['ziteh-hero', 'ziteh-categories', 'ziteh-products', 'ziteh-offers', 'ziteh-routine', 'ziteh-header', 'ziteh-quiz', 'ziteh-features'];
+			var slugs = ['ziteh-hero', 'ziteh-categories', 'ziteh-products', 'ziteh-single-product', 'ziteh-offers', 'ziteh-routine', 'ziteh-header', 'ziteh-quiz', 'ziteh-features'];
 			slugs.forEach(function (slug) {
 				window.elementorFrontend.hooks.addAction(
 					'frontend/element_ready/' + slug + '.default',

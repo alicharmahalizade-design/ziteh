@@ -1,7 +1,7 @@
 <?php
 /**
- * Header widget — the centred logo with the primary navigation menu on the
- * right and left (RTL), matching the design's main header row.
+ * Header widget — the logo on the right with the primary navigation menu
+ * following it in RTL, matching the design's main header row.
  *
  * @package Ziteh_Elementor
  */
@@ -216,11 +216,12 @@ class Ziteh_Header_Widget extends Ziteh_Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		$logo_url = ! empty( $settings['logo_url']['url'] ) ? $settings['logo_url']['url'] : '#';
+		$menu_id  = 'ziteh-menu-' . $this->get_id();
 		?>
 		<header class="ziteh-header">
 			<div class="ziteh-container ziteh-header__inner">
 
-				<nav class="ziteh-header__menu" aria-label="<?php esc_attr_e( 'منوی اصلی', 'ziteh' ); ?>">
+				<nav id="<?php echo esc_attr( $menu_id ); ?>" class="ziteh-header__menu" aria-label="<?php esc_attr_e( 'منوی اصلی', 'ziteh' ); ?>">
 					<ul>
 						<?php foreach ( $settings['menu_items'] as $item ) : ?>
 							<?php
@@ -244,7 +245,7 @@ class Ziteh_Header_Widget extends Ziteh_Widget_Base {
 					<?php endif; ?>
 				</a>
 
-				<button class="ziteh-header__burger" type="button" aria-label="<?php esc_attr_e( 'منو', 'ziteh' ); ?>" data-ziteh-burger>
+				<button class="ziteh-header__burger" type="button" aria-label="<?php esc_attr_e( 'منو', 'ziteh' ); ?>" aria-controls="<?php echo esc_attr( $menu_id ); ?>" aria-expanded="false" data-ziteh-burger>
 					<span></span><span></span><span></span>
 				</button>
 

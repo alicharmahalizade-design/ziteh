@@ -58,11 +58,22 @@ class Ziteh_Hero_Widget extends Ziteh_Widget_Base {
 		$repeater->add_control(
 			'image',
 			array(
-				'label'   => esc_html__( 'تصویر', 'ziteh' ),
+				'label'       => esc_html__( 'تصویر دسکتاپ', 'ziteh' ),
 				'type'    => Controls_Manager::MEDIA,
 				'default' => array(
 					'url' => \Elementor\Utils::get_placeholder_image_src(),
 				),
+				'description' => esc_html__( 'اندازه پیشنهادی: ۱۹۲۰ × ۴۶۰ پیکسل', 'ziteh' ),
+			)
+		);
+
+		$repeater->add_control(
+			'mobile_image',
+			array(
+				'label'       => esc_html__( 'تصویر موبایل (اختیاری)', 'ziteh' ),
+				'type'        => Controls_Manager::MEDIA,
+				'default'     => array( 'url' => '' ),
+				'description' => esc_html__( 'اندازه پیشنهادی: ۷۵۰ × ۴۴۰ پیکسل؛ در صورت خالی‌بودن، تصویر دسکتاپ استفاده می‌شود.', 'ziteh' ),
 			)
 		);
 
@@ -174,6 +185,14 @@ class Ziteh_Hero_Widget extends Ziteh_Widget_Base {
 					'unit' => 'px',
 					'size' => 460,
 				),
+				'tablet_default' => array(
+					'unit' => 'px',
+					'size' => 360,
+				),
+				'mobile_default' => array(
+					'unit' => 'px',
+					'size' => 220,
+				),
 				'selectors'  => array(
 					'{{WRAPPER}} .ziteh-hero-slider' => '--ziteh-hero-h: {{SIZE}}{{UNIT}};',
 				),
@@ -250,6 +269,7 @@ class Ziteh_Hero_Widget extends Ziteh_Widget_Base {
 					$target  = ! empty( $slide['link']['is_external'] ) ? ' target="_blank"' : '';
 					$nofollow = ! empty( $slide['link']['nofollow'] ) ? ' rel="nofollow"' : '';
 					$img_url = ! empty( $slide['image']['url'] ) ? $slide['image']['url'] : '';
+					$mobile_img_url = ! empty( $slide['mobile_image']['url'] ) ? $slide['mobile_image']['url'] : '';
 					$alt     = ! empty( $slide['alt'] ) ? $slide['alt'] : '';
 
 					if ( ! $img_url ) {
@@ -261,7 +281,12 @@ class Ziteh_Hero_Widget extends Ziteh_Widget_Base {
 					$attrs = $url ? ' href="' . esc_url( $url ) . '"' . $target . $nofollow : '';
 					?>
 					<<?php echo esc_html( $tag ); ?> class="ziteh-hero-slide<?php echo esc_attr( $active ); ?>"<?php echo $attrs; // phpcs:ignore WordPress.Security.EscapeOutput ?>>
-						<img src="<?php echo esc_url( $img_url ); ?>" alt="<?php echo esc_attr( $alt ); ?>" loading="<?php echo 0 === $i ? 'eager' : 'lazy'; ?>">
+						<picture>
+							<?php if ( $mobile_img_url ) : ?>
+								<source media="(max-width: 767px)" srcset="<?php echo esc_url( $mobile_img_url ); ?>">
+							<?php endif; ?>
+							<img src="<?php echo esc_url( $img_url ); ?>" alt="<?php echo esc_attr( $alt ); ?>" loading="<?php echo 0 === $i ? 'eager' : 'lazy'; ?>" decoding="async">
+						</picture>
 					</<?php echo esc_html( $tag ); ?>>
 					<?php
 					$i++;

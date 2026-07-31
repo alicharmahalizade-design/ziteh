@@ -76,9 +76,26 @@ class Ziteh_Ajax {
 	}
 
 	/**
+	 * Stop a disabled public feature before it performs any query work.
+	 *
+	 * @param string $feature Settings key.
+	 */
+	private function require_feature( $feature ) {
+		$shell_features = array( 'quickview', 'live_search', 'cart_drawer' );
+		$disabled       = class_exists( 'Ziteh_Settings' ) && ! Ziteh_Settings::feature_enabled( $feature );
+		if ( class_exists( 'Ziteh_Settings' ) && in_array( $feature, $shell_features, true ) && ! Ziteh_Settings::shell_enabled() ) {
+			$disabled = true;
+		}
+		if ( $disabled ) {
+			wp_send_json_error( array( 'message' => __( 'این قابلیت در هسته زیته غیرفعال است.', 'ziteh' ) ), 403 );
+		}
+	}
+
+	/**
 	 * Quick View: return the modal body markup for a product.
 	 */
 	public function quickview() {
+		$this->require_feature( 'quickview' );
 		$this->check_nonce();
 
 		if ( ! $this->wc() ) {
@@ -198,6 +215,7 @@ class Ziteh_Ajax {
 	 * Live search: return a small list of matching products.
 	 */
 	public function search() {
+		$this->require_feature( 'live_search' );
 		$this->check_nonce();
 
 		$term = isset( $_REQUEST['q'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['q'] ) ) : '';
@@ -217,7 +235,7 @@ class Ziteh_Ajax {
 			array(
 				'status' => 'publish',
 				'limit'  => 6,
-				's'      => $term,
+				'name'   => $term,
 			)
 		);
 
@@ -287,6 +305,7 @@ class Ziteh_Ajax {
 	 * Quiz recommendations: return product cards for the chosen categories.
 	 */
 	public function quiz_products() {
+		$this->require_feature( 'quiz_products' );
 		$this->check_nonce();
 
 		if ( ! $this->wc() || ! function_exists( 'wc_get_products' ) ) {

@@ -3,7 +3,7 @@
  * One-click template importer.
  *
  * Adds an admin screen (under Elementor) with a single button that builds a
- * ready-made "صفحه اصلی زیته" page from templates/ziteh-home.json — all 14
+ * ready-made "صفحه اصلی زیته" page from templates/ziteh-home.json — all 17
  * widgets pre-arranged in order — so the user doesn't have to place them by
  * hand. The created page is a full Elementor page in canvas layout.
  *
@@ -85,7 +85,7 @@ class Ziteh_Template_Importer {
 
 			<?php if ( 'success' === $notice ) : ?>
 				<div class="notice notice-success">
-					<p><?php esc_html_e( 'صفحه اصلی زیته با موفقیت ساخته شد. هر ۱۴ سکشن به ترتیب طرح چیده شده‌اند.', 'ziteh' ); ?></p>
+					<p><?php esc_html_e( 'صفحه اصلی زیته با موفقیت ساخته شد. هر ۱۷ سکشن به ترتیب طرح چیده شده‌اند.', 'ziteh' ); ?></p>
 					<p>
 						<?php if ( $edit_url ) : ?>
 							<a class="button button-primary" href="<?php echo esc_url( $edit_url ); ?>"><?php esc_html_e( 'ویرایش با المنتور', 'ziteh' ); ?></a>

@@ -56,11 +56,25 @@ class Ziteh_Cache {
 		add_action( 'admin_init', array( $this, 'maybe_purge_on_update' ) );
 
 		// Auto-purge when Ziteh settings are saved.
-		add_action( 'update_option_ziteh_settings', array( self::class, 'purge' ) );
-		add_action( 'add_option_ziteh_settings', array( self::class, 'purge' ) );
+		add_action( 'update_option_ziteh_settings', array( $this, 'maybe_purge_on_settings' ), 10, 2 );
+		add_action( 'add_option_ziteh_settings', array( $this, 'maybe_purge_on_settings' ), 10, 2 );
 
 		// Manual button handler.
 		add_action( 'admin_post_' . self::ACTION, array( $this, 'handle_manual' ) );
+	}
+
+	/**
+	 * Purge after a settings save only when the performance preference allows it.
+	 *
+	 * @param mixed $old_value Previous option value (or option name on add hook).
+	 * @param mixed $new_value New option value.
+	 */
+	public function maybe_purge_on_settings( $old_value = null, $new_value = null ) {
+		unset( $old_value );
+		$settings = is_array( $new_value ) ? $new_value : get_option( 'ziteh_settings', array() );
+		if ( ! isset( $settings['auto_cache_purge'] ) || 'off' !== $settings['auto_cache_purge'] ) {
+			self::purge();
+		}
 	}
 
 	/**

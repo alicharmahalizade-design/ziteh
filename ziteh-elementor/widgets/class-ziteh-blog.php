@@ -238,14 +238,17 @@ class Ziteh_Blog_Widget extends Ziteh_Widget_Base {
 				'title_field' => '{{{ post_title }}}',
 				'default'     => array(
 					array(
+						'post_image' => array( 'url' => \Elementor\Utils::get_placeholder_image_src() ),
 						'post_cat'   => esc_html__( 'مراقبت پوست', 'ziteh' ),
 						'post_title' => esc_html__( '۵ نکته برای داشتن پوستی سالم در فصل تابستان', 'ziteh' ),
 					),
 					array(
+						'post_image' => array( 'url' => \Elementor\Utils::get_placeholder_image_src() ),
 						'post_cat'   => esc_html__( 'مراقبت مو', 'ziteh' ),
 						'post_title' => esc_html__( 'چگونه شامپو مناسب موهای خود را انتخاب کنیم؟', 'ziteh' ),
 					),
 					array(
+						'post_image' => array( 'url' => \Elementor\Utils::get_placeholder_image_src() ),
 						'post_cat'   => esc_html__( 'سبک زندگی', 'ziteh' ),
 						'post_title' => esc_html__( 'جوانِ کالو، کلید زیبایی و سلامت', 'ziteh' ),
 					),
@@ -385,7 +388,10 @@ class Ziteh_Blog_Widget extends Ziteh_Widget_Base {
 			$url = ! empty( $post['post_url']['url'] ) ? $post['post_url']['url'] : '#';
 			$this->card(
 				$url,
-				! empty( $post['post_image']['url'] ) ? '<img src="' . esc_url( $post['post_image']['url'] ) . '" alt="' . esc_attr( wp_strip_all_tags( $post['post_title'] ) ) . '">' : '',
+				$this->get_manual_image_html(
+					isset( $post['post_image'] ) ? $post['post_image'] : array(),
+					$post['post_title']
+				),
 				$post['post_cat'],
 				$post['post_title'],
 				$settings['read_more_text']
@@ -424,10 +430,7 @@ class Ziteh_Blog_Widget extends Ziteh_Widget_Base {
 		while ( $query->have_posts() ) {
 			$query->the_post();
 
-			$thumb = '';
-			if ( has_post_thumbnail() ) {
-				$thumb = get_the_post_thumbnail( get_the_ID(), 'medium_large' );
-			}
+			$thumb = $this->get_post_image_html( get_the_ID(), get_the_title() );
 
 			$cat_name = '';
 			$cats     = get_the_category();
@@ -447,6 +450,64 @@ class Ziteh_Blog_Widget extends Ziteh_Widget_Base {
 			);
 		}
 		wp_reset_postdata();
+	}
+
+	/**
+	 * Build responsive image markup for a manually configured article.
+	 *
+	 * @param array  $media Elementor media value.
+	 * @param string $title Article title used as fallback alt text.
+	 * @return string
+	 */
+	private function get_manual_image_html( $media, $title ) {
+		$attachment_id = ! empty( $media['id'] ) ? (int) $media['id'] : 0;
+		$attributes    = array(
+			'alt'      => wp_strip_all_tags( $title ),
+			'loading'  => 'lazy',
+			'decoding' => 'async',
+		);
+
+		if ( $attachment_id ) {
+			$image = wp_get_attachment_image( $attachment_id, 'medium_large', false, $attributes );
+			if ( $image ) {
+				return $image;
+			}
+		}
+
+		$url = ! empty( $media['url'] ) ? $media['url'] : \Elementor\Utils::get_placeholder_image_src();
+		return '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $attributes['alt'] ) . '" loading="lazy" decoding="async">';
+	}
+
+	/**
+	 * Resolve a WordPress article image with sensible fallbacks.
+	 *
+	 * Priority: featured image → first image in post content → placeholder.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $title   Post title used as fallback alt text.
+	 * @return string
+	 */
+	private function get_post_image_html( $post_id, $title ) {
+		$thumbnail_id = get_post_thumbnail_id( $post_id );
+		$attributes   = array(
+			'alt'      => wp_strip_all_tags( $title ),
+			'loading'  => 'lazy',
+			'decoding' => 'async',
+		);
+
+		if ( $thumbnail_id ) {
+			$image = wp_get_attachment_image( $thumbnail_id, 'medium_large', false, $attributes );
+			if ( $image ) {
+				return $image;
+			}
+		}
+
+		$content = (string) get_post_field( 'post_content', $post_id );
+		if ( preg_match( '/<img[^>]+src=["\']([^"\']+)["\']/i', $content, $match ) ) {
+			return '<img src="' . esc_url( $match[1] ) . '" alt="' . esc_attr( $attributes['alt'] ) . '" loading="lazy" decoding="async">';
+		}
+
+		return '<img src="' . esc_url( \Elementor\Utils::get_placeholder_image_src() ) . '" alt="' . esc_attr( $attributes['alt'] ) . '" loading="lazy" decoding="async">';
 	}
 
 	/**
