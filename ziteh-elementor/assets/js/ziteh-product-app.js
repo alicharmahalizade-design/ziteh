@@ -17,6 +17,14 @@
 (function () {
 	'use strict';
 
+	// The plugin normally adds this class through body_class(). A few themes
+	// and page builders print their own <body> tag without calling it, so this
+	// script — which only loads when the feature is on — makes sure the class
+	// is there. The base layout never depends on it; only the enhancements do.
+	if (document.body && !document.body.classList.contains('ziteh-app')) {
+		document.body.classList.add('ziteh-app');
+	}
+
 	var TOUCH = window.matchMedia('(max-width: 767px)');
 	var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)');
 

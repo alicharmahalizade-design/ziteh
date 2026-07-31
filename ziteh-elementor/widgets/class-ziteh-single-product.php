@@ -189,6 +189,7 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 		$this->add_responsive_control( 'column_gap', array( 'label' => esc_html__( 'فاصله ستون‌ها', 'ziteh' ), 'type' => Controls_Manager::SLIDER, 'range' => array( 'px' => array( 'min' => 8, 'max' => 72 ) ), 'default' => array( 'size' => 38, 'unit' => 'px' ), 'selectors' => array( '{{WRAPPER}} .ziteh-sp' => '--ziteh-sp-gap: {{SIZE}}{{UNIT}};' ) ) );
 		$this->add_control( 'image_ratio', array( 'label' => esc_html__( 'نسبت تصویر اصلی', 'ziteh' ), 'type' => Controls_Manager::SELECT, 'default' => '1 / 1.05', 'options' => array( '1 / 1.05' => esc_html__( 'مطابق طرح', 'ziteh' ), '1 / 1' => esc_html__( 'مربع', 'ziteh' ), '4 / 5' => esc_html__( 'عمودی', 'ziteh' ), '16 / 13' => esc_html__( 'افقی', 'ziteh' ) ), 'selectors' => array( '{{WRAPPER}} .ziteh-sp' => '--ziteh-sp-ratio: {{VALUE}};' ) ) );
 		$this->add_control( 'image_fit', array( 'label' => esc_html__( 'نحوه نمایش تصویر', 'ziteh' ), 'type' => Controls_Manager::SELECT, 'default' => 'cover', 'options' => array( 'cover' => esc_html__( 'پوشش کامل', 'ziteh' ), 'contain' => esc_html__( 'نمایش کامل محصول', 'ziteh' ) ), 'selectors' => array( '{{WRAPPER}} .ziteh-sp' => '--ziteh-sp-fit: {{VALUE}};' ) ) );
+		$this->add_control( 'clean_buy_card', array( 'label' => esc_html__( 'کارت خرید تمیز', 'ziteh' ), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => '', 'description' => esc_html__( 'افزودنی‌های افزونه‌های دیگر (جعبه فروشنده، نشان اعتماد، هشدار قیمت) را از داخل فرم افزودن به سبد حذف می‌کند تا کارت خرید دقیقاً مطابق طرح بماند. فقط روی مواردی اثر دارد که از هوک‌های استاندارد ووکامرس اضافه شده باشند.', 'ziteh' ) ) );
 		$this->add_control( 'show_app_bar', array( 'label' => esc_html__( 'نوار خرید چسبان موبایل', 'ziteh' ), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes', 'description' => esc_html__( 'در موبایل پس از رد شدن از دکمه خرید، یک نوار پایین صفحه ظاهر می‌شود.', 'ziteh' ) ) );
 		$this->add_control( 'sticky_purchase', array( 'label' => esc_html__( 'کارت خرید چسبان', 'ziteh' ), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes' ) );
 		$this->end_controls_section();
@@ -457,7 +458,9 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 							<?php
 							$button_filter = static function () use ( $settings ) { return $settings['add_to_cart_text']; };
 							add_filter( 'woocommerce_product_single_add_to_cart_text', $button_filter );
+							$suspended = 'yes' === $settings['clean_buy_card'] ? $this->suspend_cart_addons() : array();
 							woocommerce_template_single_add_to_cart();
+							$this->restore_cart_addons( $suspended );
 							remove_filter( 'woocommerce_product_single_add_to_cart_text', $button_filter );
 							?>
 						</div>
@@ -488,6 +491,62 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 		</article>
 		<?php
 		$product = $previous_product;
+	}
+
+	/**
+	 * Hooks other plugins use to inject markup into the add-to-cart form.
+	 *
+	 * The two `single_variation` hooks are deliberately absent: WooCommerce
+	 * itself renders the variation price and the add-to-cart button through
+	 * them, so clearing those would break variable products.
+	 *
+	 * @var string[]
+	 */
+	private static $cart_addon_hooks = array(
+		'woocommerce_before_add_to_cart_form',
+		'woocommerce_after_add_to_cart_form',
+		'woocommerce_before_add_to_cart_button',
+		'woocommerce_after_add_to_cart_button',
+		'woocommerce_before_add_to_cart_quantity',
+		'woocommerce_after_add_to_cart_quantity',
+	);
+
+	/**
+	 * Temporarily detach third-party additions to the add-to-cart form.
+	 *
+	 * Seller badges, trust boxes and price-alert widgets are added through these
+	 * hooks and frequently ship their own fixed-width container, which is what
+	 * pushes the reference buy card out of shape. This removes them for the
+	 * duration of the template call only — the callbacks are handed back
+	 * immediately afterwards, so nothing else on the page is affected.
+	 *
+	 * @return array<string, mixed> Detached callbacks, keyed by hook.
+	 */
+	private function suspend_cart_addons() {
+		global $wp_filter;
+		$suspended = array();
+
+		foreach ( self::$cart_addon_hooks as $hook ) {
+			if ( isset( $wp_filter[ $hook ] ) ) {
+				$suspended[ $hook ] = $wp_filter[ $hook ];
+				unset( $wp_filter[ $hook ] );
+			}
+		}
+
+		return $suspended;
+	}
+
+	/**
+	 * Put the detached callbacks back.
+	 *
+	 * @param array<string, mixed> $suspended Value returned by suspend_cart_addons().
+	 */
+	private function restore_cart_addons( $suspended ) {
+		global $wp_filter;
+
+		foreach ( $suspended as $hook => $callbacks ) {
+			$wp_filter[ $hook ] = $callbacks;
+		}
 	}
 
 	/**

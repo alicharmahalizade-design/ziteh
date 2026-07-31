@@ -532,6 +532,71 @@
 	font-size: 18px;
 }
 
+/* The shipping row is a disclosure whenever details are filled in. This layout
+   is unconditional because the markup is: the row must not depend on the
+   optional app layer being on. */
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping.is-collapsible {
+	display: block;
+	padding: 0;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping-head {
+	display: grid;
+	grid-template-columns: 34px minmax(0, 1fr) 20px;
+	align-items: center;
+	gap: 13px;
+	width: 100% !important;
+	padding: 15px 18px !important;
+	background: none !important;
+	text-align: right !important;
+	cursor: pointer;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping-head .ziteh-sp__shipping-chevron {
+	transition: transform .22s ease;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping.is-open .ziteh-sp__shipping-chevron {
+	transform: rotate(180deg);
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping-panel {
+	padding: 0 18px 15px;
+	color: #8a8d86;
+	font-size: 12.5px;
+	line-height: 2;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__shipping-panel[hidden] { display: none; }
+
+/* Gallery affordances also always render, so they are styled unconditionally.
+   The dots only become visible on the touch layout of the app layer. */
+.elementor-widget-ziteh-single-product .ziteh-sp__track {
+	position: absolute;
+	inset: 0;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__zoom {
+	position: absolute;
+	z-index: 5;
+	bottom: 14px;
+	inset-inline-start: 14px;
+	display: inline-grid;
+	place-items: center;
+	width: 38px;
+	height: 38px;
+	border: 1px solid rgba(51, 56, 48, .07) !important;
+	border-radius: 50% !important;
+	background: rgba(255, 255, 255, .92) !important;
+	color: #6f726a !important;
+	font-size: 17px;
+	backdrop-filter: blur(6px);
+	transition: transform .18s ease, background .2s ease;
+}
+
+.elementor-widget-ziteh-single-product .ziteh-sp__zoom:active { transform: scale(.9); }
+.elementor-widget-ziteh-single-product .ziteh-sp__dots { display: none; }
+
 .elementor-widget-ziteh-single-product .ziteh-sp__meta {
 	display: grid;
 	gap: 6px;
@@ -670,6 +735,38 @@
 	padding: 0;
 	border: 0;
 	background: none;
+}
+
+/* Third-party "buy box" plugins — the Persian seller/trust/price-alert ones in
+   particular — wrap the cart controls in a container of their own, often a
+   narrow fixed width. `width: 100%` on the button then resolves against that
+   container rather than the card, which is what squeezes the primary action
+   until its label wraps onto three lines.
+
+   Rather than guess at those plugins' class names, this stretches whatever
+   element happens to contain the cart controls. Anything else the plugin adds
+   keeps its own styling and stays where it is. */
+.elementor-widget-ziteh-single-product .ziteh-sp__buy form.cart :is(div, span, p, section, ul, li):has(.single_add_to_cart_button, .quantity, button[type="submit"]) {
+	display: block !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: none !important;
+	float: none !important;
+}
+
+/* Fallback for engines without :has() — covers the common single-wrapper case.
+   .quantity re-asserts display:flex from its own armoured rule below. */
+.elementor-widget-ziteh-single-product .ziteh-sp__buy form.cart > div,
+.elementor-widget-ziteh-single-product .ziteh-sp__buy form.cart > div > div {
+	width: 100% !important;
+	max-width: none !important;
+	float: none !important;
+}
+
+/* Long Persian labels must not break mid-phrase inside the button. */
+.elementor-widget-ziteh-single-product .ziteh-sp__buy .single_add_to_cart_button.single_add_to_cart_button {
+	overflow-wrap: normal;
+	word-break: keep-all;
 }
 
 /* Armoured selectors.
@@ -1889,33 +1986,6 @@ body.ziteh-app .elementor-widget-ziteh-store-services .ziteh-ss :where(a) {
    Swipeable gallery
    -------------------------------------------------------------------------- */
 
-body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__track {
-	position: absolute;
-	inset: 0;
-}
-
-body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__zoom {
-	position: absolute;
-	z-index: 5;
-	bottom: 14px;
-	inset-inline-start: 14px;
-	display: inline-grid;
-	place-items: center;
-	width: 38px;
-	height: 38px;
-	border: 1px solid rgba(51, 56, 48, .07) !important;
-	border-radius: 50% !important;
-	background: rgba(255, 255, 255, .92) !important;
-	color: #6f726a !important;
-	font-size: 17px;
-	backdrop-filter: blur(6px);
-	transition: transform .18s var(--ziteh-ease), background .2s ease;
-}
-
-body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__zoom:active { transform: scale(.9); }
-
-body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__dots { display: none; }
-
 /* --------------------------------------------------------------------------
    Fullscreen image viewer
    -------------------------------------------------------------------------- */
@@ -2036,6 +2106,8 @@ body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-inner {
 body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-price {
 	flex: 0 1 auto;
 	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	color: var(--ziteh-sp-heading);
 	font-size: 15px;
 	font-weight: 800;
@@ -2083,6 +2155,7 @@ body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-cta {
 	color: #fff !important;
 	font-size: 15px !important;
 	font-weight: 700 !important;
+	white-space: nowrap !important;
 	transition: transform .18s var(--ziteh-ease), filter .2s ease;
 }
 
@@ -2095,35 +2168,6 @@ body.ziteh-app.ziteh-sp-has-appbar { padding-bottom: calc(66px + var(--ziteh-saf
 /* --------------------------------------------------------------------------
    Shipping disclosure
    -------------------------------------------------------------------------- */
-
-body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping.is-collapsible { display: block; padding: 0; }
-
-body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping-head {
-	display: grid;
-	grid-template-columns: 34px minmax(0, 1fr) 20px;
-	align-items: center;
-	gap: 13px;
-	width: 100% !important;
-	padding: 15px 18px !important;
-	text-align: right !important;
-}
-
-body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping-chevron {
-	transition: transform .22s var(--ziteh-ease);
-}
-
-body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping.is-open .ziteh-sp__shipping-chevron {
-	transform: rotate(180deg);
-}
-
-body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping-panel {
-	padding: 0 18px 15px;
-	color: #8a8d86;
-	font-size: 12.5px;
-	line-height: 2;
-}
-
-body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping-panel[hidden] { display: none; }
 
 /* --------------------------------------------------------------------------
    Segmented tabs
