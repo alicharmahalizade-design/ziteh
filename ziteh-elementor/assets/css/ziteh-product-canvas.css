@@ -104,3 +104,41 @@ body.ziteh-product-canvas .woocommerce div.product > :where(.woocommerce-product
 	body.ziteh-product-canvas .elementor-location-single > .e-con,
 	body.ziteh-product-canvas main .elementor > .e-con { min-width: 0; }
 }
+
+/* ==========================================================================
+   Running on the Ziteh theme
+
+   The theme provides a clean shell of its own, so the neutralisation above has
+   nothing left to fight. Standing the overrides down hands that specificity
+   back to the site owner: an Elementor container width or padding set in the
+   panel now simply applies, instead of losing to an !important from here.
+   ========================================================================== */
+
+body.ziteh-product-canvas-native :where(.site-content, .content-area, .site-main, main#main, #primary),
+body.ziteh-product-canvas-native :where(.site-content, .content-area, .site-main, main#main, #primary, .container, .container-fluid):has(.elementor-location-single) {
+	width: auto !important;
+	max-width: none !important;
+	padding: 0 !important;
+	background: transparent !important;
+}
+
+body.ziteh-product-canvas-native .elementor-location-single > .e-con,
+body.ziteh-product-canvas-native main .elementor[data-elementor-type="product"] > .e-con,
+body.ziteh-product-canvas-native main .elementor[data-elementor-type="wp-post"] > .e-con {
+	--container-max-width: initial;
+	--content-width: initial;
+	--padding-top: initial;
+	--padding-right: initial;
+	--padding-bottom: initial;
+	--padding-left: initial;
+	--margin-top: initial;
+	--margin-right: initial;
+	--margin-bottom: initial;
+	--margin-left: initial;
+	--gap: initial;
+	width: auto !important;
+	max-width: none !important;
+	margin: revert !important;
+	padding: revert !important;
+	gap: revert !important;
+}

@@ -1,0 +1,18 @@
+/*
+Theme Name: زیته
+Theme URI: https://ziteh.com
+Author: Ziteh
+Author URI: https://ziteh.com
+Description: قالب اختصاصی فروشگاه بهداشتی زیته. برای کار با المنتور و افزونه «هسته زیته» ساخته شده: ساختار سبک، راست‌به‌چپ، سازگار با ووکامرس، و بدون استایل تحمیلی روی ویجت‌ها.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.7
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: ziteh-theme
+Tags: rtl-language-support, e-commerce, blog, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+
+این فایل فقط سربرگ قالب است. استایل واقعی در assets/css/theme.css قرار دارد
+تا در صف استایل‌ها نسخه‌دهی و کش‌شکنی درست انجام شود.
+*/

@@ -55,8 +55,28 @@ class Ziteh_Product_Canvas {
 		if ( $this->active() ) {
 			$classes[] = 'ziteh-product-canvas';
 			$classes[] = 'ziteh-product-canvas-v1';
+
+			if ( $this->native_theme() ) {
+				$classes[] = 'ziteh-product-canvas-native';
+			}
 		}
 		return array_unique( $classes );
+	}
+
+	/**
+	 * Whether the active theme is built for Ziteh.
+	 *
+	 * The Ziteh theme declares `ziteh-native` support. When it is active there is
+	 * no hostile page shell left to neutralise, so the canvas stands its
+	 * `!important` container overrides down. Those overrides are not free: they
+	 * burn specificity the site owner would otherwise have for their own
+	 * customisation, which is how the 3.8.0 width lock ended up disabling every
+	 * Elementor size control.
+	 *
+	 * @return bool
+	 */
+	private function native_theme() {
+		return current_theme_supports( 'ziteh-native' );
 	}
 
 	/** Load the final, high-priority canvas and remove known Woo block skins. */

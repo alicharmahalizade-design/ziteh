@@ -1,0 +1,633 @@
+/**
+ * Ziteh theme shell.
+ *
+ * The single rule this file follows: never style a bare element outside the
+ * theme's own components. No `button {}`, no `input {}`, no `p {}`, no
+ * `h1–h6 {}` at document level. Those are precisely the declarations that leaked
+ * out of the previous theme and forced the product widgets to carry a scoped
+ * reset and an armour of !important just to look right.
+ *
+ * Everything here is scoped to a `ziteh-` class, so Elementor widgets — Ziteh's
+ * or anyone else's — render exactly as their own stylesheets intend.
+ *
+ * Written RTL-first with logical properties, so no separate rtl.css is needed.
+ */
+
+:root {
+	--ziteh-font: "Vazirmatn", Tahoma, "Segoe UI", sans-serif;
+	--ziteh-primary: #6f7d5f;
+	--ziteh-primary-dark: #55603a;
+	--ziteh-heading: #333830;
+	--ziteh-text: #5f625b;
+	--ziteh-muted: #a5a69f;
+	--ziteh-line: #e9e6df;
+	--ziteh-bg: #faf9f6;
+	--ziteh-surface: #fff;
+	--ziteh-radius: 16px;
+	--ziteh-shell: 1240px;
+	--ziteh-gutter: clamp(16px, 3vw, 40px);
+	--ziteh-ease: cubic-bezier(.22, .68, .28, 1);
+}
+
+/* Document shell only. */
+html { box-sizing: border-box; -webkit-text-size-adjust: 100%; }
+*, *::before, *::after { box-sizing: inherit; }
+
+body.ziteh-site {
+	margin: 0;
+	background: var(--ziteh-bg);
+	color: var(--ziteh-text);
+	font-family: var(--ziteh-font);
+	font-size: 16px;
+	line-height: 1.85;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+body.ziteh-site img,
+body.ziteh-site video,
+body.ziteh-site iframe { max-width: 100%; }
+
+body.ziteh-site img { height: auto; }
+
+.ziteh-site__wrap {
+	display: flex;
+	flex-direction: column;
+	/* dvh so a mobile browser's collapsing chrome cannot leave a gap under a
+	   short page. */
+	min-height: 100dvh;
+}
+
+.ziteh-site__main { flex: 1; min-width: 0; }
+
+.ziteh-skip-link {
+	position: absolute;
+	inset-inline-start: -9999px;
+	z-index: 100000;
+	padding: 12px 20px;
+	background: var(--ziteh-primary);
+	color: #fff;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+.ziteh-skip-link:focus {
+	inset-inline-start: 12px;
+	top: 12px;
+	border-radius: 10px;
+}
+
+.screen-reader-text {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* ==========================================================================
+   Fallback header
+   ========================================================================== */
+
+.ziteh-site-header {
+	border-bottom: 1px solid var(--ziteh-line);
+	background: var(--ziteh-surface);
+}
+
+.ziteh-site-header__inner {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	width: min(100%, var(--ziteh-shell));
+	min-height: 72px;
+	margin-inline: auto;
+	padding: 12px var(--ziteh-gutter);
+}
+
+.ziteh-site-header__brand { display: grid; gap: 2px; min-width: 0; }
+
+.ziteh-site-header__title {
+	color: var(--ziteh-heading);
+	font-size: 20px;
+	font-weight: 800;
+	text-decoration: none;
+}
+
+.ziteh-site-header__tagline { color: var(--ziteh-muted); font-size: 12px; }
+.ziteh-site-header .custom-logo { max-height: 52px; width: auto; }
+
+.ziteh-site-nav { margin-inline-start: auto; }
+
+.ziteh-site-nav__list {
+	display: flex;
+	align-items: center;
+	gap: 22px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ziteh-site-nav__list a {
+	color: var(--ziteh-heading);
+	font-size: 14.5px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: color .2s ease;
+}
+
+.ziteh-site-nav__list a:hover,
+.ziteh-site-nav__list a[aria-current="page"] { color: var(--ziteh-primary); }
+
+.ziteh-site-nav__list .sub-menu {
+	position: absolute;
+	z-index: 20;
+	display: none;
+	min-width: 200px;
+	margin: 10px 0 0;
+	padding: 10px;
+	border: 1px solid var(--ziteh-line);
+	border-radius: 14px;
+	background: var(--ziteh-surface);
+	list-style: none;
+	box-shadow: 0 18px 40px -28px rgba(51, 56, 48, .5);
+}
+
+.ziteh-site-nav__list > li { position: relative; }
+.ziteh-site-nav__list > li:hover > .sub-menu,
+.ziteh-site-nav__list > li:focus-within > .sub-menu { display: block; }
+.ziteh-site-nav__list .sub-menu li { padding: 6px 8px; }
+
+.ziteh-site-header__burger {
+	display: none;
+	flex-direction: column;
+	justify-content: center;
+	gap: 5px;
+	width: 42px;
+	height: 42px;
+	padding: 0;
+	border: 1px solid var(--ziteh-line);
+	border-radius: 12px;
+	background: var(--ziteh-surface);
+	cursor: pointer;
+}
+
+.ziteh-site-header__burger span {
+	display: block;
+	width: 18px;
+	height: 2px;
+	margin-inline: auto;
+	border-radius: 2px;
+	background: var(--ziteh-heading);
+	transition: transform .2s var(--ziteh-ease), opacity .2s ease;
+}
+
+.ziteh-site-header__actions { margin-inline-start: auto; }
+
+.ziteh-site-header__cart {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 40px;
+	padding: 8px 16px;
+	border: 1px solid var(--ziteh-line);
+	border-radius: 999px;
+	color: var(--ziteh-heading);
+	font-size: 13.5px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: border-color .2s ease, color .2s ease;
+}
+
+.ziteh-site-header__cart:hover { border-color: var(--ziteh-primary); color: var(--ziteh-primary); }
+
+.ziteh-site-header__cart b {
+	display: inline-grid;
+	place-items: center;
+	min-width: 22px;
+	height: 22px;
+	padding: 0 6px;
+	border-radius: 999px;
+	background: var(--ziteh-primary);
+	color: #fff;
+	font-size: 11.5px;
+}
+
+.ziteh-site-header__hint {
+	width: min(100%, var(--ziteh-shell));
+	margin: 0 auto;
+	padding: 0 var(--ziteh-gutter) 12px;
+	color: var(--ziteh-muted);
+	font-size: 12px;
+}
+
+/* ==========================================================================
+   Fallback footer
+   ========================================================================== */
+
+.ziteh-site-footer {
+	margin-top: 48px;
+	border-top: 1px solid var(--ziteh-line);
+	background: var(--ziteh-surface);
+}
+
+.ziteh-site-footer__widgets {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 30px;
+	width: min(100%, var(--ziteh-shell));
+	margin-inline: auto;
+	padding: 40px var(--ziteh-gutter);
+}
+
+.ziteh-site-widget__title {
+	margin: 0 0 12px;
+	color: var(--ziteh-heading);
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.ziteh-site-footer__bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 14px;
+	width: min(100%, var(--ziteh-shell));
+	margin-inline: auto;
+	padding: 20px var(--ziteh-gutter);
+	border-top: 1px solid var(--ziteh-line);
+}
+
+.ziteh-site--no-footer-widgets .ziteh-site-footer__bar { border-top: 0; }
+.ziteh-site-footer__copy { margin: 0; color: var(--ziteh-muted); font-size: 13px; }
+
+.ziteh-site-footer__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 18px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ziteh-site-footer__list a {
+	color: var(--ziteh-text);
+	font-size: 13px;
+	text-decoration: none;
+}
+
+.ziteh-site-footer__list a:hover { color: var(--ziteh-primary); }
+
+/* ==========================================================================
+   Fallback content shell
+   ========================================================================== */
+
+.ziteh-shell {
+	width: min(100%, var(--ziteh-shell));
+	margin-inline: auto;
+	padding: 40px var(--ziteh-gutter);
+}
+
+.ziteh-shell--narrow { max-width: 720px; }
+.ziteh-shell__head { margin-bottom: 26px; }
+
+.ziteh-shell__title {
+	margin: 0 0 8px;
+	color: var(--ziteh-heading);
+	font-size: clamp(24px, 2.6vw, 34px);
+	font-weight: 800;
+	line-height: 1.55;
+}
+
+.ziteh-shell__description { color: var(--ziteh-text); font-size: 14.5px; }
+.ziteh-empty { padding: 40px 0; color: var(--ziteh-muted); text-align: center; }
+
+.ziteh-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 22px;
+}
+
+.ziteh-card {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border: 1px solid var(--ziteh-line);
+	border-radius: var(--ziteh-radius);
+	background: var(--ziteh-surface);
+	transition: border-color .2s ease, transform .2s var(--ziteh-ease);
+}
+
+.ziteh-card:hover { border-color: #ddd9d0; transform: translateY(-3px); }
+.ziteh-card__thumb { display: block; aspect-ratio: 3 / 2; overflow: hidden; background: #f1eee9; }
+.ziteh-card__thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ziteh-card__body { display: flex; flex-direction: column; gap: 9px; flex: 1; padding: 16px 18px 18px; }
+
+.ziteh-card__title { margin: 0; font-size: 16px; font-weight: 700; line-height: 1.7; }
+.ziteh-card__title a { color: var(--ziteh-heading); text-decoration: none; }
+.ziteh-card__title a:hover { color: var(--ziteh-primary); }
+.ziteh-card__excerpt { margin: 0; font-size: 13.5px; line-height: 1.95; }
+
+.ziteh-card__more {
+	margin-top: auto;
+	color: var(--ziteh-primary);
+	font-size: 13px;
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.ziteh-entry__meta {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+	color: var(--ziteh-muted);
+	font-size: 12px;
+}
+
+.ziteh-entry__meta a { color: var(--ziteh-primary); text-decoration: none; }
+.ziteh-entry__head { margin-bottom: 22px; }
+
+.ziteh-entry__title {
+	margin: 0 0 10px;
+	color: var(--ziteh-heading);
+	font-size: clamp(24px, 3vw, 38px);
+	font-weight: 800;
+	line-height: 1.5;
+}
+
+.ziteh-entry__thumb { margin: 0 0 28px; overflow: hidden; border-radius: var(--ziteh-radius); }
+.ziteh-entry__thumb img { display: block; width: 100%; }
+
+.ziteh-entry__tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 28px;
+	padding-top: 20px;
+	border-top: 1px solid var(--ziteh-line);
+}
+
+.ziteh-entry__tags a {
+	padding: 6px 13px;
+	border: 1px solid var(--ziteh-line);
+	border-radius: 999px;
+	color: var(--ziteh-text);
+	font-size: 12.5px;
+	text-decoration: none;
+}
+
+/* ==========================================================================
+   Prose — the editor's own content, in the fallback templates only
+   ========================================================================== */
+
+.ziteh-prose {
+	max-width: 760px;
+	color: var(--ziteh-text);
+	font-size: 15.5px;
+	line-height: 2.15;
+}
+
+.ziteh-prose > :first-child { margin-top: 0; }
+.ziteh-prose > :last-child { margin-bottom: 0; }
+
+.ziteh-prose :where(h2, h3, h4, h5, h6) {
+	margin: 34px 0 12px;
+	color: var(--ziteh-heading);
+	font-weight: 800;
+	line-height: 1.6;
+	scroll-margin-top: 96px;
+}
+
+.ziteh-prose h2 { font-size: 22px; }
+.ziteh-prose h3 { font-size: 18px; }
+.ziteh-prose h4 { font-size: 16px; }
+.ziteh-prose p { margin: 0 0 18px; }
+.ziteh-prose :where(ul, ol) { margin: 0 0 18px; padding-inline-start: 22px; }
+.ziteh-prose li { margin-bottom: 8px; }
+.ziteh-prose a { color: var(--ziteh-primary); text-underline-offset: 3px; }
+
+.ziteh-prose blockquote {
+	margin: 24px 0;
+	padding: 18px 22px;
+	border-inline-start: 3px solid var(--ziteh-primary);
+	border-radius: 12px;
+	background: #f3f1ec;
+	color: var(--ziteh-heading);
+}
+
+.ziteh-prose :where(img, figure) { margin: 24px 0; border-radius: 14px; }
+.ziteh-prose figcaption { color: var(--ziteh-muted); font-size: 12.5px; text-align: center; }
+.ziteh-prose table { width: 100%; margin: 24px 0; border-collapse: collapse; font-size: 14px; }
+.ziteh-prose :where(th, td) { padding: 10px 12px; border: 1px solid var(--ziteh-line); text-align: right; }
+.ziteh-prose th { background: #f3f1ec; font-weight: 700; }
+
+.ziteh-prose :where(code, pre) {
+	background: #f1efe9;
+	border-radius: 8px;
+	direction: ltr;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 13px;
+	text-align: left;
+}
+
+.ziteh-prose code { padding: 2px 6px; }
+.ziteh-prose pre { margin: 22px 0; padding: 16px; overflow-x: auto; }
+
+/* ==========================================================================
+   Search form, pagination, comments
+   ========================================================================== */
+
+.ziteh-searchform { display: flex; gap: 8px; max-width: 460px; margin-top: 14px; }
+
+.ziteh-searchform__input {
+	flex: 1;
+	min-width: 0;
+	min-height: 46px;
+	padding: 10px 16px;
+	border: 1px solid var(--ziteh-line);
+	border-radius: 12px;
+	background: var(--ziteh-surface);
+	color: var(--ziteh-heading);
+	font-family: inherit;
+	font-size: 14px;
+}
+
+.ziteh-searchform__input:focus { border-color: var(--ziteh-primary); outline: none; }
+
+.ziteh-searchform__submit {
+	min-height: 46px;
+	padding: 10px 22px;
+	border: 0;
+	border-radius: 12px;
+	background: var(--ziteh-primary);
+	color: #fff;
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.ziteh-searchform__submit:hover { background: var(--ziteh-primary-dark); }
+
+.ziteh-pagination { margin-top: 32px; }
+
+.ziteh-pagination .nav-links {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 7px;
+}
+
+.ziteh-pagination .page-numbers {
+	display: inline-grid;
+	place-items: center;
+	min-width: 40px;
+	height: 40px;
+	padding: 0 12px;
+	border: 1px solid var(--ziteh-line);
+	border-radius: 11px;
+	background: var(--ziteh-surface);
+	color: var(--ziteh-text);
+	font-size: 13.5px;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.ziteh-pagination .page-numbers.current {
+	border-color: var(--ziteh-primary);
+	background: var(--ziteh-primary);
+	color: #fff;
+}
+
+.ziteh-comments { max-width: 760px; margin-top: 44px; }
+
+.ziteh-comments__title {
+	margin: 0 0 18px;
+	color: var(--ziteh-heading);
+	font-size: 19px;
+	font-weight: 800;
+}
+
+.ziteh-comments__list { margin: 0; padding: 0; list-style: none; }
+.ziteh-comments__list ol.children { margin-inline-start: 24px; padding: 0; list-style: none; }
+
+.ziteh-comments__list .comment-body {
+	margin-bottom: 14px;
+	padding: 16px 18px;
+	border: 1px solid var(--ziteh-line);
+	border-radius: var(--ziteh-radius);
+	background: var(--ziteh-surface);
+}
+
+.ziteh-comments__list .comment-author { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; }
+.ziteh-comments__list .comment-author img { border-radius: 50%; }
+.ziteh-comments__list .comment-meta { margin-bottom: 8px; color: var(--ziteh-muted); font-size: 12px; }
+.ziteh-comments__list .comment-meta a { color: inherit; text-decoration: none; }
+.ziteh-comments__closed { color: var(--ziteh-muted); font-size: 13.5px; }
+
+.ziteh-comment-form { display: grid; gap: 12px; margin-top: 26px; }
+.ziteh-comment-form label { display: block; margin-bottom: 5px; color: var(--ziteh-heading); font-size: 13px; font-weight: 600; }
+
+.ziteh-comment-form :where(input[type="text"], input[type="email"], input[type="url"], textarea) {
+	width: 100%;
+	min-height: 46px;
+	padding: 11px 14px;
+	border: 1px solid var(--ziteh-line);
+	border-radius: 12px;
+	background: var(--ziteh-surface);
+	color: var(--ziteh-heading);
+	font-family: inherit;
+	font-size: 14px;
+}
+
+.ziteh-comment-form textarea { min-height: 130px; resize: vertical; line-height: 1.9; }
+
+.ziteh-comment-form :where(input, textarea):focus { border-color: var(--ziteh-primary); outline: none; }
+
+.ziteh-comment-form__submit {
+	justify-self: start;
+	min-height: 48px;
+	padding: 12px 26px;
+	border: 0;
+	border-radius: 12px;
+	background: var(--ziteh-primary);
+	color: #fff;
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 14.5px;
+	font-weight: 700;
+}
+
+.ziteh-comment-form__submit:hover { background: var(--ziteh-primary-dark); }
+
+/* ==========================================================================
+   404
+   ========================================================================== */
+
+.ziteh-404 { padding: 40px 0; text-align: center; }
+.ziteh-404__code { margin: 0; color: var(--ziteh-primary); font-size: clamp(56px, 12vw, 96px); font-weight: 900; line-height: 1; }
+.ziteh-404__title { margin: 14px 0 8px; color: var(--ziteh-heading); font-size: 24px; font-weight: 800; }
+.ziteh-404__text { margin: 0 auto 20px; max-width: 460px; font-size: 14.5px; }
+.ziteh-404 .ziteh-searchform { margin-inline: auto; }
+
+.ziteh-404__home {
+	display: inline-block;
+	margin-top: 22px;
+	color: var(--ziteh-primary);
+	font-size: 14px;
+	font-weight: 700;
+	text-decoration: none;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 900px) {
+	.ziteh-site-header__burger { display: flex; }
+	.ziteh-site-header__inner { flex-wrap: wrap; }
+	.ziteh-site-header__actions { margin-inline-start: 0; order: 2; }
+	.ziteh-site-header__burger { order: 3; margin-inline-start: auto; }
+
+	.ziteh-site-nav {
+		order: 4;
+		flex-basis: 100%;
+		margin-inline-start: 0;
+		display: none;
+	}
+
+	.ziteh-site-nav.is-open { display: block; }
+
+	.ziteh-site-nav__list {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0;
+		padding-bottom: 10px;
+	}
+
+	.ziteh-site-nav__list > li { border-top: 1px solid var(--ziteh-line); }
+	.ziteh-site-nav__list a { display: block; padding: 12px 2px; }
+
+	.ziteh-site-nav__list .sub-menu {
+		position: static;
+		display: block;
+		margin: 0 0 8px;
+		padding: 0 14px;
+		border: 0;
+		box-shadow: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body.ziteh-site *,
+	body.ziteh-site *::before,
+	body.ziteh-site *::after {
+		animation-duration: .01ms !important;
+		transition-duration: .01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
