@@ -1757,7 +1757,9 @@
 	.elementor-widget-ziteh-single-product .ziteh-sp__wish,
 	.elementor-widget-ziteh-single-product .ziteh-sp__trust { grid-column: 2; }
 
-	.elementor-widget-ziteh-single-product .ziteh-sp__trust { grid-row: 5 / span 3; align-self: end; }
+	/* No forced row: the trust strip belongs at the end of the buy column,
+	   and pinning it to row 5 pushed it above the stock line and the cart. */
+	.elementor-widget-ziteh-single-product .ziteh-sp__trust { align-self: end; }
 
 	.elementor-widget-ziteh-product-details .ziteh-pd__panel--description { gap: 32px; }
 	.elementor-widget-ziteh-related-products .ziteh-rp { --ziteh-rp-visible: 4; }
@@ -1849,4 +1851,499 @@
 		animation-duration: .01ms !important;
 		transition-duration: .01ms !important;
 	}
+}
+
+/* ==========================================================================
+   App layer
+
+   Everything below is gated on `body.ziteh-app`, which the plugin adds only
+   when the "تجربه اپلیکیشنی صفحه محصول" setting is on. With the setting off —
+   or if this CSS loads without its script — the page falls back to the plain
+   responsive composition above, which is fully functional on its own.
+
+   The pieces here are the ones that make a web page feel like an app: a
+   thumb-driven gallery, a persistent action bar, a fullscreen viewer, and
+   press feedback with real 44px touch targets.
+   ========================================================================== */
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp,
+body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd,
+body.ziteh-app .elementor-widget-ziteh-related-products .ziteh-rp,
+body.ziteh-app .elementor-widget-ziteh-product-reviews .ziteh-pr,
+body.ziteh-app .elementor-widget-ziteh-store-services .ziteh-ss {
+	--ziteh-ease: cubic-bezier(.22, .68, .28, 1);
+	--ziteh-app-radius: 18px;
+	--ziteh-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Kill the grey flash Android and iOS paint over every tap target. */
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp :where(a, button),
+body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd :where(a, button),
+body.ziteh-app .elementor-widget-ziteh-related-products .ziteh-rp :where(a, button),
+body.ziteh-app .elementor-widget-ziteh-product-reviews .ziteh-pr :where(a, button),
+body.ziteh-app .elementor-widget-ziteh-store-services .ziteh-ss :where(a) {
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   Swipeable gallery
+   -------------------------------------------------------------------------- */
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__track {
+	position: absolute;
+	inset: 0;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__zoom {
+	position: absolute;
+	z-index: 5;
+	bottom: 14px;
+	inset-inline-start: 14px;
+	display: inline-grid;
+	place-items: center;
+	width: 38px;
+	height: 38px;
+	border: 1px solid rgba(51, 56, 48, .07) !important;
+	border-radius: 50% !important;
+	background: rgba(255, 255, 255, .92) !important;
+	color: #6f726a !important;
+	font-size: 17px;
+	backdrop-filter: blur(6px);
+	transition: transform .18s var(--ziteh-ease), background .2s ease;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__zoom:active { transform: scale(.9); }
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__dots { display: none; }
+
+/* --------------------------------------------------------------------------
+   Fullscreen image viewer
+   -------------------------------------------------------------------------- */
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__lightbox {
+	position: fixed;
+	inset: 0;
+	z-index: 999999;
+	display: flex;
+	flex-direction: column;
+	/* dvh, not vh: mobile browser chrome must not push the viewer off screen. */
+	height: 100dvh;
+	/* Opaque: the wrapper's own opacity handles the fade, so any translucency
+	   here would only let the page bleed through once it is fully open. */
+	background: #191b16;
+	opacity: 0;
+	transition: opacity .2s ease;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__lightbox[hidden] { display: none; }
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__lightbox.is-open { opacity: 1; }
+
+/* Locking the root rather than the body keeps the scroll position on iOS. */
+html.ziteh-sp-lock,
+html.ziteh-sp-lock body { overflow: hidden; }
+
+/* The action bar has no business sitting over a fullscreen viewer. */
+html.ziteh-sp-lock .ziteh-sp__appbar { display: none !important; }
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__lightbox-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex: 0 0 auto;
+	padding: calc(env(safe-area-inset-top, 0px) + 12px) 16px 12px;
+	color: rgba(255, 255, 255, .9);
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__lightbox-count {
+	display: inline-flex;
+	gap: 4px;
+	direction: ltr;
+	font-size: 14px;
+	font-variant-numeric: tabular-nums;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__lightbox-count b { font-weight: 700; }
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__lightbox-close {
+	display: inline-grid;
+	place-items: center;
+	width: 44px !important;
+	height: 44px !important;
+	border-radius: 50% !important;
+	background: rgba(255, 255, 255, .12) !important;
+	color: #fff !important;
+	font-size: 26px !important;
+	line-height: 1 !important;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__lightbox-track {
+	display: flex;
+	flex: 1;
+	min-height: 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scroll-snap-type: x mandatory;
+	overscroll-behavior: contain;
+	scrollbar-width: none;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__lightbox-track::-webkit-scrollbar { display: none; }
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__lightbox-slide {
+	display: grid;
+	place-items: center;
+	flex: 0 0 100%;
+	min-width: 0;
+	padding: 16px;
+	scroll-snap-align: center;
+	scroll-snap-stop: always;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__lightbox-slide img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+}
+
+/* --------------------------------------------------------------------------
+   Sticky action bar
+   -------------------------------------------------------------------------- */
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar {
+	position: fixed;
+	z-index: 9998;
+	inset-inline: 0;
+	bottom: 0;
+	padding: 10px 14px calc(10px + var(--ziteh-safe-bottom));
+	border-top: 1px solid var(--ziteh-sp-border);
+	background: rgba(255, 255, 255, .92);
+	backdrop-filter: blur(14px);
+	transform: translateY(105%);
+	transition: transform .26s var(--ziteh-ease);
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar[hidden] { display: none; }
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar.is-visible { transform: translateY(0); }
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-inner {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: min(100%, 520px);
+	margin-inline: auto;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-price {
+	flex: 0 1 auto;
+	min-width: 0;
+	color: var(--ziteh-sp-heading);
+	font-size: 15px;
+	font-weight: 800;
+	line-height: 1.4;
+	white-space: nowrap;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-price del {
+	display: block;
+	color: #a5a69f;
+	font-size: 11px;
+	font-weight: 500;
+	text-decoration: line-through;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-price ins { background: none; text-decoration: none; }
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-wish {
+	display: inline-grid;
+	place-items: center;
+	width: 46px !important;
+	height: 46px !important;
+	flex: 0 0 46px;
+	border: 1px solid var(--ziteh-sp-border) !important;
+	border-radius: 13px !important;
+	background: #fff !important;
+	color: #82857e !important;
+	font-size: 19px !important;
+	transition: transform .18s var(--ziteh-ease), color .2s ease;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-wish:active { transform: scale(.92); }
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-wish.is-active { color: #c0705f !important; }
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-cta {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	gap: 9px;
+	flex: 1;
+	min-height: 46px !important;
+	padding: 10px 16px !important;
+	border-radius: 13px !important;
+	background: var(--ziteh-sp-primary) !important;
+	color: #fff !important;
+	font-size: 15px !important;
+	font-weight: 700 !important;
+	transition: transform .18s var(--ziteh-ease), filter .2s ease;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-cta .ziteh-i { order: 2; font-size: 19px; }
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__appbar-cta:active { transform: scale(.97); filter: brightness(.94); }
+
+/* Keep the last section clear of the bar. */
+body.ziteh-app.ziteh-sp-has-appbar { padding-bottom: calc(66px + var(--ziteh-safe-bottom, 0px)); }
+
+/* --------------------------------------------------------------------------
+   Shipping disclosure
+   -------------------------------------------------------------------------- */
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping.is-collapsible { display: block; padding: 0; }
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping-head {
+	display: grid;
+	grid-template-columns: 34px minmax(0, 1fr) 20px;
+	align-items: center;
+	gap: 13px;
+	width: 100% !important;
+	padding: 15px 18px !important;
+	text-align: right !important;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping-chevron {
+	transition: transform .22s var(--ziteh-ease);
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping.is-open .ziteh-sp__shipping-chevron {
+	transform: rotate(180deg);
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping-panel {
+	padding: 0 18px 15px;
+	color: #8a8d86;
+	font-size: 12.5px;
+	line-height: 2;
+}
+
+body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__shipping-panel[hidden] { display: none; }
+
+/* --------------------------------------------------------------------------
+   Segmented tabs
+   -------------------------------------------------------------------------- */
+
+body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd__tabs { position: relative; }
+
+/* The sliding pill is placed by JS. Until then its width is 0 and it stays
+   invisible, leaving the plain underline from the base layer in charge. */
+body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd__tabs::after {
+	content: "";
+	position: absolute;
+	z-index: 0;
+	bottom: 0;
+	inset-inline-start: var(--ziteh-pd-pill-x, 0);
+	width: var(--ziteh-pd-pill-w, 0);
+	height: 2px;
+	border-radius: 2px;
+	background: var(--ziteh-pd-primary);
+	transition: inset-inline-start .28s var(--ziteh-ease), width .28s var(--ziteh-ease);
+}
+
+body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd__tab { position: relative; z-index: 1; }
+
+/* --------------------------------------------------------------------------
+   Touch layout
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 767px) {
+	/* -- Gallery: real horizontal swiping ---------------------------------- */
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__stage {
+		border-radius: var(--ziteh-app-radius);
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__track {
+		display: flex;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: x mandatory;
+		overscroll-behavior-x: contain;
+		scrollbar-width: none;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__track::-webkit-scrollbar { display: none; }
+
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__slide {
+		position: static;
+		flex: 0 0 100%;
+		min-width: 0;
+		opacity: 1;
+		visibility: visible;
+		scroll-snap-align: center;
+		scroll-snap-stop: always;
+		transition: none;
+		cursor: zoom-in;
+	}
+
+	/* Arrows are a pointer affordance; on touch the dots do the job. */
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__gallery-arrow { display: none; }
+
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__dots {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		margin-top: 12px;
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__dot {
+		width: 6px !important;
+		height: 6px !important;
+		border-radius: 999px !important;
+		background: #d8d4cc !important;
+		transition: width .24s var(--ziteh-ease), background .24s ease;
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__dot.is-active {
+		width: 20px !important;
+		background: var(--ziteh-sp-primary) !important;
+	}
+
+	/* The thumbnail strip is redundant next to dots on a phone. */
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__thumbs { display: none; }
+
+	/* -- Purchase card: the app bar carries the primary action -------------- */
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__purchase {
+		border-radius: var(--ziteh-app-radius);
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__qty-btn {
+		width: 44px !important;
+		height: 44px !important;
+		flex: 0 0 44px;
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__buy .quantity.quantity { min-height: 52px !important; }
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__buy .quantity .qty.qty { height: 50px !important; font-size: 16px !important; }
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__buy .single_add_to_cart_button.single_add_to_cart_button { min-height: 52px !important; }
+
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__buy .single_add_to_cart_button.single_add_to_cart_button:active,
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__wish:active,
+	body.ziteh-app .elementor-widget-ziteh-single-product .ziteh-sp__qty-btn:active {
+		transform: scale(.97);
+	}
+
+	/* -- Details: scrollable segmented control ------------------------------ */
+	body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd__tabs {
+		gap: 8px;
+		justify-content: flex-start;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		scroll-padding-inline: 16px;
+		scrollbar-width: none;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd__tabs::-webkit-scrollbar { display: none; }
+
+	/* Pills read as a native segmented control; the sliding bar is for pointer
+	   layouts where the tabs sit still. */
+	body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd__tabs::after { display: none; }
+
+	body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd__tab {
+		flex: 0 0 auto;
+		min-height: 38px !important;
+		padding: 8px 16px !important;
+		border-bottom: 0 !important;
+		border-radius: 999px !important;
+		background: #f1efe9 !important;
+		font-size: 13.5px !important;
+		transition: background .2s ease, color .2s ease, transform .18s var(--ziteh-ease);
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd__tab:active { transform: scale(.96); }
+
+	body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd__tab.is-active {
+		background: var(--ziteh-pd-primary) !important;
+		color: #fff !important;
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd__body { border-radius: var(--ziteh-app-radius); }
+
+	/* -- Related: peek the next card so the row reads as swipeable ---------- */
+	body.ziteh-app .elementor-widget-ziteh-related-products .ziteh-rp { --ziteh-rp-visible: 2.25; --ziteh-rp-gap: 12px; }
+	body.ziteh-app .elementor-widget-ziteh-related-products .ziteh-rp__viewport { scroll-snap-type: x proximity; overscroll-behavior-x: contain; }
+	body.ziteh-app .elementor-widget-ziteh-related-products .ziteh-rp__card { border-radius: 14px; transition: transform .18s var(--ziteh-ease); }
+	body.ziteh-app .elementor-widget-ziteh-related-products .ziteh-rp__card:active { transform: scale(.98); }
+
+	/* -- Reviews: a swipeable row instead of a tall stack ------------------- */
+	body.ziteh-app .elementor-widget-ziteh-product-reviews .ziteh-pr__list {
+		flex-direction: row;
+		gap: 12px;
+		margin-inline: calc(var(--ziteh-gutter) * -1);
+		padding-inline: var(--ziteh-gutter);
+		overflow-x: auto;
+		scroll-snap-type: x proximity;
+		overscroll-behavior-x: contain;
+		scrollbar-width: none;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-product-reviews .ziteh-pr__list::-webkit-scrollbar { display: none; }
+
+	body.ziteh-app .elementor-widget-ziteh-product-reviews .ziteh-pr__card {
+		flex: 0 0 84%;
+		align-items: start;
+		min-height: 0;
+		scroll-snap-align: start;
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-product-reviews .ziteh-pr__comment {
+		white-space: normal;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+	}
+
+	body.ziteh-app .elementor-widget-ziteh-product-reviews .ziteh-pr__summary { border-radius: var(--ziteh-app-radius); }
+
+	/* -- Services: full-bleed snap row -------------------------------------- */
+	body.ziteh-app .elementor-widget-ziteh-store-services .ziteh-ss__item { border-radius: 0; }
+	body.ziteh-app .elementor-widget-ziteh-store-services .ziteh-ss__inner { border-radius: var(--ziteh-app-radius); }
+}
+
+/* --------------------------------------------------------------------------
+   Entrance reveals
+
+   Scroll-driven where supported, IntersectionObserver otherwise. Both are
+   switched off for `prefers-reduced-motion`.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+	body.ziteh-app .ziteh-reveal-js {
+		opacity: 0;
+		transform: translateY(14px);
+		transition: opacity .5s ease, transform .5s var(--ziteh-ease, ease);
+	}
+
+	body.ziteh-app .ziteh-reveal-js.is-revealed {
+		opacity: 1;
+		transform: none;
+	}
+
+	@supports (animation-timeline: view()) {
+		body.ziteh-app .elementor-widget-ziteh-product-details .ziteh-pd__body,
+		body.ziteh-app .elementor-widget-ziteh-related-products .ziteh-rp__shell,
+		body.ziteh-app .elementor-widget-ziteh-product-reviews .ziteh-pr__layout,
+		body.ziteh-app .elementor-widget-ziteh-store-services .ziteh-ss__inner {
+			animation: ziteh-rise linear both;
+			animation-timeline: view();
+			/* `cover` rather than `entry`: the entry range is ill-defined for a
+			   subject taller than the viewport, which a long description can be.
+			   This finishes early and stays well-defined at any height. */
+			animation-range: cover 0% cover 18%;
+		}
+	}
+}
+
+@keyframes ziteh-rise {
+	from { opacity: 0; transform: translateY(16px); }
+	to { opacity: 1; transform: none; }
 }

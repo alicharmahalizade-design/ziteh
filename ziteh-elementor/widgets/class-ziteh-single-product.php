@@ -170,6 +170,7 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 		$this->start_controls_section( 'section_shipping', array( 'label' => esc_html__( 'ارسال و تحویل', 'ziteh' ), 'tab' => Controls_Manager::TAB_CONTENT ) );
 		$this->add_control( 'shipping_title', array( 'label' => esc_html__( 'عنوان ارسال', 'ziteh' ), 'type' => Controls_Manager::TEXT, 'default' => esc_html__( 'ارسال سریع و مطمئن', 'ziteh' ) ) );
 		$this->add_control( 'shipping_text', array( 'label' => esc_html__( 'توضیح ارسال', 'ziteh' ), 'type' => Controls_Manager::TEXT, 'default' => esc_html__( 'ارسال به سراسر ایران در ۲ تا ۳ روز کاری', 'ziteh' ) ) );
+		$this->add_control( 'shipping_details', array( 'label' => esc_html__( 'جزئیات ارسال (بازشونده)', 'ziteh' ), 'type' => Controls_Manager::TEXTAREA, 'rows' => 3, 'default' => esc_html__( 'سفارش‌های ثبت‌شده تا ساعت ۱۴ همان روز کاری ارسال می‌شوند. هزینه ارسال در سبد خرید بر اساس آدرس شما محاسبه می‌شود و برای خریدهای بالای ۵۰۰ هزار تومان رایگان است.', 'ziteh' ), 'description' => esc_html__( 'اگر پر باشد، ردیف ارسال به یک بخش بازشونده تبدیل می‌شود.', 'ziteh' ) ) );
 		$this->add_control( 'shipping_icon', array( 'label' => esc_html__( 'آیکن ارسال', 'ziteh' ), 'type' => Controls_Manager::ICONS, 'default' => array( 'value' => 'fas fa-truck', 'library' => 'fa-solid' ) ) );
 		$this->end_controls_section();
 
@@ -188,6 +189,7 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 		$this->add_responsive_control( 'column_gap', array( 'label' => esc_html__( 'فاصله ستون‌ها', 'ziteh' ), 'type' => Controls_Manager::SLIDER, 'range' => array( 'px' => array( 'min' => 8, 'max' => 72 ) ), 'default' => array( 'size' => 38, 'unit' => 'px' ), 'selectors' => array( '{{WRAPPER}} .ziteh-sp' => '--ziteh-sp-gap: {{SIZE}}{{UNIT}};' ) ) );
 		$this->add_control( 'image_ratio', array( 'label' => esc_html__( 'نسبت تصویر اصلی', 'ziteh' ), 'type' => Controls_Manager::SELECT, 'default' => '1 / 1.05', 'options' => array( '1 / 1.05' => esc_html__( 'مطابق طرح', 'ziteh' ), '1 / 1' => esc_html__( 'مربع', 'ziteh' ), '4 / 5' => esc_html__( 'عمودی', 'ziteh' ), '16 / 13' => esc_html__( 'افقی', 'ziteh' ) ), 'selectors' => array( '{{WRAPPER}} .ziteh-sp' => '--ziteh-sp-ratio: {{VALUE}};' ) ) );
 		$this->add_control( 'image_fit', array( 'label' => esc_html__( 'نحوه نمایش تصویر', 'ziteh' ), 'type' => Controls_Manager::SELECT, 'default' => 'cover', 'options' => array( 'cover' => esc_html__( 'پوشش کامل', 'ziteh' ), 'contain' => esc_html__( 'نمایش کامل محصول', 'ziteh' ) ), 'selectors' => array( '{{WRAPPER}} .ziteh-sp' => '--ziteh-sp-fit: {{VALUE}};' ) ) );
+		$this->add_control( 'show_app_bar', array( 'label' => esc_html__( 'نوار خرید چسبان موبایل', 'ziteh' ), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes', 'description' => esc_html__( 'در موبایل پس از رد شدن از دکمه خرید، یک نوار پایین صفحه ظاهر می‌شود.', 'ziteh' ) ) );
 		$this->add_control( 'sticky_purchase', array( 'label' => esc_html__( 'کارت خرید چسبان', 'ziteh' ), 'type' => Controls_Manager::SWITCHER, 'return_value' => 'yes', 'default' => 'yes' ) );
 		$this->end_controls_section();
 
@@ -329,6 +331,15 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 							<?php if ( $discount && 'yes' === $settings['show_sale_badge'] ) : ?>
 								<span class="ziteh-sp__sale"><?php echo esc_html( sprintf( __( '%d٪ تخفیف', 'ziteh' ), $discount ) ); ?></span>
 							<?php endif; ?>
+							<?php
+							/*
+							 * The slides live in their own track so the stage stays a plain
+							 * positioned box. On touch layouts the track becomes the scroll
+							 * container; were that the stage, the sale badge and the arrows
+							 * would scroll away together with the images.
+							 */
+							?>
+							<div class="ziteh-sp__track" data-ziteh-sp-track>
 							<?php if ( $gallery_ids ) : ?>
 								<?php foreach ( $gallery_ids as $index => $image_id ) : ?>
 									<div class="ziteh-sp__slide<?php echo 0 === $index ? ' is-active' : ''; ?>" data-ziteh-sp-slide="<?php echo esc_attr( $index ); ?>" aria-hidden="<?php echo 0 === $index ? 'false' : 'true'; ?>">
@@ -347,7 +358,11 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 									</div>
 								<?php endforeach; ?>
 							<?php else : ?>
-								<div class="ziteh-sp__slide is-active"><?php echo wc_placeholder_img( 'woocommerce_single' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+								<div class="ziteh-sp__slide is-active" data-ziteh-sp-slide="0"><?php echo wc_placeholder_img( 'woocommerce_single' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+							<?php endif; ?>
+							</div>
+							<?php if ( $gallery_ids ) : ?>
+								<button class="ziteh-sp__zoom" type="button" data-ziteh-sp-zoom aria-label="<?php esc_attr_e( 'نمایش تصویر در تمام صفحه', 'ziteh' ); ?>"><?php Ziteh_Icons::render( 'search' ); ?></button>
 							<?php endif; ?>
 							<?php if ( count( $gallery_ids ) > 1 ) : ?>
 								<button class="ziteh-sp__gallery-arrow ziteh-sp__gallery-arrow--prev" type="button" data-ziteh-sp-prev aria-label="<?php esc_attr_e( 'تصویر قبلی', 'ziteh' ); ?>"><?php Ziteh_Icons::render( 'chevron-right' ); ?></button>
@@ -356,6 +371,12 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 						</div>
 
 						<?php if ( count( $gallery_ids ) > 1 ) : ?>
+							<div class="ziteh-sp__dots" data-ziteh-sp-dots aria-hidden="true">
+								<?php foreach ( $gallery_ids as $index => $image_id ) : ?>
+									<button class="ziteh-sp__dot<?php echo 0 === $index ? ' is-active' : ''; ?>" type="button" tabindex="-1" data-ziteh-sp-dot="<?php echo esc_attr( $index ); ?>"></button>
+								<?php endforeach; ?>
+							</div>
+
 							<div class="ziteh-sp__thumbs" role="tablist" aria-label="<?php esc_attr_e( 'تصاویر محصول', 'ziteh' ); ?>">
 								<?php foreach ( $gallery_ids as $index => $image_id ) : ?>
 									<button class="ziteh-sp__thumb<?php echo 0 === $index ? ' is-active' : ''; ?>" type="button" role="tab" aria-selected="<?php echo 0 === $index ? 'true' : 'false'; ?>" tabindex="<?php echo 0 === $index ? '0' : '-1'; ?>" data-ziteh-sp-thumb="<?php echo esc_attr( $index ); ?>">
@@ -399,10 +420,22 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 								<?php endforeach; ?>
 							</ul>
 						<?php endif; ?>
-						<div class="ziteh-sp__shipping">
-							<span class="ziteh-sp__shipping-icon"><?php Ziteh_Icons::render_control( $settings['shipping_icon'], 'truck' ); ?></span>
-							<span class="ziteh-sp__shipping-copy"><strong><?php echo esc_html( $settings['shipping_title'] ); ?></strong><small><?php echo esc_html( $settings['shipping_text'] ); ?></small></span>
-							<span class="ziteh-sp__shipping-chevron"><?php Ziteh_Icons::render( 'chevron-down' ); ?></span>
+						<?php $shipping_details = trim( (string) $settings['shipping_details'] ); ?>
+						<?php $shipping_panel = 'ziteh-sp-shipping-' . $this->get_id(); ?>
+						<div class="ziteh-sp__shipping<?php echo $shipping_details ? ' is-collapsible' : ''; ?>">
+							<?php
+							// The chevron has always been drawn here; with details filled in it
+							// finally does something, so the row becomes a real button.
+							$shipping_tag = $shipping_details ? 'button' : 'div';
+							?>
+							<<?php echo esc_attr( $shipping_tag ); ?> class="ziteh-sp__shipping-head"<?php echo $shipping_details ? ' type="button" data-ziteh-sp-disclosure aria-expanded="false" aria-controls="' . esc_attr( $shipping_panel ) . '"' : ''; ?>>
+								<span class="ziteh-sp__shipping-icon"><?php Ziteh_Icons::render_control( $settings['shipping_icon'], 'truck' ); ?></span>
+								<span class="ziteh-sp__shipping-copy"><strong><?php echo esc_html( $settings['shipping_title'] ); ?></strong><small><?php echo esc_html( $settings['shipping_text'] ); ?></small></span>
+								<span class="ziteh-sp__shipping-chevron"><?php Ziteh_Icons::render( 'chevron-down' ); ?></span>
+							</<?php echo esc_attr( $shipping_tag ); ?>>
+							<?php if ( $shipping_details ) : ?>
+								<div class="ziteh-sp__shipping-panel" id="<?php echo esc_attr( $shipping_panel ); ?>" data-ziteh-sp-disclosure-panel hidden><p><?php echo esc_html( $shipping_details ); ?></p></div>
+							<?php endif; ?>
 						</div>
 						<?php if ( 'yes' === $settings['show_meta'] ) : ?><div class="ziteh-sp__meta">
 							<?php if ( $product->get_sku() ) : ?><span><?php esc_html_e( 'کد محصول:', 'ziteh' ); ?> <strong><?php echo esc_html( $product->get_sku() ); ?></strong></span><?php endif; ?>
@@ -449,10 +482,81 @@ class Ziteh_Single_Product_Widget extends Ziteh_Widget_Base {
 					<?php $this->render_related( $product, (int) $settings['related_count'] ); ?>
 				<?php endif; ?>
 			</div>
+			<?php $this->render_app_bar( $product, $settings ); ?>
+			<?php $this->render_lightbox( $product, $gallery_ids ); ?>
 			<?php if ( 'yes' === $settings['enable_schema'] && ( ! function_exists( 'is_product' ) || ! is_product() ) ) : ?><?php $this->render_schema( $product, $gallery_ids ); ?><?php endif; ?>
 		</article>
 		<?php
 		$product = $previous_product;
+	}
+
+	/**
+	 * Sticky action bar for touch layouts.
+	 *
+	 * Revealed by ziteh-product-app.js once the real add-to-cart button scrolls
+	 * out of view. Its button is a proxy: it clicks the genuine WooCommerce
+	 * submit button rather than posting on its own, so variation validation,
+	 * stock checks and every cart filter still run exactly as before.
+	 *
+	 * @param WC_Product $product  Product.
+	 * @param array      $settings Widget settings.
+	 */
+	private function render_app_bar( $product, $settings ) {
+		if ( 'yes' !== $settings['show_app_bar'] ) {
+			return;
+		}
+		?>
+		<div class="ziteh-sp__appbar" data-ziteh-sp-appbar hidden>
+			<div class="ziteh-sp__appbar-inner">
+				<div class="ziteh-sp__appbar-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
+				<button class="ziteh-sp__appbar-wish" type="button" data-ziteh-wish="<?php echo esc_attr( $product->get_id() ); ?>" aria-label="<?php echo esc_attr( $settings['wishlist_text'] ); ?>"><?php Ziteh_Icons::render( 'heart' ); ?></button>
+				<button class="ziteh-sp__appbar-cta" type="button" data-ziteh-sp-appbar-cta><?php Ziteh_Icons::render( 'cart' ); ?><span><?php echo esc_html( $settings['add_to_cart_text'] ); ?></span></button>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Fullscreen image viewer.
+	 *
+	 * Images are only referenced here; the markup stays inert (hidden, no
+	 * sources fetched beyond lazy ones) until the viewer is opened.
+	 *
+	 * @param WC_Product $product     Product.
+	 * @param int[]      $gallery_ids Gallery attachment IDs.
+	 */
+	private function render_lightbox( $product, $gallery_ids ) {
+		if ( ! $gallery_ids ) {
+			return;
+		}
+		$total = count( $gallery_ids );
+		?>
+		<div class="ziteh-sp__lightbox" data-ziteh-sp-lightbox role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'نمایشگر تصاویر محصول', 'ziteh' ); ?>" hidden>
+			<div class="ziteh-sp__lightbox-bar">
+				<span class="ziteh-sp__lightbox-count"><b data-ziteh-sp-lightbox-index>1</b><span>/</span><span><?php echo esc_html( number_format_i18n( $total ) ); ?></span></span>
+				<button class="ziteh-sp__lightbox-close" type="button" data-ziteh-sp-lightbox-close aria-label="<?php esc_attr_e( 'بستن', 'ziteh' ); ?>">&times;</button>
+			</div>
+			<div class="ziteh-sp__lightbox-track" data-ziteh-sp-lightbox-track>
+				<?php foreach ( $gallery_ids as $index => $image_id ) : ?>
+					<div class="ziteh-sp__lightbox-slide" data-ziteh-sp-lightbox-slide="<?php echo esc_attr( $index ); ?>">
+						<?php
+						echo wp_get_attachment_image(
+							$image_id,
+							'large',
+							false,
+							array(
+								/* translators: 1: image number, 2: product name */
+								'alt'      => sprintf( __( 'تصویر %1$d از %2$s', 'ziteh' ), $index + 1, $product->get_name() ),
+								'loading'  => 'lazy',
+								'decoding' => 'async',
+							)
+						); // phpcs:ignore WordPress.Security.EscapeOutput
+						?>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
 	}
 
 	/**

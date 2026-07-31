@@ -80,6 +80,11 @@ class Ziteh_Widgets_Manager {
 
 		// Optimisation: defer the widgets script so it never blocks render.
 		add_filter( 'script_loader_tag', array( $this, 'defer_script' ), 10, 2 );
+
+		// The app-like product layer is gated by a body class rather than a
+		// separate stylesheet, so the markup is styled correctly on first paint
+		// instead of flashing the desktop composition first.
+		add_filter( 'body_class', array( $this, 'app_body_class' ) );
 	}
 
 	/**
@@ -90,7 +95,7 @@ class Ziteh_Widgets_Manager {
 	 * @return string
 	 */
 	public function defer_script( $tag, $handle ) {
-		if ( 'ziteh-widgets' === $handle && false === strpos( $tag, 'defer' ) ) {
+		if ( in_array( $handle, array( 'ziteh-widgets', 'ziteh-product-app' ), true ) && false === strpos( $tag, 'defer' ) ) {
 			$tag = str_replace( ' src=', ' defer src=', $tag );
 		}
 		return $tag;
@@ -171,6 +176,36 @@ class Ziteh_Widgets_Manager {
 			ZITEH_EL_VERSION,
 			true
 		);
+
+		wp_register_script(
+			'ziteh-product-app',
+			ZITEH_EL_URL . 'assets/js/ziteh-product-app.js',
+			array( 'ziteh-widgets' ),
+			ZITEH_EL_VERSION,
+			true
+		);
+	}
+
+	/**
+	 * Flag the app-like product experience for CSS.
+	 *
+	 * @param string[] $classes Body classes.
+	 * @return string[]
+	 */
+	public function app_body_class( $classes ) {
+		if ( $this->product_app_enabled() ) {
+			$classes[] = 'ziteh-app';
+		}
+		return $classes;
+	}
+
+	/**
+	 * Whether the app-like product experience should load.
+	 *
+	 * @return bool
+	 */
+	private function product_app_enabled() {
+		return ! class_exists( 'Ziteh_Settings' ) || Ziteh_Settings::feature_enabled( 'product_app', true );
 	}
 
 	/**
@@ -187,6 +222,16 @@ class Ziteh_Widgets_Manager {
 			ZITEH_EL_VERSION,
 			true
 		);
+
+		if ( $this->product_app_enabled() ) {
+			wp_enqueue_script(
+				'ziteh-product-app',
+				ZITEH_EL_URL . 'assets/js/ziteh-product-app.js',
+				array( 'ziteh-widgets' ),
+				ZITEH_EL_VERSION,
+				true
+			);
+		}
 	}
 
 	/**
