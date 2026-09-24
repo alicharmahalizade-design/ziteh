@@ -67,7 +67,7 @@ class ZT_W_Related_Products extends ZT_Widget_Base {
 			echo ZT_Parts::empty_marker(); // phpcs:ignore
 			return;
 		}
-		echo '<div style="position:relative" data-zt-carousel><div class="zt-rel-track" data-zt-track>';
+		echo '<div style="position:relative" data-zt-carousel><div class="zt-rel-track' . ( count( $items ) > 5 ? ' zt-is-overflow' : '' ) . '" data-zt-track>';
 		foreach ( $items as $it ) {
 			echo ZT_Parts::rel_card( $it, array( 'exp' => 'yes' === $s['exp'], 'exp_label' => $s['exp_label'] ) ); // phpcs:ignore
 		}

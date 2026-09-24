@@ -434,3 +434,15 @@ a.zt-cinfo__row:hover b{color:var(--zt-green)}
 .zt-revform__stars button svg{width:22px;height:22px}
 .zt-revform__stars button.zt-is-on,.zt-revform__stars button:hover{color:var(--zt-star)}
 .zt-revform .zt-btn{align-self:flex-start}
+
+/* Carousels with more items than desktop columns: one scrollable row
+   (the arrows scroll it). Exact design counts keep the design grid. */
+@media (min-width:901px){
+  .zt-prod-track.zt-is-overflow,.zt-rel-track.zt-is-overflow{grid-template-columns:none;grid-auto-flow:column;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:12px 0 26px;margin:-12px 0 -26px}
+  .zt-prod-track.zt-is-overflow::-webkit-scrollbar,.zt-rel-track.zt-is-overflow::-webkit-scrollbar{display:none}
+  .zt-prod-track.zt-is-overflow > *,.zt-rel-track.zt-is-overflow > *{scroll-snap-align:start}
+  .zt-prod-track.zt-is-overflow{grid-auto-columns:calc((100% - 3 * 28px) / 4)}
+  .zt-rel-track.zt-is-overflow{grid-auto-columns:calc((100% - 4 * 22px) / 5)}
+}
+@media (min-width:901px) and (max-width:1000px){ .zt-prod-track.zt-is-overflow{grid-auto-columns:calc((100% - 28px) / 2)} }
+@media (min-width:901px) and (max-width:1180px){ .zt-rel-track.zt-is-overflow{grid-auto-columns:calc((100% - 2 * 22px) / 3)} }

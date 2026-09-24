@@ -61,7 +61,7 @@ class ZT_W_Products extends ZT_W_Offers {
 		$items = $this->get_products( $s );
 		$this->section_open( $s );
 		$this->heading_render( $s );
-		echo '<div class="zt-prods' . esc_attr( $this->reveal( $s ) ) . '" data-zt-carousel><div class="zt-prod-track" data-zt-track>';
+		echo '<div class="zt-prods' . esc_attr( $this->reveal( $s ) ) . '" data-zt-carousel><div class="zt-prod-track' . ( count( $items ) > 4 ? ' zt-is-overflow' : '' ) . '" data-zt-track>';
 		foreach ( $items as $it ) {
 			echo ZT_Parts::product_card( $it, array( 'badge' => 'yes' === $s['badge'], 'exp' => 'yes' === $s['exp'], 'exp_label' => $s['exp_label'], 'stock' => 'yes' === $s['stock'] ) ); // phpcs:ignore
 		}

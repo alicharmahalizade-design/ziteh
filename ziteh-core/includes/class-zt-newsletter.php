@@ -124,7 +124,7 @@ class ZT_Newsletter {
 		}
 		global $wpdb;
 		$wpdb->delete( self::table(), array( 'id' => isset( $_GET['id'] ) ? absint( $_GET['id'] ) : 0 ) ); // phpcs:ignore
-		wp_safe_redirect( admin_url( 'admin.php?page=ziteh-core&tab=newsletter' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=ziteh-core&tab=subscribers' ) );
 		exit;
 	}
 }
