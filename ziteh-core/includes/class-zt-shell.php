@@ -171,7 +171,7 @@ class ZT_Shell {
 		}
 		$classes[] = 'zt-site';
 		$classes[] = 'zt-page-' . self::page_type();
-		$classes[] = is_user_logged_in() ? 'zt-logged-in' : 'zt-guest';
+		$classes[] = ( is_user_logged_in() || ZT_Context::demo() ) ? 'zt-logged-in' : 'zt-guest';
 		if ( self::shell_on() ) {
 			$bar = self::bar_type();
 			if ( 'none' !== $bar ) {
@@ -218,7 +218,7 @@ class ZT_Shell {
 			return;
 		}
 		$brand = zt_opt( 'general.brand_name', 'زیته' );
-		$count = ( zt_is_woo() && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0;
+		$count = zt_cart_count();
 		$cnt   = zt_fa( $count );
 		$vis   = $count > 0 ? '' : ' style="visibility:hidden"';
 		echo '<div class="zt-w zt-shell-root">';

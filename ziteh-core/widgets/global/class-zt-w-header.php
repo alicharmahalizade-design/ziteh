@@ -245,7 +245,7 @@ class ZT_W_Header extends ZT_Widget_Base {
 	 * @return string
 	 */
 	private function cart( $s, $label, $style = '' ) {
-		$count = ( zt_is_woo() && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0;
+		$count = zt_cart_count();
 		$out   = '<a' . zt_link_attrs( $s['cart_link'] ) . ' class="zt-cart-btn"' . ( $style ? ' style="' . esc_attr( $style ) . '"' : '' ) . '>';
 		$out  .= '<span class="zt-count" data-zt-cart-badge data-zt-keep>' . esc_html( zt_fa( $count ) ) . '</span>' . zt_icon( $s['cart_icon'] );
 		if ( $label && '' !== $s['cart_label'] ) {
@@ -265,14 +265,14 @@ class ZT_W_Header extends ZT_Widget_Base {
 		if ( $chip ) {
 			$u    = wp_get_current_user();
 			$name = $u->first_name ? $u->first_name : $u->display_name;
-			if ( ! is_user_logged_in() ) {
+			if ( ! is_user_logged_in() || ZT_Context::demo() ) {
 				$name = 'نرگس';
 			}
 			$greet = str_replace( '{name}', $name, zt_opt( 'tracking.greeting', 'سلام {name} عزیز' ) );
 			return '<a' . zt_link_attrs( $s['acc_link'] ) . ' class="zt-userchip"><span class="zt-ava">' . zt_icon( 'user' ) . '</span><span class="zt-txt"><b>' . esc_html( $greet ) . '</b><span>' . esc_html( $s['acc_chip_sub'] ) . '</span></span>' . zt_icon( 'chev-down', array( 'class' => 'zt-chev' ) ) . '</a>';
 		}
 		$txt = is_user_logged_in() ? $s['acc_user'] : $s['acc_guest'];
-		if ( 'cart' === ZT_Shell::page_type() && ! is_user_logged_in() && $this->is_editor() ) {
+		if ( 'cart' === ZT_Shell::page_type() && ! is_user_logged_in() && ( $this->is_editor() || ZT_Context::demo() ) ) {
 			$txt = $s['acc_user'];
 		}
 		return '<a' . zt_link_attrs( $s['acc_link'] ) . ' class="zt-hicon">' . zt_icon( $s['acc_icon'] ) . '<span>' . esc_html( $txt ) . '</span></a>';
@@ -308,7 +308,7 @@ class ZT_W_Header extends ZT_Widget_Base {
 	/** @inheritDoc */
 	protected function zt_render( $s ) {
 		$layout = $this->layout( $s );
-		$chip   = 'yes' === $s['acc_chip'] && 'panel' === ZT_Shell::page_type() && ( is_user_logged_in() || $this->is_editor() || ! zt_is_woo() );
+		$chip   = 'yes' === $s['acc_chip'] && 'panel' === ZT_Shell::page_type() && ( is_user_logged_in() || $this->is_editor() || ZT_Context::demo() || ! zt_is_woo() );
 		$items  = $this->items( $s );
 
 		echo '<header class="zt-header">';

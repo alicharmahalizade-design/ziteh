@@ -153,6 +153,13 @@ class ZT_Templates {
 	 */
 	public static function template_include( $template ) {
 		if ( is_singular( self::CPT ) ) {
+			if ( ! current_user_can( 'edit_pages' ) && ! ( defined( 'ZT_ALLOW_DEMO' ) && ZT_ALLOW_DEMO ) ) {
+				global $wp_query;
+				$wp_query->set_404();
+				status_header( 404 );
+				nocache_headers();
+				return get_404_template() ? get_404_template() : $template;
+			}
 			self::$current = get_the_ID();
 			return ZT_PATH . 'templates/template-preview.php';
 		}

@@ -114,10 +114,34 @@ class ZT_Assets {
 		wp_add_inline_style( 'zt-core', self::tokens_css() );
 
 		if ( zt_is_woo() && ! is_admin() ) {
-			wp_enqueue_script( 'wc-cart-fragments' );
+			if ( self::sample_cart() ) {
+				add_action( 'wp_enqueue_scripts', array( __CLASS__, 'dequeue_live_cart' ), 100 );
+				add_action( 'wp_footer', array( __CLASS__, 'dequeue_live_cart' ), 1 );
+			} else {
+				wp_enqueue_script( 'wc-cart-fragments' );
+			}
 		}
 		wp_enqueue_script( 'zt-app' );
 		wp_localize_script( 'zt-app', 'ZT', self::js_data() );
+	}
+
+	/**
+	 * Is the sample (design) cart shown instead of the live one?
+	 *
+	 * @return bool
+	 */
+	public static function sample_cart() {
+		return ZT_Context::demo() || ( zt_is_editor() && zt_is_woo() && WC()->cart && WC()->cart->is_empty() );
+	}
+
+	/**
+	 * Design preview / empty-cart editor: WooCommerce cart/checkout scripts
+	 * would replace the sample content with live (empty) data.
+	 */
+	public static function dequeue_live_cart() {
+		foreach ( array( 'wc-checkout', 'wc-cart', 'wc-cart-fragments' ) as $h ) {
+			wp_dequeue_script( $h );
+		}
 	}
 
 	/**
@@ -192,16 +216,14 @@ class ZT_Assets {
 	 * @return array
 	 */
 	public static function js_data() {
-		$count = 0;
-		if ( zt_is_woo() && WC()->cart ) {
-			$count = WC()->cart->get_cart_contents_count();
-		}
+		$count = zt_cart_count();
 		return array(
 			'ajax'     => admin_url( 'admin-ajax.php' ),
 			'nonce'    => wp_create_nonce( 'zt-ajax' ),
 			'woo'      => zt_is_woo(),
 			'editor'   => zt_is_editor(),
 			'count'    => $count,
+			'demo'     => ZT_Context::demo(),
 			'loggedIn' => is_user_logged_in(),
 			'fa'       => (bool) zt_opt( 'general.persian_digits', 1 ),
 			'currency' => zt_currency(),
@@ -228,6 +250,7 @@ class ZT_Assets {
 				'wishOn'      => 'به لیست علاقه‌مندی اضافه شد',
 				'wishOff'     => 'از لیست علاقه‌مندی حذف شد',
 				'copied'      => 'شماره سفارش کپی شد',
+				'copied_code' => 'کد کپی شد',
 				'results'     => '{n} نتیجه برای «{q}»',
 				'selected'    => '{label}: {name} انتخاب شد',
 				'error'       => 'خطایی رخ داد؛ دوباره تلاش کنید.',

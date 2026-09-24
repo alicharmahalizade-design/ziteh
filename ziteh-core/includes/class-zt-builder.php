@@ -636,9 +636,50 @@ class ZT_Builder {
 	}
 
 	/**
+	 * Existing page to reuse for a page key: the WooCommerce page, a page built
+	 * earlier by Ziteh, or an empty page with the same slug.
+	 *
+	 * @param string $key  Page key.
+	 * @param string $slug Slug.
+	 * @return int
+	 */
+	public static function adopt( $key, $slug ) {
+		$wc = array(
+			'shop'     => 'shop',
+			'cart'     => 'cart',
+			'checkout' => 'checkout',
+			'account'  => 'myaccount',
+		);
+		if ( isset( $wc[ $key ] ) && function_exists( 'wc_get_page_id' ) ) {
+			$id = (int) wc_get_page_id( $wc[ $key ] );
+			if ( $id > 0 && 'publish' === get_post_status( $id ) ) {
+				return $id;
+			}
+		}
+		$found = get_posts(
+			array(
+				'post_type'   => 'page',
+				'post_status' => array( 'publish', 'draft', 'private' ),
+				'meta_key'    => '_zt_built', // phpcs:ignore
+				'meta_value'  => $key, // phpcs:ignore
+				'numberposts' => 1,
+				'fields'      => 'ids',
+			)
+		);
+		if ( $found ) {
+			return (int) $found[0];
+		}
+		$page = get_page_by_path( $slug );
+		if ( $page && 'page' === $page->post_type && '' === trim( wp_strip_all_tags( $page->post_content ) ) && ! get_post_meta( $page->ID, '_elementor_data', true ) ) {
+			return (int) $page->ID;
+		}
+		return 0;
+	}
+
+	/**
 	 * Build (or rebuild) everything.
 	 *
-	 * @param array $opts overwrite (bool): rebuild existing pages too; front (bool) set front page; woo (bool) assign WC pages.
+	 * @param array $opts overwrite (bool): rebuild existing pages too; front (bool) set front page; woo (bool) assign WC pages; only (array) keys.
 	 * @return array Log lines.
 	 */
 	public static function build( $opts = array() ) {
@@ -664,6 +705,9 @@ class ZT_Builder {
 			}
 			$exists = (bool) $id;
 			if ( ! $id ) {
+				$id = self::adopt( $key, $def['slug'] );
+			}
+			if ( ! $id ) {
 				$id = wp_insert_post(
 					array(
 						'post_type'   => 'page',
@@ -679,6 +723,7 @@ class ZT_Builder {
 				continue;
 			}
 			ZT_Settings::set( 'pages.' . $key, $id );
+			update_post_meta( $id, '_zt_built', $key );
 			if ( ! $exists || $o['overwrite'] ) {
 				update_post_meta( $id, '_wp_page_template', 'zt-canvas' );
 				$ps = array();
@@ -690,6 +735,15 @@ class ZT_Builder {
 					self::save_elementor( $id, $def['elements'], $ps );
 				} else {
 					update_post_meta( $id, '_elementor_page_settings', $ps );
+				}
+				$sc = array(
+					'cart'     => '[woocommerce_cart]',
+					'checkout' => '[woocommerce_checkout]',
+					'account'  => '[woocommerce_my_account]',
+				);
+				if ( isset( $sc[ $key ] ) ) {
+					// Classic shortcode in post_content so WooCommerce treats the page as the classic cart/checkout/account.
+					wp_update_post( array( 'ID' => $id, 'post_content' => $sc[ $key ] ) );
 				}
 				$log[] = ( $exists ? 'بازسازی شد: ' : 'ساخته شد: ' ) . $def['title'];
 			} else {

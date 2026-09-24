@@ -69,6 +69,7 @@ class ZT_Parts {
 			'reviews'     => (int) $product->get_review_count(),
 			'volume'      => (string) get_post_meta( $id, '_zt_volume', true ),
 			'en'          => (string) get_post_meta( $id, '_zt_en_name', true ),
+			'short'       => (string) get_post_meta( $id, '_zt_short_title', true ),
 		);
 	}
 

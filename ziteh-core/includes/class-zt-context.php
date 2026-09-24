@@ -28,6 +28,20 @@ class ZT_Context {
 	private static $order = null;
 
 	/**
+	 * Design-preview mode: every dynamic widget renders the sample content of
+	 * the original design (?zt_demo=1, for editors only).
+	 *
+	 * @return bool
+	 */
+	public static function demo() {
+		static $d = null;
+		if ( null === $d ) {
+			$d = isset( $_GET['zt_demo'] ) && ( current_user_can( 'edit_pages' ) || ( defined( 'ZT_ALLOW_DEMO' ) && ZT_ALLOW_DEMO ) ); // phpcs:ignore
+		}
+		return $d;
+	}
+
+	/**
 	 * Id of the template currently edited (if any).
 	 *
 	 * @return int
@@ -50,7 +64,7 @@ class ZT_Context {
 	 * @return WC_Product|null
 	 */
 	public static function product() {
-		if ( ! zt_is_woo() ) {
+		if ( ! zt_is_woo() || self::demo() ) {
 			return null;
 		}
 		if ( self::$product ) {
@@ -88,6 +102,28 @@ class ZT_Context {
 	}
 
 	/**
+	 * Current blog post (single post, or a preview post while editing a template).
+	 *
+	 * @return WP_Post|null
+	 */
+	public static function post() {
+		if ( is_singular( 'post' ) ) {
+			return get_post( get_queried_object_id() );
+		}
+		$tpl = self::editing_template();
+		if ( $tpl ) {
+			$pid = (int) get_post_meta( $tpl, '_zt_preview_id', true );
+			if ( ! $pid || 'post' !== get_post_type( $pid ) ) {
+				$ids = get_posts( array( 'numberposts' => 1, 'fields' => 'ids', 'post_type' => 'post' ) );
+				$pid = $ids ? (int) $ids[0] : 0;
+			}
+			return $pid ? get_post( $pid ) : null;
+		}
+		global $post;
+		return ( $post instanceof WP_Post && 'post' === $post->post_type ) ? $post : null;
+	}
+
+	/**
 	 * Current order for the tracking page.
 	 *
 	 * Resolution: ?zt_order=ID&zt_key=wc_order_xxx (guest link) or ?zt_order=ID for the
@@ -97,7 +133,7 @@ class ZT_Context {
 	 * @return WC_Order|null
 	 */
 	public static function order() {
-		if ( ! zt_is_woo() ) {
+		if ( ! zt_is_woo() || self::demo() ) {
 			return null;
 		}
 		if ( null !== self::$order ) {

@@ -169,6 +169,23 @@ function zt_page_url( $role ) {
 			break;
 		case 'logout':
 			return zt_is_woo() ? wc_logout_url() : wp_logout_url( home_url( '/' ) );
+		case 'addresses':
+		case 'edit-address':
+		case 'edit-account':
+		case 'lost-password':
+		case 'downloads':
+		case 'payment-methods':
+		case 'reviews':
+		case 'coupons':
+			if ( zt_is_woo() ) {
+				$map = array(
+					'addresses' => 'edit-address',
+					'reviews'   => 'zt-reviews',
+					'coupons'   => 'zt-coupons',
+				);
+				return wc_get_account_endpoint_url( isset( $map[ $role ] ) ? $map[ $role ] : $role );
+			}
+			break;
 	}
 	$id = (int) zt_opt( 'pages.' . $role, 0 );
 	if ( $id && get_post_status( $id ) ) {
@@ -460,4 +477,25 @@ function zt_page_setting( $key, $id = null ) {
 		}
 	}
 	return '';
+}
+
+/**
+ * Cart item count for badges. In design-preview mode the count of the
+ * original design page is used.
+ *
+ * @return int
+ */
+function zt_cart_count() {
+	if ( class_exists( 'ZT_Context' ) && ZT_Context::demo() ) {
+		$map = array(
+			'product'  => 4,
+			'cart'     => 2,
+			'checkout' => 3,
+			'panel'    => 2,
+			'tracking' => 2,
+		);
+		$t = class_exists( 'ZT_Shell' ) ? ZT_Shell::page_type() : '';
+		return isset( $map[ $t ] ) ? $map[ $t ] : 0;
+	}
+	return ( zt_is_woo() && WC()->cart ) ? (int) WC()->cart->get_cart_contents_count() : 0;
 }

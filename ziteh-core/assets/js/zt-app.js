@@ -44,7 +44,7 @@
   }
   function syncCountFromFragments() {
     var el = $1('.zt-cart-count-data');
-    if (el) { var n = parseInt(el.getAttribute('data-count'), 10); if (!isNaN(n) && n !== D.count) paintBadges(n, true); }
+    if (el && !D.demo) { var n = parseInt(el.getAttribute('data-count'), 10); if (!isNaN(n) && n !== D.count) paintBadges(n, true); }
   }
   $(document.body).on('wc_fragments_refreshed wc_fragments_loaded added_to_cart removed_from_cart', function () { setTimeout(syncCountFromFragments, 0); });
 
@@ -415,6 +415,22 @@
     col.classList.toggle('zt-is-open');
   });
 
+  /* copy-to-clipboard buttons (coupon codes …) + clickable table rows */
+  document.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-zt-copy]');
+    if (c) {
+      e.preventDefault();
+      var v = c.getAttribute('data-zt-copy');
+      try { navigator.clipboard.writeText(v); } catch (err) {}
+      c.classList.add('zt-is-done');
+      toast(I18N.copied_code || I18N.copied);
+      setTimeout(function () { c.classList.remove('zt-is-done'); }, 2200);
+      return;
+    }
+    var r = e.target.closest('[data-zt-href]');
+    if (r && !D.editor && (r.tagName === 'BUTTON' || !e.target.closest('a,button'))) location.href = r.getAttribute('data-zt-href');
+  });
+
   /* ==========================================================================
      Per-scope initialisers (widgets)
      ========================================================================== */
@@ -452,6 +468,18 @@
     window.addEventListener('load', paint);
     setTimeout(function () { els.forEach(function (el) { el.classList.add('zt-in'); }); }, D.editor ? 50 : 4000);
     void revealIO;
+  });
+
+  /* FAQ: only one open at a time (optional) */
+  def(function (root) {
+    $$('[data-zt-faq-single]', root).forEach(function (w) {
+      if (!once(w, 'faq')) return;
+      $$('details', w).forEach(function (d) {
+        d.addEventListener('toggle', function () {
+          if (d.open) $$('details', w).forEach(function (x) { if (x !== d) x.open = false; });
+        });
+      });
+    });
   });
 
   /* tabs (product) */
@@ -770,7 +798,7 @@
           e.preventDefault();
           var v = k + 1;
           if (input) input.value = v;
-          $$('button', wrap).forEach(function (x, j) { x.classList.toggle('zt-on', j < v); });
+          $$('button', wrap).forEach(function (x, j) { x.classList.toggle('zt-is-on', j < v); });
         });
       });
     });
@@ -863,7 +891,7 @@
       if (!t) return;
       $$('[data-zt-tier]', box).forEach(function (el) { el.classList.toggle('zt-is-done', st.subtotal_tier >= parseFloat(el.getAttribute('data-zt-tier'))); });
       var fill = $1('[data-zt-tier-fill]', box);
-      if (fill) fill.style.width = 'calc((100% - 200px) * ' + (t.fill / 100) + ')';
+      if (fill && t.fill >= 0) { fill.classList.add('zt-fill-l'); fill.style.width = 'calc((100% - 2 * var(--zt-tin, 100px)) * ' + (t.fill / 100) + ')'; }
     });
     $$('[data-zt-tier-msg]').forEach(function (el) { if (t) el.textContent = t.msg; });
     $$('[data-zt-tier-bar]').forEach(function (el) { if (t) el.style.width = t.bar + '%'; });
