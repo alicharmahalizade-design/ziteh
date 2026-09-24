@@ -748,6 +748,9 @@ abstract class ZT_Widget_Base extends Widget_Base {
 	protected function get_products( $s ) {
 		$items = array();
 		$src   = isset( $s['src'] ) ? $s['src'] : 'auto';
+		if ( 'auto' === $src && ZT_Context::demo() ) {
+			$src = 'manual'; // design preview: the design's own sample products.
+		}
 		if ( 'manual' !== $src && zt_is_woo() ) {
 			foreach ( $this->query_products( $s ) as $p ) {
 				$it = ZT_Parts::product_item( $p );
@@ -1032,6 +1035,9 @@ abstract class ZT_Widget_Base extends Widget_Base {
 	 */
 	protected function get_posts_items( $s, $exclude = array() ) {
 		$src = isset( $s['psrc'] ) ? $s['psrc'] : 'auto';
+		if ( 'auto' === $src && ZT_Context::demo() ) {
+			$src = 'manual';
+		}
 		$out = array();
 		if ( 'manual' !== $src ) {
 			$args = array(
