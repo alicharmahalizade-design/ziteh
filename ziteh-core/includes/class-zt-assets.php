@@ -18,6 +18,7 @@ class ZT_Assets {
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue' ), 20 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'dequeue_theme' ), 999 );
+		add_action( 'wp_footer', array( __CLASS__, 'dequeue_wc_blocks' ), 1 );
 		add_action( 'elementor/editor/after_enqueue_styles', array( __CLASS__, 'editor_styles' ) );
 		add_action( 'elementor/preview/enqueue_styles', array( __CLASS__, 'enqueue' ) );
 
@@ -26,7 +27,13 @@ class ZT_Assets {
 		add_filter( 'hello_elementor_enqueue_theme_style', array( __CLASS__, 'hello_off' ) );
 		add_filter( 'hello_elementor_header_footer', array( __CLASS__, 'hello_hf_off' ) );
 		add_filter( 'hello_elementor_page_title', array( __CLASS__, 'hello_hf_off' ) );
-		add_filter( 'hello_elementor_add_description_meta_tag', '__return_false' );
+		add_filter( 'hello_elementor_add_description_meta_tag', '__return_false' ); // Hello < 3.
+		add_filter( 'hello_elementor_description_meta_tag', '__return_false' );
+
+		// Elementor Google Fonts (the design ships its own Dana font).
+		if ( zt_opt( 'general.disable_elementor_defaults', 1 ) ) {
+			add_filter( 'elementor/frontend/print_google_fonts', '__return_false' );
+		}
 
 		// WooCommerce default styles.
 		add_filter( 'woocommerce_enqueue_styles', array( __CLASS__, 'woo_styles' ), 99 );
@@ -160,6 +167,25 @@ class ZT_Assets {
 			foreach ( array( 'woocommerce-general', 'woocommerce-layout', 'woocommerce-smallscreen', 'woocommerce-blocktheme' ) as $h ) {
 				wp_dequeue_style( $h );
 			}
+			self::dequeue_wc_blocks();
+		}
+	}
+
+	/**
+	 * WooCommerce block styles are kept only where the content really uses
+	 * WooCommerce blocks (WooCommerce enqueues them again in wp_head, so this
+	 * also runs at the start of wp_footer, before late styles are printed).
+	 */
+	public static function dequeue_wc_blocks() {
+		if ( ! zt_opt( 'general.disable_wc_styles', 1 ) ) {
+			return;
+		}
+		$post = is_singular() ? get_post() : null;
+		if ( $post && false !== strpos( (string) $post->post_content, '<!-- wp:woocommerce' ) ) {
+			return;
+		}
+		foreach ( array( 'wc-blocks-style', 'wc-blocks-vendors-style' ) as $h ) {
+			wp_dequeue_style( $h );
 		}
 	}
 
