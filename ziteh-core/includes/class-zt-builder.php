@@ -254,6 +254,7 @@ class ZT_Builder {
 				),
 			),
 			'meta'     => array(
+				'search_ph'    => 'جستجو در زیته ...',
 				'footer_width' => 'narrow',
 				'footer_copy'  => 'کلیه حقوق این وب‌سایت متعلق به زیته است.',
 			),
@@ -320,6 +321,7 @@ class ZT_Builder {
 				),
 			),
 			'meta'     => array(
+				'nav_rename'   => 'دسته‌بندی‌ها|دسته بندی ها',
 				'footer_style' => 'cream',
 				'footer_box'   => 1440,
 				'footer_copy'  => 'کلیه حقوق محفوظ است برای زیته',

@@ -154,6 +154,17 @@ class ZT_W_Header extends ZT_Widget_Base {
 	private function items( $s ) {
 		$out  = array();
 		$here = trailingslashit( strtok( ( is_ssl() ? 'https://' : 'http://' ) . ( isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '' ) . ( isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '' ), '?' ) );
+		if ( is_singular( 'zt_template' ) ) {
+			$here = '-'; // template preview: no active item.
+		}
+		// Per-page label overrides ("old label|new label" per line, page settings → «عنوان منو در این صفحه»).
+		$rename = array();
+		foreach ( zt_lines( (string) zt_page_setting( 'nav_rename' ) ) as $l ) {
+			$pp = array_map( 'trim', explode( '|', $l, 2 ) );
+			if ( 2 === count( $pp ) ) {
+				$rename[ $pp[0] ] = $pp[1];
+			}
+		}
 		if ( ! empty( $s['menu_wp'] ) ) {
 			$tree = array();
 			foreach ( (array) wp_get_nav_menu_items( (int) $s['menu_wp'] ) as $mi ) {
@@ -192,7 +203,8 @@ class ZT_W_Header extends ZT_Widget_Base {
 				}
 			}
 			$active = '#' !== $url && trailingslashit( strtok( $url, '?' ) ) === $here;
-			$out[]  = array( $m['label'], $url, $children, $active, '' !== $ch );
+			$label  = isset( $rename[ $m['label'] ] ) ? $rename[ $m['label'] ] : $m['label'];
+			$out[]  = array( $label, $url, $children, $active, '' !== $ch );
 		}
 		return $out;
 	}
@@ -229,7 +241,7 @@ class ZT_W_Header extends ZT_Widget_Base {
 			return '';
 		}
 		$out  = '<form class="zt-search" role="search" method="get" action="' . esc_url( home_url( '/' ) ) . '"' . ( $style ? ' style="' . esc_attr( $style ) . '"' : '' ) . '>';
-		$out .= zt_icon( 'search' ) . '<input type="search" name="s" enterkeyhint="search" placeholder="' . esc_attr( $s['search_ph'] ) . '" value="' . esc_attr( get_search_query() ) . '">';
+		$out .= zt_icon( 'search' ) . '<input type="search" name="s" enterkeyhint="search" placeholder="' . esc_attr( '' !== (string) zt_page_setting( 'search_ph' ) ? zt_page_setting( 'search_ph' ) : $s['search_ph'] ) . '" value="' . esc_attr( get_search_query() ) . '">';
 		if ( 'yes' === $s['search_products'] && zt_is_woo() ) {
 			$out .= '<input type="hidden" name="post_type" value="product">';
 		}

@@ -396,7 +396,9 @@ class ZT_Shell {
 			echo '<button class="zt-btn zt-btn--primary" data-zt-ab-add="' . esc_attr( $pid ) . '"' . $disabled . '>' . zt_icon( 'bag' ) . ' ' . esc_html( zt_opt( 'shell.ab_product' ) ) . '</button>';
 		} else {
 			$total = 0;
-			if ( zt_is_woo() && WC()->cart ) {
+			if ( ZT_Context::demo() ) {
+				$total = ( 'cart' === $type ? 1910000 : 1485000 ) * max( 1, (float) zt_opt( 'general.price_divisor', 1 ) );
+			} elseif ( zt_is_woo() && WC()->cart ) {
 				WC()->cart->calculate_totals();
 				$total = 'cart' === $type ? (float) WC()->cart->get_total( 'edit' ) - (float) WC()->cart->get_shipping_total() - (float) WC()->cart->get_shipping_tax() : (float) WC()->cart->get_total( 'edit' );
 			}

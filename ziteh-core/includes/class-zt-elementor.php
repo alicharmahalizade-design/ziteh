@@ -214,6 +214,36 @@ class ZT_Elementor {
 				),
 			)
 		);
+		$doc->add_control(
+			'zt_footer_box',
+			array(
+				'label'       => 'حداکثر عرض جعبه فوتر (px)',
+				'type'        => \Elementor\Controls_Manager::NUMBER,
+				'description' => 'خالی = پیش‌فرض قالب فوتر',
+			)
+		);
+		$doc->add_control(
+			'zt_footer_copy',
+			array(
+				'label' => 'متن کپی‌رایت در این صفحه',
+				'type'  => \Elementor\Controls_Manager::TEXT,
+			)
+		);
+		$doc->add_control(
+			'zt_search_ph',
+			array(
+				'label' => 'متن جستجوی هدر در این صفحه',
+				'type'  => \Elementor\Controls_Manager::TEXT,
+			)
+		);
+		$doc->add_control(
+			'zt_nav_rename',
+			array(
+				'label'       => 'عنوان منو در این صفحه',
+				'type'        => \Elementor\Controls_Manager::TEXTAREA,
+				'description' => 'هر خط: عنوان فعلی|عنوان جدید',
+			)
+		);
 		$doc->end_controls_section();
 	}
 

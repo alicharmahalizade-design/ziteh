@@ -112,6 +112,9 @@ body.zt-guest .zt-panel-grid{grid-template-columns:1fr}
 @media (max-width:900px){
   body.zt-page-product main.zt-container{padding-inline:0;--padding-left:0px;--padding-right:0px;--padding-inline-start:0px;--padding-inline-end:0px}
   body.zt-page-product main.zt-container > *:not(.zt-pdp){padding-inline:16px}
+  /* boxes with a background take the 16px themselves (full-bleed, as in the design) */
+  body.zt-page-product main.zt-container > .elementor-widget-zt-newsletter{padding-inline:0}
+  body.zt-page-product main.zt-container > .elementor-widget-zt-newsletter .zt-news{padding-inline:16px}
   .e-con.zt-pdp{padding-top:0;--padding-top:0px}
   .zt-co-grid > aside,.zt-co-grid > .e-con:last-child{order:-1}
   .zt-reviews > aside{order:-1}

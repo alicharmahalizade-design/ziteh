@@ -71,7 +71,7 @@ class ZT_W_Cart_Tiers extends ZT_Widget_Base {
 			return;
 		}
 		$fill = $st['tiers']['fill'];
-		$fill_style = $fill < 0 ? 'width:calc(50% - 100px)' : 'width:calc((100% - 2 * var(--zt-tin, 100px)) * ' . ( $fill / 100 ) . ')';
+		$fill_style = $fill < 0 ? 'width:calc(0% - 60px)' : 'width:calc((100% - 2 * var(--zt-tin, 100px)) * ' . ( $fill / 100 ) . ')';
 		echo '<section class="zt-pcard"><h2 class="zt-pcard__title">' . zt_icon( $s['icon'] ) . ' ' . esc_html( $s['title'] ) . '</h2><p class="zt-pcard__sub">' . esc_html( $s['sub'] ) . '</p>'; // phpcs:ignore
 		echo '<div class="zt-tiers" data-zt-tiers><span class="zt-tiers__fill' . ( $fill < 0 ? '' : ' zt-fill-l' ) . '" data-zt-tier-fill style="' . esc_attr( $fill_style ) . '"></span>';
 		foreach ( $tiers as $t ) {

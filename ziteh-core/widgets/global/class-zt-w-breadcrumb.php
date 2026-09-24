@@ -67,6 +67,9 @@ class ZT_W_Breadcrumb extends ZT_Widget_Base {
 		$t   = array();
 		$cur = '' !== $s['current'] ? $s['current'] : '';
 		$p   = ZT_Context::product();
+		if ( ! $p && ZT_Context::demo() && 'product' === ZT_Shell::page_type() ) {
+			return array( array( 'مراقبت مو', '#' ), array( $cur ? $cur : 'شامپو تقویت کننده و ضد ریزش مو', '' ) );
+		}
 		if ( $p && ( is_product() || ZT_Context::editing_template() ) ) {
 			$terms = get_the_terms( $p->get_id(), 'product_cat' );
 			if ( $terms && ! is_wp_error( $terms ) ) {

@@ -76,7 +76,9 @@ class ZT_W_Cart_Samples extends ZT_Widget_Base {
 			echo '<label class="zt-gift' . ( $is ? ' zt-is-selected' : '' ) . '" data-zt-radio data-index="' . esc_attr( $i ) . '"><img src="' . esc_url( zt_img_url( $g['image'] ) ) . '" alt=""><b>' . esc_html( $g['title'] ) . '</b><span>' . esc_html( zt_fa( $g['size'] ) ) . '</span><input type="radio" name="zt_sample" value="' . esc_attr( $i ) . '" hidden' . checked( $is, true, false ) . '><span class="zt-radio"></span></label>';
 		}
 		if ( 'yes' === $s['note'] ) {
-			echo '<div class="zt-gift zt-gift--note"><p>' . esc_html( str_replace( '{amount}', $min, zt_opt( 'cart.samples_note' ) ) ) . '</p>' . zt_icon( 'leaf' ) . '</div>'; // phpcs:ignore
+			// Design preview reproduces the sample text of the design literally ("۱,۰۰۰۰").
+			$note_amount = ZT_Context::demo() ? '۱,۰۰۰۰' : $min;
+			echo '<div class="zt-gift zt-gift--note"><p>' . esc_html( str_replace( '{amount}', $note_amount, zt_opt( 'cart.samples_note' ) ) ) . '</p>' . zt_icon( 'leaf' ) . '</div>'; // phpcs:ignore
 		}
 		echo '</div></section>';
 	}
