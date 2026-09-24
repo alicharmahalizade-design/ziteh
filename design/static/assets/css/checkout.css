@@ -1,0 +1,99 @@
+/* ==========================================================================
+   Checkout page
+   ========================================================================== */
+
+.co-grid{display:grid;grid-template-columns:1fr 350px;gap:26px;align-items:start}
+
+/* ---------- stepper -------------------------------------------------------- */
+.steps-bar{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:26px 28px 22px;margin-bottom:30px}
+.steps-bar ol{display:flex;justify-content:space-between;position:relative}
+.steps-bar ol::before{content:"";position:absolute;top:19px;inset-inline:60px;height:2px;background:var(--line-2)}
+.steps-bar ol::after{content:"";position:absolute;top:19px;inset-inline-start:60px;width:calc(25% - 20px);
+  height:2px;background:var(--green)}
+.stepli{position:relative;z-index:2;text-align:center;flex:1 1 0;min-width:0}
+.stepli i{width:38px;height:38px;border-radius:50%;background:#fff;border:2px solid var(--line-2);
+  color:var(--muted);display:grid;place-items:center;margin:0 auto 10px;font-style:normal;
+  font-size:13.5px;font-weight:700}
+.stepli.is-active i{background:var(--green);border-color:var(--green);color:#fff}
+.stepli span{font-size:13px;color:var(--muted)}
+.stepli.is-active span{color:var(--ink);font-weight:600}
+
+/* ---------- section heads --------------------------------------------------- */
+.co-head{display:flex;align-items:center;gap:11px;font-size:17px;font-weight:700;margin:30px 0 16px}
+.co-head svg{width:21px;height:21px;color:var(--green)}
+.co-head:first-child{margin-top:0}
+
+.co-box{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:26px 28px}
+
+/* ---------- form ------------------------------------------------------------- */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px}
+.form-grid .full{grid-column:1 / -1}
+
+/* ---------- option cards (shipping / payment) --------------------------------- */
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.opt{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;cursor:pointer;
+  transition:border-color var(--t),box-shadow var(--t)}
+.opt:hover{border-color:var(--green-200)}
+.opt.is-selected{border-color:var(--green);box-shadow:0 0 0 3px rgba(107,116,87,.08)}
+.opt__top{display:flex;align-items:flex-start;gap:14px}
+.opt__top > svg{width:28px;height:28px;color:var(--ink-2);flex:none}
+.opt.is-selected .opt__top > svg{color:var(--green)}
+.opt b{display:block;font-size:14.5px;font-weight:700}
+.opt small{display:block;font-size:11.5px;color:var(--muted);line-height:1.8;margin-top:3px}
+.opt__foot{display:flex;align-items:center;justify-content:space-between;margin-top:16px}
+.opt__foot span{font-size:13.5px;font-weight:600}
+
+/* ---------- submit row --------------------------------------------------------- */
+.co-submit{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:26px}
+.co-submit p{font-size:13px;color:var(--muted)}
+
+/* ---------- order summary -------------------------------------------------------- */
+.osum{background:var(--cream);border-radius:var(--r-lg);padding:24px 22px}
+.osum__title{display:flex;align-items:center;gap:11px;font-size:18px;font-weight:800;margin-bottom:20px}
+.osum__title svg{width:20px;height:20px;color:var(--green)}
+.oitem{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line-2);position:relative}
+.oitem img{width:62px;height:62px;border-radius:12px;object-fit:cover;background:#fff;flex:none}
+.oitem b{display:block;font-size:13px;font-weight:600;line-height:1.85;padding-inline-end:22px}
+.oitem span{display:block;font-size:11.5px;color:var(--muted)}
+.oitem .price{font-size:13px;font-weight:700;margin-top:8px;display:block}
+.oitem .rm{position:absolute;top:16px;inset-inline-start:0;color:var(--ink-2);width:20px;height:20px;
+  display:grid;place-items:center;transition:color var(--t)}
+.oitem .rm:hover{color:var(--red)}
+.oitem .rm svg{width:12px;height:12px}
+.coupon{padding:18px 0 20px;border-bottom:1px solid var(--line-2)}
+.coupon p{font-size:13px;color:var(--ink-2);margin-bottom:12px}
+.coupon div{display:flex;gap:0;background:#fff;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.coupon input{flex:1;border:0;outline:0;height:44px;padding-inline:14px;font-size:13px;background:none}
+.coupon input::placeholder{color:var(--muted-2)}
+.coupon button{background:var(--green);color:#fff;padding-inline:22px;font-size:13.5px;font-weight:700;
+  transition:background var(--t)}
+.coupon button:hover{background:var(--green-600)}
+.osum__row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2);padding:9px 0}
+.osum__row b{font-weight:600}
+.osum__total{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  border-top:1px solid var(--line-2);margin-top:12px;padding-top:16px}
+.osum__total > span{font-size:14px;color:var(--ink-2)}
+.osum__total b{font-size:20px;font-weight:800;color:var(--green)}
+.osum__total b small{font-size:13.5px;font-weight:500}
+.osum__pts{font-size:12.5px;color:var(--muted);margin-top:12px}
+
+.safe{background:var(--cream);border-radius:var(--r-lg);padding:24px 22px;margin-top:22px;position:relative;overflow:hidden}
+.safe__title{display:flex;align-items:center;gap:11px;font-size:16px;font-weight:800;margin-bottom:16px}
+.safe__title svg{width:20px;height:20px;color:var(--green)}
+.safe li{display:flex;align-items:center;gap:11px;font-size:13px;color:var(--ink-2);padding:6px 0;
+  position:relative;z-index:2}
+.safe li svg{width:15px;height:15px;color:var(--green);flex:none}
+.safe .orn{position:absolute;bottom:-24px;left:-16px;width:130px;opacity:.55;z-index:1;pointer-events:none}
+
+/* ---------- responsive ------------------------------------------------------------- */
+@media (max-width:1050px){
+  .co-grid{grid-template-columns:1fr}
+  .opts{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .form-grid{grid-template-columns:1fr}
+  .steps-bar{padding-inline:16px}
+  .steps-bar ol::before,.steps-bar ol::after{display:none}
+  .co-submit{flex-direction:column-reverse;align-items:stretch}
+}

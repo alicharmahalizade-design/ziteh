@@ -1,0 +1,226 @@
+/* ==========================================================================
+   زیته | Ziteh — Base / Design tokens
+   ========================================================================== */
+
+/* ==========================================================================
+   Dana — فونت متغیر، سلف‌هاست (بدون وابستگی به گوگل)
+   محور وزن: ۱۰ تا ۹۹۰  |  محور کشیده: KASH
+   ========================================================================== */
+@font-face{
+  font-family:'Dana';
+  src:url('../fonts/DanaVF.woff2') format('woff2'),
+      url('../fonts/DanaVF.ttf')   format('truetype');
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+
+:root{
+  /* brand ------------------------------------------------------------- */
+  --green:        #6B7457;
+  --green-600:    #5D6749;
+  --green-700:    #4E5740;
+  --green-050:    #F1F3EB;
+  --green-100:    #E5E9DA;
+  --green-200:    #D3D9C4;
+
+  /* neutrals ---------------------------------------------------------- */
+  --paper:        #FAF8F5;
+  --cream:        #F6F2EA;
+  --cream-2:      #F1EADF;
+  --cream-3:      #EBE2D4;
+  --card:         #FFFFFF;
+  --line:         #EEE8DE;
+  --line-2:       #E3DACC;
+
+  /* text -------------------------------------------------------------- */
+  --ink:          #2E2E29;
+  --ink-2:        #55544C;
+  --muted:        #9C968A;
+  --muted-2:      #B3ACA0;
+
+  /* accents ----------------------------------------------------------- */
+  --star:         #EFA92E;
+  --red:          #C4552A;
+
+  /* shape ------------------------------------------------------------- */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r:    16px;
+  --r-lg: 22px;
+  --r-xl: 28px;
+  --pill: 999px;
+
+  --shadow-xs: 0 1px 2px rgba(85,72,50,.05);
+  --shadow-sm: 0 2px 10px rgba(85,72,50,.05);
+  --shadow:    0 10px 30px rgba(85,72,50,.07);
+  --shadow-lg: 0 18px 50px rgba(85,72,50,.10);
+
+  --container: 1440px;
+  --gutter: 24px;
+
+  --t: .22s cubic-bezier(.4,0,.2,1);
+}
+
+/* reset ---------------------------------------------------------------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Dana',Vazirmatn,'Segoe UI',Tahoma,sans-serif;
+  font-size:15px;
+  line-height:1.9;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+h1,h2,h3,h4,h5,h6,p,figure,ul,ol{margin:0;padding:0}
+ul,ol{list-style:none}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+svg{display:block;flex:none}
+[hidden]{display:none!important}
+
+::selection{background:var(--green-200);color:var(--green-700)}
+
+/* scrollbar ------------------------------------------------------------ */
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--cream)}
+::-webkit-scrollbar-thumb{background:#D8D2C4;border-radius:99px;border:3px solid var(--cream)}
+::-webkit-scrollbar-thumb:hover{background:#C3BCAB}
+
+/* layout helpers ------------------------------------------------------- */
+/* grid/flex items must be allowed to shrink below their min-content width */
+.shop-grid>*,.co-grid>*,.panel-grid>*,.dash-grid>*,.trk-grid>*,.pdp>*,
+.reviews>*,.story>*,.consult>*,.tabpanel__grid>*,.hero__wrap>*{min-width:0}
+table{table-layout:auto;max-width:100%}
+.container{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:var(--gutter)}
+.container--narrow{max-width:1240px}
+.section{padding-block:64px}
+.section--cream{background:var(--cream)}
+.section--white{background:#fff}
+.spacer{flex:1}
+
+/* typography ----------------------------------------------------------- */
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.tiny{font-size:12px}
+.strike{text-decoration:line-through;color:var(--muted-2)}
+
+/* section heading ------------------------------------------------------ */
+.sec-head{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:34px}
+.sec-title{display:flex;align-items:center;gap:10px;font-size:27px;font-weight:800;letter-spacing:-.2px}
+.sec-title .leaf{color:var(--green);flex:none}
+.sec-head--center{flex-direction:column;justify-content:center;gap:8px;text-align:center}
+.sec-sub{color:var(--muted);font-size:14.5px}
+.link-more{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:14px;transition:color var(--t)}
+.link-more:hover{color:var(--green)}
+.link-more svg{width:15px;height:15px}
+
+/* buttons -------------------------------------------------------------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  height:52px;padding-inline:26px;border-radius:var(--pill);
+  font-size:15px;font-weight:700;line-height:1;
+  transition:background var(--t),color var(--t),border-color var(--t),box-shadow var(--t),transform var(--t);
+  white-space:nowrap;
+}
+.btn svg{width:18px;height:18px}
+.btn:active{transform:translateY(1px)}
+.btn--primary{background:var(--green);color:#fff;box-shadow:0 6px 18px rgba(107,116,87,.22)}
+.btn--primary:hover{background:var(--green-600)}
+.btn--ghost{background:#fff;color:var(--ink);border:1px solid var(--line-2)}
+.btn--ghost:hover{border-color:var(--green);color:var(--green)}
+.btn--outline{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+.btn--outline:hover{background:var(--green);color:#fff}
+.btn--soft{background:var(--green-050);color:var(--green-700)}
+.btn--soft:hover{background:var(--green-100)}
+.btn--block{width:100%}
+.btn--sm{height:42px;font-size:14px;padding-inline:20px}
+.btn--lg{height:56px;font-size:16px;padding-inline:34px}
+
+/* icon button / carousel arrows --------------------------------------- */
+.iconbtn{
+  width:42px;height:42px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:#fff;border:1px solid var(--line);color:var(--ink-2);
+  box-shadow:var(--shadow-xs);transition:all var(--t);
+}
+.iconbtn:hover{color:var(--green);border-color:var(--green-200);box-shadow:var(--shadow-sm)}
+.iconbtn svg{width:17px;height:17px}
+.arrows{display:flex;gap:10px;justify-content:center;margin-top:28px}
+
+/* form controls -------------------------------------------------------- */
+.field{display:flex;flex-direction:column;gap:9px}
+.label{font-size:13.5px;color:var(--ink-2);font-weight:500}
+.label .req{color:var(--green)}
+.input,.select,.textarea{
+  width:100%;height:52px;padding-inline:18px;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  font-size:14.5px;color:var(--ink);transition:border-color var(--t),box-shadow var(--t);
+}
+.input::placeholder,.textarea::placeholder{color:var(--muted-2)}
+.input:focus,.select:focus,.textarea:focus{outline:0;border-color:var(--green-200);box-shadow:0 0 0 3px rgba(107,116,87,.08)}
+.textarea{height:auto;min-height:110px;padding:14px 18px;line-height:1.9;resize:vertical}
+.select{appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239C968A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:left 16px center;padding-left:44px}
+
+/* checkbox / radio ----------------------------------------------------- */
+.check{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-size:14px;color:var(--ink-2)}
+.check input{position:absolute;opacity:0;pointer-events:none}
+.check .box{
+  width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line-2);background:#fff;
+  display:grid;place-items:center;transition:all var(--t);flex:none}
+.check .box svg{width:12px;height:12px;color:#fff;opacity:0;transition:opacity var(--t)}
+.check input:checked + .box{background:var(--green);border-color:var(--green)}
+.check input:checked + .box svg{opacity:1}
+
+.radio{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line-2);background:#fff;
+  display:grid;place-items:center;flex:none;transition:all var(--t)}
+.radio::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--green);transform:scale(0);transition:transform var(--t)}
+.is-selected .radio::after{transform:scale(1)}
+.is-selected .radio{border-color:var(--green)}
+
+/* qty stepper ---------------------------------------------------------- */
+.qty{display:inline-flex;align-items:center;direction:ltr;background:#fff;border:1px solid var(--line);border-radius:var(--pill);height:44px;overflow:hidden}
+.qty button{width:42px;height:100%;display:grid;place-items:center;color:var(--ink-2);transition:color var(--t),background var(--t)}
+.qty button:hover{color:var(--green);background:var(--green-050)}
+.qty button svg{width:14px;height:14px}
+.qty span{min-width:38px;text-align:center;font-weight:600;font-size:15px}
+
+/* badges & chips ------------------------------------------------------- */
+.chip{display:inline-flex;align-items:center;gap:6px;height:30px;padding-inline:14px;border-radius:var(--pill);
+  background:var(--green-050);color:var(--green-700);font-size:12.5px;font-weight:600}
+.chip--green{background:var(--green);color:#fff}
+.chip--white{background:#fff;color:var(--ink-2);border:1px solid var(--line)}
+.badge-off{position:absolute;inset-inline-start:14px;top:14px;z-index:2;
+  background:var(--green);color:#fff;font-size:12.5px;font-weight:700;
+  height:32px;padding-inline:15px;border-radius:var(--pill);display:inline-flex;align-items:center;justify-content:center;text-align:center}
+
+.badge-off--left{inset-inline-start:auto;left:12px;top:12px;height:38px;min-width:64px;font-size:14px}
+
+/* status pill ---------------------------------------------------------- */
+.ostatus{display:inline-flex;align-items:center;gap:7px;height:32px;padding-inline:14px;
+  border-radius:var(--pill);background:var(--green-050);color:var(--green-700);font-size:12px;font-weight:600}
+.ostatus svg{width:15px;height:15px}
+.ostatus--ship{background:#EAEEE0}
+
+/* stars ---------------------------------------------------------------- */
+.stars{display:inline-flex;gap:3px;color:var(--star)}
+.stars svg{width:15px;height:15px;fill:currentColor;stroke:none}
+.stars .off{color:#E2DED4}
+
+/* cards ---------------------------------------------------------------- */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-xs)}
+.card--soft{background:var(--cream);border-color:transparent}
+.card-pad{padding:26px 28px}
+
+/* utility -------------------------------------------------------------- */
+.divider{height:1px;background:var(--line);border:0;margin:0}
+.ratio{position:relative;overflow:hidden}
+.ratio > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}

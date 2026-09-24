@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- example.com را با دامنه‌ی خودتان جایگزین کنید -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://example.com/</loc><priority>1.0</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://example.com/product.html</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://example.com/routine.html</loc><priority>0.7</priority></url>
+  <url><loc>https://example.com/cart.html</loc><priority>0.5</priority></url>
+  <url><loc>https://example.com/checkout.html</loc><priority>0.5</priority></url>
+  <url><loc>https://example.com/panel.html</loc><priority>0.4</priority></url>
+  <url><loc>https://example.com/tracking.html</loc><priority>0.4</priority></url>
+</urlset>

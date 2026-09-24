@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>زیته | جوانه‌ای برای مراقبت از خودت</title>
+<meta name="description" content="فروشگاه آنلاین زیته — بهترین محصولات بهداشتی و مراقبتی با ضمانت اصالت و ارسال سریع به سراسر ایران.">
+<meta name="theme-color" content="#FAF8F5">
+<!--SEO-->
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="زیته">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="زیته">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:title" content="زیته | جوانه‌ای برای مراقبت از خودت">
+<meta property="og:description" content="فروشگاه آنلاین زیته — بهترین محصولات بهداشتی و مراقبتی با ضمانت اصالت و ارسال سریع به سراسر ایران.">
+<meta property="og:image" content="assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="زیته | جوانه‌ای برای مراقبت از خودت">
+<meta name="twitter:description" content="فروشگاه آنلاین زیته — بهترین محصولات بهداشتی و مراقبتی با ضمانت اصالت و ارسال سریع به سراسر ایران.">
+<meta name="twitter:image" content="assets/img/og.jpg">
+<!--/SEO-->
+<link rel="preload" href="assets/fonts/DanaVF.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/base.css?v=6">
+<link rel="stylesheet" href="assets/css/layout.css?v=6">
+<link rel="stylesheet" href="assets/css/home.css?v=6">
+<link rel="stylesheet" href="assets/css/app.css?v=6">
+</head>
+<body data-page="home" data-title="زیته" data-cart-count="0" data-tab="home" data-tabbar>
+<!--APPSHELL--><!-- ═══════════════ APP SHELL (shared, injected by build.py) ═══════════════ -->
+
+<!-- scroll progress ---------------------------------------------------- -->
+<div class="scrollprog" aria-hidden="true"><i data-scrollprog></i></div>
+
+<!-- mobile app bar ----------------------------------------------------- -->
+<header class="appbar" data-appbar>
+  <button class="appbar__btn" data-drawer-open aria-label="منو" data-only="home">
+    <svg><use href="#i-menu"/></svg>
+  </button>
+  <button class="appbar__btn" data-back aria-label="بازگشت" data-only="inner">
+    <svg><use href="#i-chev-right"/></svg>
+  </button>
+
+  <a class="appbar__logo" href="index.html" data-only="home"><b>زیته</b></a>
+  <h2 class="appbar__title" data-appbar-title data-only="inner"></h2>
+
+  <div class="appbar__actions">
+    <button class="appbar__btn" data-search-open aria-label="جستجو">
+      <svg><use href="#i-search"/></svg>
+    </button>
+    <a class="appbar__btn" href="cart.html" aria-label="سبد خرید">
+      <svg><use href="#i-bag"/></svg>
+      <span class="appbar__count" data-cart-badge>۰</span>
+    </a>
+  </div>
+</header>
+
+<!-- bottom tab bar ------------------------------------------------------ -->
+<nav class="tabbar" data-tabbar aria-label="ناوبری اصلی">
+  <a href="index.html" class="tab" data-tab="home">
+    <span class="tab__ic"><svg><use href="#i-home"/></svg></span><span class="tab__t">خانه</span>
+  </a>
+  <a href="product.html" class="tab" data-tab="shop">
+    <span class="tab__ic"><svg><use href="#i-store"/></svg></span><span class="tab__t">فروشگاه</span>
+  </a>
+  <a href="cart.html" class="tab tab--fab" data-tab="cart" aria-label="سبد خرید">
+    <span class="tab__fab"><svg><use href="#i-bag"/></svg><i class="tab__count" data-cart-badge>۰</i></span>
+    <span class="tab__t">سبد</span>
+  </a>
+  <a href="#" class="tab" data-tab="wish" data-wishlist>
+    <span class="tab__ic"><svg><use href="#i-heart"/></svg></span><span class="tab__t">علاقه‌مندی</span>
+  </a>
+  <a href="panel.html" class="tab" data-tab="account">
+    <span class="tab__ic"><svg><use href="#i-user"/></svg></span><span class="tab__t">حساب</span>
+  </a>
+</nav>
+
+<!-- side drawer --------------------------------------------------------- -->
+<div class="scrim" data-scrim hidden></div>
+
+<aside class="drawer" data-drawer hidden aria-label="منوی زیته">
+  <div class="drawer__head">
+    <a href="panel.html" class="drawer__user">
+      <span class="drawer__ava"><svg><use href="#i-user"/></svg></span>
+      <span><b>خوش آمدید</b><small>وارد شوید یا ثبت‌نام کنید</small></span>
+    </a>
+    <button class="drawer__close" data-drawer-close aria-label="بستن"><svg><use href="#i-x"/></svg></button>
+  </div>
+
+  <nav class="drawer__nav">
+    <a href="index.html"><svg><use href="#i-home"/></svg> خانه</a>
+    <a href="product.html"><svg><use href="#i-store"/></svg> فروشگاه</a>
+    <div class="drawer__acc" data-drawer-acc>
+      <button><svg><use href="#i-grid"/></svg> دسته‌بندی‌ها <svg class="chev"><use href="#i-chev-down"/></svg></button>
+      <div class="drawer__sub"><div>
+        <a href="product.html">مراقبت پوست</a>
+        <a href="product.html">مراقبت مو</a>
+        <a href="product.html">مراقبت کودک</a>
+        <a href="product.html">بهداشت فردی</a>
+        <a href="product.html">سلامت دندان</a>
+        <a href="product.html">مراقبت دور چشم</a>
+      </div></div>
+    </div>
+    <a href="tracking.html"><svg><use href="#i-truck-fast"/></svg> پیگیری سفارش</a>
+    <a href="#"><svg><use href="#i-tag"/></svg> تخفیف‌های ویژه</a>
+    <a href="#"><svg><use href="#i-leaf"/></svg> مجله زیته</a>
+    <a href="#"><svg><use href="#i-info"/></svg> درباره ما</a>
+    <a href="#"><svg><use href="#i-headset"/></svg> تماس با ما</a>
+  </nav>
+
+  <div class="drawer__foot">
+    <div class="drawer__socials">
+      <a href="#" aria-label="اینستاگرام"><svg><use href="#i-instagram"/></svg></a>
+      <a href="#" aria-label="تلگرام"><svg><use href="#i-telegram"/></svg></a>
+      <a href="#" aria-label="واتساپ"><svg><use href="#i-whatsapp"/></svg></a>
+    </div>
+    <p>زیته — جوانه‌ای برای مراقبت از خودت</p>
+  </div>
+</aside>
+
+<!-- search overlay ------------------------------------------------------ -->
+<div class="searchpane" data-searchpane hidden>
+  <div class="searchpane__bar">
+    <button class="appbar__btn" data-search-close aria-label="بستن"><svg><use href="#i-chev-right"/></svg></button>
+    <label class="searchpane__field">
+      <svg><use href="#i-search"/></svg>
+      <input type="search" placeholder="دنبال چه محصولی می‌گردی؟" data-search-input enterkeyhint="search">
+      <button data-search-clear aria-label="پاک کردن" hidden><svg><use href="#i-x"/></svg></button>
+    </label>
+  </div>
+  <div class="searchpane__body">
+    <section data-search-idle>
+      <h3><svg><use href="#i-history"/></svg> جستجوهای اخیر</h3>
+      <div class="chips">
+        <button class="chipbtn">شامپو ضد ریزش</button>
+        <button class="chipbtn">سرم ویتامین C</button>
+        <button class="chipbtn">ضد آفتاب</button>
+        <button class="chipbtn">ماسک مو</button>
+      </div>
+      <h3><svg><use href="#i-fire"/></svg> پرجستجوترین‌ها</h3>
+      <div class="chips">
+        <button class="chipbtn">تونر آبرسان</button>
+        <button class="chipbtn">کرم مرطوب‌کننده</button>
+        <button class="chipbtn">مام ضد عرق</button>
+        <button class="chipbtn">عطر خانه</button>
+        <button class="chipbtn">پک هدیه</button>
+      </div>
+    </section>
+    <section data-search-results hidden>
+      <h3 data-search-count></h3>
+      <div class="sresults" data-search-list></div>
+      <p class="sempty" data-search-empty hidden>چیزی پیدا نشد. یک عبارت دیگر امتحان کنید.</p>
+    </section>
+  </div>
+</div>
+
+<!-- quick add sheet ------------------------------------------------------ -->
+<div class="sheet" id="sheet-quickadd" data-sheet hidden aria-label="افزودن سریع به سبد">
+  <div class="sheet__panel">
+    <div class="sheet__grab" data-sheet-grab></div>
+    <div class="sheet__body">
+      <div class="qa">
+        <img data-qa-img src="" alt="">
+        <div>
+          <span class="qa__cat" data-qa-cat></span>
+          <b data-qa-title></b>
+          <div class="qa__price"><span data-qa-price></span> <small>تومان</small></div>
+        </div>
+      </div>
+      <div class="qa__row">
+        <span>تعداد</span>
+        <div class="qty" data-qa-qty>
+          <button data-step="-1" aria-label="کاهش"><svg><use href="#i-minus"/></svg></button>
+          <span>۱</span>
+          <button data-step="1" aria-label="افزایش"><svg><use href="#i-plus"/></svg></button>
+        </div>
+      </div>
+      <div class="qa__note"><svg><use href="#i-truck-fast"/></svg> ارسال سریع، تحویل ۱ تا ۳ روز کاری</div>
+    </div>
+    <div class="sheet__foot">
+      <button class="btn btn--ghost" data-sheet-close>انصراف</button>
+      <button class="btn btn--primary" data-qa-add><svg><use href="#i-bag"/></svg> افزودن به سبد</button>
+    </div>
+  </div>
+</div>
+
+<!-- advice sheet (WhatsApp / Telegram / Bale) ---------------------------- -->
+<div class="sheet" id="sheet-advice" data-sheet hidden aria-label="مشاوره پوستی">
+  <div class="sheet__panel">
+    <div class="sheet__grab" data-sheet-grab></div>
+    <div class="sheet__body">
+      <h3 class="sheetttl">مشاوره پوستی رایگان</h3>
+      <p style="font-size:13.5px;color:var(--muted);line-height:2;margin-bottom:18px">
+        سؤالت را از هر کدام از راه‌های زیر بپرس؛ در ساعات کاری پاسخ می‌دهیم.</p>
+      <div class="advice">
+        <a href="https://wa.me/989121234567" target="_blank" rel="noopener">
+          <i><svg><use href="#i-whatsapp"/></svg></i>
+          <span><b>واتساپ</b><small>۰۹۱۲ ۱۲۳ ۴۵۶۷</small></span>
+          <span class="go"><svg><use href="#i-chev-left"/></svg></span>
+        </a>
+        <a href="https://t.me/ziteh" target="_blank" rel="noopener">
+          <i><svg><use href="#i-telegram"/></svg></i>
+          <span><b>تلگرام</b><small>ziteh@</small></span>
+          <span class="go"><svg><use href="#i-chev-left"/></svg></span>
+        </a>
+        <a href="https://ble.ir/ziteh" target="_blank" rel="noopener">
+          <i><svg><use href="#i-headset"/></svg></i>
+          <span><b>بله</b><small>ziteh@</small></span>
+          <span class="go"><svg><use href="#i-chev-left"/></svg></span>
+        </a>
+      </div>
+    </div>
+    <div class="sheet__foot" style="grid-template-columns:1fr">
+      <button class="btn btn--ghost" data-sheet-close>بستن</button>
+    </div>
+  </div>
+</div>
+
+<!-- toast host ------------------------------------------------------------ -->
+<div class="toasts" data-toasts aria-live="polite"></div>
+
+<!-- back to top ----------------------------------------------------------- -->
+<button class="fab-top" data-totop aria-label="بازگشت به بالا"><svg><use href="#i-arrow-up"/></svg></button><!--/APPSHELL-->
+<!--ICONS--><svg width="0" height="0" style="position:absolute;left:0;top:0;overflow:hidden" aria-hidden="true" focusable="false"><defs>
+<symbol viewBox="0 0 24 24" id="i-leaf" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-sprout" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8Z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2Z"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-search" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-user" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-bag" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-cart" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-chev-down" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-chev-left" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-chev-right" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-arrow-left" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-truck" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h2"/><path d="M14 9h4l3 3v5a1 1 0 0 1-1 1h-1"/><circle cx="9" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-truck-fast" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18V7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v11h1"/><path d="M15 10h3.5l2.5 2.6V17a1 1 0 0 1-1 1h-1"/><circle cx="10" cy="18" r="1.8"/><circle cx="17.5" cy="18" r="1.8"/><path d="M2 9h3M1 13h4M3 17h2"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-shield" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1Z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-headset" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M16 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2Z"/><path d="M3 14v-3a9 9 0 0 1 18 0v3"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-rotate" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-package" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-gift" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-clipboard" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-pin" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-phone" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-mail" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-clock" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-instagram" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37"/><path d="M17.5 6.5h.01"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-telegram" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 3.5 2.5 10.2l5.3 1.9 2 6.4 2.9-3.7 4.6 3.4Z"/><path d="m7.8 12.1 13.7-8.6-8.8 11.4"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-whatsapp" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8Z"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-star" fill="currentColor" stroke="none"><path d="M11.5 2.3a.55.55 0 0 1 1 0l2.3 4.9 5.2.7c.45.06.63.62.3.94l-3.8 3.6.95 5.3a.55.55 0 0 1-.81.57L12 15.8l-4.64 2.5a.55.55 0 0 1-.81-.57l.95-5.3-3.8-3.6a.55.55 0 0 1 .3-.94l5.2-.7Z"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-plus" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-minus" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-x" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-check" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-heart" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-tag" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1.2"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-percent" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5 5 19"/><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-droplet" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-sun" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-moon" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-shield-sun" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1Z"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-pen" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-settings" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-logout" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-grid" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-wallet" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h15a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5"/><path d="M18 12h.01"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-star-o" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.3a.55.55 0 0 1 1 0l2.3 4.9 5.2.7c.45.06.63.62.3.94l-3.8 3.6.95 5.3a.55.55 0 0 1-.81.57L12 15.8l-4.64 2.5a.55.55 0 0 1-.81-.57l.95-5.3-3.8-3.6a.55.55 0 0 1 .3-.94l5.2-.7Z"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-lock" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-card" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-card2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="10" rx="2"/><path d="M2 9.5h14"/><rect x="14" y="12" width="8" height="6" rx="1.5"/><path d="M16 15h4"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-bike" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-cash" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 6 6"/><circle cx="16" cy="6" r="3"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-calendar" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-map" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v15l6-2 6 2 6-2V4l-6 2Z"/><path d="M9 4v15M15 6v15"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-trash" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6M14 11v6"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-refresh" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9c-2.5 0-4.8-1-6.4-2.7"/><path d="M3 12a9 9 0 0 1 9-9c2.5 0 4.8 1 6.4 2.7"/><path d="M18 3v3.5h-3.5M6 21v-3.5h3.5"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-box" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-flask" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v6.3a2 2 0 0 1-.3 1.1L4.4 18a2 2 0 0 0 1.7 3h11.8a2 2 0 0 0 1.7-3l-5.3-8.6a2 2 0 0 1-.3-1.1V2"/><path d="M8.5 2h7M6.8 14h10.4"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-atom" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.6"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(45 12 12)"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(-45 12 12)"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-waves" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M2 9c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-ban" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-zap" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.1 13.4A1 1 0 0 0 4.9 15H11l-1 7 8.9-11.4a1 1 0 0 0-.8-1.6H12Z"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-verified" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-dots" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-home" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.2 12 3l9 7.2V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-check-circle" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-circle" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-arrow-lr" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-key" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 3a5.5 5.5 0 1 0-4.4 8.8L4 19v2h3v-2h2v-2h2l2.2-2.2A5.5 5.5 0 0 0 15.5 3"/><path d="M16.5 7.5h.01"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-basket" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 11 3-6M19 11l-3-6"/><path d="M2 11h20l-1.5 8.2a2 2 0 0 1-2 1.8H5.5a2 2 0 0 1-2-1.8Z"/><path d="M10 15v2M14 15v2"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-menu" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-store" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M3.5 9 5 4h14l1.5 5a3 3 0 0 1-5.6 1.6A3 3 0 0 1 12 11a3 3 0 0 1-2.9-.4A3 3 0 0 1 3.5 9Z"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-arrow-up" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-history" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5"/><path d="M12 8v4l3 2"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-fire" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1.5 3.5-.5 5-1.8 6.3C8.4 10 7 11.6 7 14a5 5 0 0 0 10 0c0-2.2-1.1-3.7-2.2-5.1"/><path d="M12 22a3 3 0 0 0 3-3c0-1.4-1-2.3-1.7-3.1-.6-.7-1.3-1.4-1.3-2.4-1.3 1-3 2.4-3 5.5A3 3 0 0 0 12 22Z"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-sliders" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h10M18 18h2"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="16" cy="18" r="2"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-share" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-heart-fill" fill="currentColor" stroke="none"><path d="M12 21.3 3.9 13.4A5.4 5.4 0 0 1 7.6 4c1.8 0 3.3.8 4.4 2.1A5.7 5.7 0 0 1 16.4 4a5.4 5.4 0 0 1 3.7 9.4Z"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-info" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></symbol>
+<symbol viewBox="0 0 24 24" id="i-bale" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H7.8L3.6 22.4a.4.4 0 0 1-.6-.35V11.5A8.5 8.5 0 0 1 11.5 3h1A8.5 8.5 0 0 1 21 11.5Z"/><path d="M8.6 10.6v2.1a2.3 2.3 0 0 0 2.3 2.3h4.5"/><path d="M15.4 12.7v-2.1"/><path d="M12 8.4h.01"/></symbol>
+</defs></svg><!--/ICONS-->
+
+
+<!-- ======================= HEADER ======================= -->
+<header class="header">
+  <div class="container">
+    <div class="header__top">
+      <a href="panel.html" class="hicon"><svg><use href="#i-user"/></svg><span>ورود / ثبت‌نام</span></a>
+      <div class="spacer"></div>
+      <label class="search">
+        <svg><use href="#i-search"/></svg>
+        <input type="search" enterkeyhint="search" placeholder="جستجو در فروشگاه...">
+      </label>
+      <div class="spacer"></div>
+      <a href="cart.html" class="cart-btn">
+        <span class="count">۰</span>
+        <svg><use href="#i-bag"/></svg>
+        <span>سبد خرید</span>
+      </a>
+    </div>
+  </div>
+  <div class="header__nav">
+    <div class="container" style="height:100%">
+      <nav class="nav nav--start" style="justify-content:flex-start">
+        <a href="index.html" class="logo" style="margin-left:34px">
+          <b>زیته</b><svg class="sprout"><use href="#i-sprout"/></svg>
+        </a>
+        <a href="index.html" class="is-active">خانه</a>
+        <a href="product.html">فروشگاه</a>
+        <a href="#">دسته‌بندی‌ها <svg><use href="#i-chev-down"/></svg></a>
+        <a href="#">وبلاگ</a>
+        <a href="#">درباره ما</a>
+        <a href="#">تماس با ما</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ MOBILE HOME HEAD (image-first slider) ══════════════ -->
+<div class="mhome">
+
+  <!-- search entry ------------------------------------------------------ -->
+  <button class="msearch" data-search-open>
+    <svg><use href="#i-search"/></svg>
+    <span>دنبال چه محصولی می‌گردی؟</span>
+    <i><svg><use href="#i-sliders"/></svg></i>
+  </button>
+
+  <!-- hero slider ------------------------------------------------------- -->
+  <section class="mhero" data-mslider aria-label="پیشنهادهای زیته">
+    <div class="mhero__track" data-mtrack>
+
+      <article class="mslide">
+        <div class="mslide__img"><img src="assets/img/hero.jpg" alt="محصولات مراقبتی زیته"></div>
+        <div class="mslide__body">
+          <span class="mslide__tag"><svg><use href="#i-sprout"/></svg> تازه رسیده</span>
+          <h2>جوانه‌ای برای مراقبت از خودت</h2>
+          <p>انتخابی آگاهانه از بهترین محصولات بهداشتی و مراقبتی، برای زیبایی و آرامش تو.</p>
+          <a href="product.html" class="btn btn--primary">همین حالا خرید کن <svg><use href="#i-arrow-left"/></svg></a>
+        </div>
+      </article>
+
+      <article class="mslide">
+        <div class="mslide__img"><img src="assets/img/consult.jpg" alt="کوییز پوست زیته"></div>
+        <div class="mslide__body">
+          <span class="mslide__tag"><svg><use href="#i-droplet"/></svg> کوییز پوست</span>
+          <h2>روتین مناسب پوستت را پیدا کن</h2>
+          <p>با چند سؤال کوتاه، بهترین محصولات و روتین متناسب با پوست تو را پیشنهاد می‌دهیم.</p>
+          <a href="#" class="btn btn--primary">شروع کوییز <svg><use href="#i-arrow-left"/></svg></a>
+        </div>
+      </article>
+
+      <article class="mslide">
+        <div class="mslide__img"><img src="assets/img/p-desc.jpg" alt="تخفیف پلکانی زیته"></div>
+        <div class="mslide__body">
+          <span class="mslide__tag"><svg><use href="#i-tag"/></svg> تخفیف پلکانی</span>
+          <h2>هرچه بیشتر بخری، بیشتر تخفیف بگیر</h2>
+          <p>تا ۱۰٪ تخفیف پلکانی، به‌علاوه‌ی ارسال رایگان از ۲,۵۰۰,۰۰۰ تومان.</p>
+          <a href="cart.html" class="btn btn--primary">مشاهده تخفیف‌ها <svg><use href="#i-arrow-left"/></svg></a>
+        </div>
+      </article>
+
+    </div>
+    <div class="mhero__dots" data-mdots>
+      <button class="is-active" aria-label="اسلاید ۱"></button>
+      <button aria-label="اسلاید ۲"></button>
+      <button aria-label="اسلاید ۳"></button>
+    </div>
+  </section>
+
+  <!-- category circles ---------------------------------------------------- -->
+  <nav class="mcats" aria-label="دسته‌بندی‌ها">
+    <a href="product.html"><span><img src="assets/img/cat-1.jpg" alt=""></span>مراقبت پوست</a>
+    <a href="product.html"><span><img src="assets/img/cat-2.jpg" alt=""></span>مراقبت مو</a>
+    <a href="product.html"><span><img src="assets/img/cat-3.jpg" alt=""></span>مراقبت کودک</a>
+    <a href="product.html"><span><img src="assets/img/cat-4.jpg" alt=""></span>بهداشت فردی</a>
+    <a href="product.html"><span><img src="assets/img/cat-5.jpg" alt=""></span>سلامت دندان</a>
+    <a href="product.html"><span><img src="assets/img/cat-6.jpg" alt=""></span>دور چشم</a>
+  </nav>
+
+  <!-- trust strip ---------------------------------------------------------- -->
+  <div class="mtrust">
+    <div><svg><use href="#i-truck-fast"/></svg><b>ارسال سریع</b><span>۲ تا ۳ روز کاری</span></div>
+    <div><svg><use href="#i-shield"/></svg><b>ضمانت اصالت</b><span>۱۰۰٪ اورجینال</span></div>
+    <div><svg><use href="#i-lock"/></svg><b>پرداخت امن</b><span>درگاه معتبر</span></div>
+  </div>
+</div>
+
+<!-- ======================= HERO ======================= -->
+<section class="hero" data-mslider aria-label="بنرهای زیته">
+  <div class="hero__track" data-mtrack>
+      <article class="hero__slide">
+        <figure class="hero__media"><img src="assets/img/hero.jpg" alt="محصولات مراقبتی زیته"></figure>
+        <img class="hero__branch" src="assets/img/hero-branch.png" alt="">
+        <div class="container">
+          <div class="hero__wrap">
+            <div class="hero__body">
+        <div class="hero__logo"><b>زیته</b><svg class="sprout"><use href="#i-sprout"/></svg></div>
+        <h2>جوانه‌ای برای مراقبت از خودت</h2>
+              <p>انتخابی آگاهانه از بهترین محصولات بهداشتی و مراقبتی،<br>برای زیبایی، سلامت و آرامش تو.</p>
+              <a href="product.html" class="btn btn--primary"><svg><use href="#i-leaf"/></svg> همین حالا خرید کن</a>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="hero__slide">
+        <figure class="hero__media"><img src="assets/img/consult.jpg" alt="روتین مراقبت از پوست"></figure>
+        <img class="hero__branch" src="assets/img/hero-branch.png" alt="">
+        <div class="container">
+          <div class="hero__wrap">
+            <div class="hero__body">
+        <h2>روتین مناسب پوستت را پیدا کن</h2>
+              <p>با یک روتین ساده و مداوم شروع کن؛<br>راهنمای کامل صبح و شب را بخوان.</p>
+              <a href="routine.html" class="btn btn--primary"><svg><use href="#i-droplet"/></svg> راهنمای روتین</a>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="hero__slide">
+        <figure class="hero__media"><img src="assets/img/p-desc.jpg" alt="تخفیف پلکانی زیته"></figure>
+        <img class="hero__branch" src="assets/img/hero-branch.png" alt="">
+        <div class="container">
+          <div class="hero__wrap">
+            <div class="hero__body">
+        <h2>هرچه بیشتر بخری، بیشتر تخفیف بگیر</h2>
+              <p>تا ۵٪ تخفیف پلکانی،<br>به‌علاوه‌ی ارسال رایگان از ۵,۰۰۰,۰۰۰ تومان.</p>
+              <a href="cart.html" class="btn btn--primary"><svg><use href="#i-tag"/></svg> مشاهده تخفیف‌ها</a>
+            </div>
+          </div>
+        </div>
+      </article>
+  </div>
+  <button class="iconbtn hero__nav hero__nav--prev" data-mdir="prev" aria-label="قبلی"><svg><use href="#i-chev-left"/></svg></button>
+  <button class="iconbtn hero__nav hero__nav--next" data-mdir="next" aria-label="بعدی"><svg><use href="#i-chev-right"/></svg></button>
+  <div class="hero__dots" data-mdots>
+    <button class="is-active" aria-label="اسلاید ۱"></button>
+    <button aria-label="اسلاید ۲"></button>
+    <button aria-label="اسلاید ۳"></button>
+  </div>
+</section>
+
+<div class="ann"><div class="container"><ul class="annrow"><li><svg><use href="#i-leaf"/></svg> از زیته تا خانه‌ی شما</li><li><svg><use href="#i-truck-fast"/></svg> ارسال به سراسر ایران با پست پیشتاز</li><li><svg><use href="#i-bike"/></svg> ارسال در لاهیجان با پیک</li></ul></div></div>
+
+<!-- ======================= STORY ======================= -->
+<section class="section section--white">
+  <div class="container">
+    <div class="story reveal">
+      <div>
+        <h2 class="sec-title" style="margin-bottom:22px"><svg class="leaf" width="22" height="22"><use href="#i-leaf"/></svg> داستان زیته</h2>
+        <p>زیته در زبان گیلکی یعنی روییدن و آغاز یک جوانه.</p>
+        <p>ما این نام را انتخاب کردیم چون باور داریم مراقبت از خود هم شبیه روییدن است؛ با قدم‌های کوچک آغاز می‌شود، با عشق ادامه پیدا می‌کند و آرام‌آرام به بخشی از زندگی تبدیل می‌شود.</p>
+        <p>در زیته، تلاش می‌کنیم با انتخاب محصولاتی اصیل و باکیفیت، این مسیر را برایت ساده‌تر و مطمئن‌تر کنیم.</p>
+        <p>زیته: جوانه‌ای برای مراقبت از خودت</p>
+      </div>
+      <figure class="story__frame">
+        <img src="assets/img/story.jpg" alt="داستان زیته">
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PLEDGE ======================= -->
+<section class="section section--cream">
+  <div class="container">
+    <div class="pledge reveal">
+      <span class="pledge__ic"><svg><use href="#i-leaf"/></svg></span>
+      <h2>تعهد ما</h2>
+      <p>هر انتخاب کوچک می‌تواند آغاز یک حس خوب باشد. ما در زیتِه متعهدیم محصولاتی اصیل و باکیفیت را با
+        دقت انتخاب کنیم، سفارش‌ها را با عشق آماده کنیم و تجربه‌ای بسازیم که مراقبت از خود، برای شما به
+        عادتی لذت‌بخش و ماندگار تبدیل شود.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CATEGORIES ======================= -->
+<section class="section section--cream" data-hide-mobile>
+  <div class="container">
+    <div class="sec-head sec-head--center">
+      <h2 class="sec-title"><svg class="leaf" width="22" height="22"><use href="#i-leaf"/></svg> دسته‌بندی‌های محبوب</h2>
+    </div>
+    <div class="cats reveal">
+      <a href="#" class="cat"><span class="cat__img"><img src="assets/img/cat-1.jpg" alt="مراقبت پوست"></span><span class="cat__name">مراقبت پوست</span></a>
+      <a href="#" class="cat"><span class="cat__img"><img src="assets/img/cat-2.jpg" alt="مراقبت مو"></span><span class="cat__name">مراقبت مو</span></a>
+      <a href="#" class="cat"><span class="cat__img"><img src="assets/img/cat-3.jpg" alt="مراقبت کودک"></span><span class="cat__name">مراقبت کودک</span></a>
+      <a href="#" class="cat"><span class="cat__img"><img src="assets/img/cat-4.jpg" alt="بهداشت فردی"></span><span class="cat__name">بهداشت فردی</span></a>
+      <a href="#" class="cat"><span class="cat__img"><img src="assets/img/cat-5.jpg" alt="سلامت دندان"></span><span class="cat__name">سلامت دندان</span></a>
+      <a href="#" class="cat"><span class="cat__img"><img src="assets/img/cat-6.jpg" alt="مراقبت دور چشم"></span><span class="cat__name">مراقبت دور چشم</span></a>
+    </div>
+    <div class="arrows">
+      <button class="iconbtn" aria-label="قبلی"><svg><use href="#i-chev-right"/></svg></button>
+      <button class="iconbtn" aria-label="بعدی"><svg><use href="#i-chev-left"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= SPECIAL OFFERS ======================= -->
+<section class="section" style="background:#F4F3EB">
+  <div class="container">
+    <div class="offers-banner reveal" data-countdown="9581">
+      <div>
+        <h2><svg class="leaf" width="21" height="21"><use href="#i-leaf"/></svg> فرصت های ویژه در زیته</h2>
+        <p>تخفیف‌های شگفت‌انگیز، تا پایان شمارش معکوس!</p>
+      </div>
+      <div class="countdown">
+        <div class="cd-cell"><b data-cd="s">۴۱</b><span>ثانیه</span></div>
+        <span class="sep">:</span>
+        <div class="cd-cell"><b data-cd="m">۳۹</b><span>دقیقه</span></div>
+        <span class="sep">:</span>
+        <div class="cd-cell"><b data-cd="h">۰۲</b><span>ساعت</span></div>
+        <span class="sep">:</span>
+        <div class="cd-cell"><b data-cd="d">۰۰</b><span>روز</span></div>
+      </div>
+      <a href="#" class="btn">مشاهده همه <svg><use href="#i-chev-left"/></svg></a>
+    </div>
+
+    <div class="prods reveal" data-carousel>
+      <div class="prod-track" data-track>
+        <article class="prod">
+          <span class="badge-off badge-off--left">۸٪</span>
+          <a href="product.html" class="prod__img"><img src="assets/img/offer-1.jpg" alt="عطر خانه ارکید اواسیس ویت یو"><span class="exp"><svg><use href="#i-calendar"/></svg><i>انقضا</i><b>۱۴۰۸/۰۲</b></span></a>
+          <div class="prod__body">
+            <span class="prod__cat">خوشبو کننده محیط</span>
+            <a href="product.html"><h3 class="prod__title">عطر خانه ارکید اواسیس ویت یو</h3></a>
+            <div class="prod__foot">
+              <button class="prod__add" aria-label="افزودن به سبد"><svg><use href="#i-cart"/></svg></button>
+              <div class="prod__price"><b>۹۰۰,۰۰۰ <small>تومان</small></b><del>۹۸۰,۰۰۰</del></div>
+            </div>
+          </div>
+        </article>
+        <article class="prod">
+          <span class="badge-off badge-off--left">۸٪</span>
+          <a href="product.html" class="prod__img"><img src="assets/img/offer-2.jpg" alt="عطر خانه پلیس گالا ویت یو"><span class="exp"><svg><use href="#i-calendar"/></svg><i>انقضا</i><b>۱۴۰۸/۰۴</b></span></a>
+          <div class="prod__body">
+            <span class="prod__cat">خوشبو کننده محیط</span>
+            <a href="product.html"><h3 class="prod__title">عطر خانه پلیس گالا ویت یو</h3></a>
+            <div class="prod__foot">
+              <button class="prod__add" aria-label="افزودن به سبد"><svg><use href="#i-cart"/></svg></button>
+              <div class="prod__price"><b>۹۰۰,۰۰۰ <small>تومان</small></b><del>۹۸۰,۰۰۰</del></div>
+            </div>
+          </div>
+        </article>
+        <article class="prod">
+          <span class="badge-off badge-off--left">۸٪</span>
+          <a href="product.html" class="prod__img"><img src="assets/img/offer-3.jpg" alt="عطر خانه اربیتال سوک ویت یو"><span class="exp"><svg><use href="#i-calendar"/></svg><i>انقضا</i><b>۱۴۰۸/۰۱</b></span></a>
+          <div class="prod__body">
+            <span class="prod__cat">خوشبو کننده محیط</span>
+            <a href="product.html"><h3 class="prod__title">عطر خانه اربیتال سوک ویت یو</h3></a>
+            <div class="prod__foot">
+              <button class="prod__add" aria-label="افزودن به سبد"><svg><use href="#i-cart"/></svg></button>
+              <div class="prod__price"><b>۹۰۰,۰۰۰ <small>تومان</small></b><del>۹۸۰,۰۰۰</del></div>
+            </div>
+          </div>
+        </article>
+        <article class="prod">
+          <span class="badge-off badge-off--left">۸٪</span>
+          <a href="product.html" class="prod__img"><img src="assets/img/offer-4.jpg" alt="عطر خانه فارست کاتیج ویت یو"><span class="exp"><svg><use href="#i-calendar"/></svg><i>انقضا</i><b>۱۴۰۷/۱۱</b></span></a>
+          <div class="prod__body">
+            <span class="prod__cat">خوشبو کننده محیط</span>
+            <a href="product.html"><h3 class="prod__title">عطر خانه فارست کاتیج ویت یو</h3></a>
+            <div class="prod__foot">
+              <button class="prod__add" aria-label="افزودن به سبد"><svg><use href="#i-cart"/></svg></button>
+              <div class="prod__price"><b>۹۰۰,۰۰۰ <small>تومان</small></b><del>۹۸۰,۰۰۰</del></div>
+            </div>
+          </div>
+        </article>
+      </div>
+      <button class="iconbtn" data-dir="prev" style="position:absolute;top:50%;inset-inline-end:-21px;transform:translateY(-50%)" aria-label="قبلی"><svg><use href="#i-chev-left"/></svg></button>
+      <button class="iconbtn" data-dir="next" style="position:absolute;top:50%;inset-inline-start:-21px;transform:translateY(-50%)" aria-label="بعدی"><svg><use href="#i-chev-right"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= ROUTINE ======================= -->
+<section class="section section--white">
+  <div class="container">
+    <div class="routine-head reveal">
+      <div>
+        <h2 class="sec-title"><svg class="leaf" width="22" height="22"><use href="#i-leaf"/></svg> روتین مراقبت از پوست</h2>
+        <p class="sec-sub" style="margin-top:8px">پوستی سالم، با روتینی ساده و مداوم</p>
+      </div>
+      <div class="seg" data-routine>
+        <button class="is-active" data-value="am"><svg><use href="#i-sun"/></svg> صبح</button>
+        <button data-value="pm"><svg><use href="#i-moon"/></svg> شب</button>
+      </div>
+    </div>
+    <div class="steps reveal" data-steps="am">
+      <a class="step" href="product.html?cat=shosto-shoo">
+        <span class="step__n">۱</span>
+        <div class="step__ic"><svg><use href="#i-droplet"/></svg></div>
+        <b>شست‌وشو</b><span>آماده سازی پوست</span>
+      </a>
+      <a class="step" href="product.html?cat=serum">
+        <span class="step__n">۲</span>
+        <div class="step__ic"><svg><use href="#i-leaf"/></svg></div>
+        <b>سرم</b><span>مراقبت تخصصی</span>
+      </a>
+      <a class="step" href="product.html?cat=moisturizer">
+        <span class="step__n">۳</span>
+        <div class="step__ic"><svg><use href="#i-pen"/></svg></div>
+        <b>مرطوب‌کننده و آبرسان</b><span>آبرسانی و حفظ رطوبت</span>
+      </a>
+      <a class="step" href="product.html?cat=sunscreen">
+        <span class="step__n">۴</span>
+        <div class="step__ic"><svg><use href="#i-shield-sun"/></svg></div>
+        <b>ضد آفتاب</b><span>محافظت روزانه</span>
+      </a>
+    </div>
+    <div class="steps reveal" data-steps="pm" hidden>
+      <a class="step" href="product.html?cat=cleanser">
+        <span class="step__n">۱</span>
+        <div class="step__ic"><svg><use href="#i-refresh"/></svg></div>
+        <b>پاکسازی</b><span>پاک کردن آرایش و ضدآفتاب</span>
+      </a>
+      <a class="step" href="product.html?cat=shosto-shoo">
+        <span class="step__n">۲</span>
+        <div class="step__ic"><svg><use href="#i-droplet"/></svg></div>
+        <b>شست‌وشو</b><span>شوینده ملایم صورت</span>
+      </a>
+      <a class="step" href="product.html?cat=treatment">
+        <span class="step__n">۳</span>
+        <div class="step__ic"><svg><use href="#i-flask"/></svg></div>
+        <b>محصولات درمانی</b><span>رتینوئید، ضدجوش، ضدلک</span>
+      </a>
+      <a class="step" href="product.html?cat=moisturizer">
+        <span class="step__n">۴</span>
+        <div class="step__ic"><svg><use href="#i-pen"/></svg></div>
+        <b>مرطوب‌کننده و آبرسان</b><span>حفظ رطوبت در شب</span>
+      </a>
+    </div>
+    <div class="routine-foot"><a href="routine.html" class="link-more">راهنمای کامل روتین <svg><use href="#i-chev-left"/></svg></a></div>
+  </div>
+</section>
+
+<!-- ======================= SELECTED PRODUCTS ======================= -->
+<section class="section section--cream">
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="sec-title"><svg class="leaf" width="22" height="22"><use href="#i-leaf"/></svg> محصولات منتخب زیته</h2>
+      <a href="#" class="link-more">مشاهده همه <svg><use href="#i-chev-left"/></svg></a>
+    </div>
+    <div class="prods reveal" data-carousel>
+      <div class="prod-track" data-track>
+        <article class="prod">
+          <a href="product.html" class="prod__img"><img src="assets/img/sel-1.jpg" alt="شامپو ضد شوره ملایم D1 پرایم"><span class="exp"><svg><use href="#i-calendar"/></svg><i>انقضا</i><b>۱۴۰۷/۰۹</b></span></a>
+          <div class="prod__body">
+            <span class="prod__cat">شامپو</span>
+            <a href="product.html"><h3 class="prod__title">شامپو ضد شوره ملایم D1 پرایم</h3></a>
+            <div class="prod__foot">
+              <button class="prod__add" aria-label="افزودن به سبد"><svg><use href="#i-cart"/></svg></button>
+              <div class="prod__price"><b>۶۹۰,۰۰۰ <small>تومان</small></b></div>
+            </div>
+          </div>
+        </article>
+        <article class="prod">
+          <a href="product.html" class="prod__img"><img src="assets/img/sel-2.jpg" alt="ماسک لب آبرسان و حجم دهنده آردن اکسپرتیج"><span class="exp"><svg><use href="#i-calendar"/></svg><i>انقضا</i><b>۱۴۰۷/۰۶</b></span></a>
+          <div class="prod__body">
+            <span class="prod__cat">مراقبت از لب</span>
+            <a href="product.html"><h3 class="prod__title">ماسک لب آبرسان و حجم دهنده آردن اکسپرتیج</h3></a>
+            <div class="prod__foot">
+              <button class="prod__add" aria-label="افزودن به سبد"><svg><use href="#i-cart"/></svg></button>
+              <div class="prod__price"><b>۴۹۵,۰۰۰ <small>تومان</small></b></div>
+            </div>
+          </div>
+        </article>
+        <article class="prod">
+          <a href="product.html" class="prod__img"><img src="assets/img/sel-3.jpg" alt="استیک ضد آفتاب سولار شیلد SPF50"><span class="exp"><svg><use href="#i-calendar"/></svg><i>انقضا</i><b>۱۴۰۸/۰۳</b></span></a>
+          <div class="prod__body">
+            <span class="prod__cat">ضد آفتاب</span>
+            <a href="product.html"><h3 class="prod__title">استیک ضد آفتاب سولار شیلد SPF50 بی رنگ پوست خشک سان...</h3></a>
+            <div class="prod__foot">
+              <button class="prod__add" aria-label="افزودن به سبد"><svg><use href="#i-cart"/></svg></button>
+              <div class="prod__price"><b>۱,۰۹۹,۰۰۰ <small>تومان</small></b></div>
+            </div>
+          </div>
+        </article>
+        <article class="prod">
+          <a href="product.html" class="prod__img"><img src="assets/img/sel-4.jpg" alt="کرم ژل مرطوب کننده پوست خشک و حساس"><span class="exp"><svg><use href="#i-calendar"/></svg><i>انقضا</i><b>۱۴۰۷/۱۲</b></span></a>
+          <div class="prod__body">
+            <span class="prod__cat">کرم مرطوب کننده پوست حساس</span>
+            <a href="product.html"><h3 class="prod__title">کرم ژل مرطوب کننده پوست خشک، حساس و مستعد قرمزی...</h3></a>
+            <div class="prod__foot">
+              <button class="prod__add" aria-label="افزودن به سبد"><svg><use href="#i-cart"/></svg></button>
+              <div class="prod__price"><b>۱,۵۴۸,۰۰۰ <small>تومان</small></b></div>
+            </div>
+          </div>
+        </article>
+      </div>
+      <button class="iconbtn" data-dir="prev" style="position:absolute;top:42%;inset-inline-end:-21px;transform:translateY(-50%)" aria-label="قبلی"><svg><use href="#i-chev-left"/></svg></button>
+      <button class="iconbtn" data-dir="next" style="position:absolute;top:42%;inset-inline-start:-21px;transform:translateY(-50%)" aria-label="بعدی"><svg><use href="#i-chev-right"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= BRANDS ======================= -->
+<section class="section section--white" style="padding-top:0">
+  <div class="container">
+    <div class="sec-head sec-head--center">
+      <h2 class="sec-title"><svg class="leaf" width="22" height="22"><use href="#i-leaf"/></svg> برندهای معتبر</h2>
+    </div>
+    <ul class="brands reveal">
+      <li>DERMATYPIQUE</li><li>Ormus</li><li>Revival</li><li>SKIN ONE</li><li>racuten</li>
+      <li>With you</li><li>EIN</li><li>Veronique</li><li>SEBYCTA</li><li>Bio Marine</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================= BLOG ======================= -->
+<section class="section section--cream">
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="sec-title"><svg class="leaf" width="22" height="22"><use href="#i-leaf"/></svg> مجله زیته</h2>
+      <a href="#" class="link-more">مشاهده مقالات <svg><use href="#i-chev-left"/></svg></a>
+    </div>
+    <div class="posts reveal">
+      <article class="post">
+        <a href="#" class="post__img"><img src="assets/img/blog-1.jpg" alt=""><span class="post__tag">دسته‌بندی نشده</span></a>
+        <div class="post__body">
+          <a href="#"><h3>جوش‌های زیر پوستی چیست؟ دلایل و روش های درمان</h3></a>
+          <a href="#" class="link-more">مطالعه مقاله <svg><use href="#i-chev-left"/></svg></a>
+        </div>
+      </article>
+      <article class="post">
+        <a href="#" class="post__img"><img src="assets/img/blog-2.jpg" alt=""><span class="post__tag">وبلاگ</span></a>
+        <div class="post__body">
+          <a href="#"><h3>از بین بردن لک صورت با خمیردندان</h3></a>
+          <a href="#" class="link-more">مطالعه مقاله <svg><use href="#i-chev-left"/></svg></a>
+        </div>
+      </article>
+      <article class="post">
+        <a href="#" class="post__img"><img src="assets/img/blog-3.jpg" alt=""><span class="post__tag">وبلاگ</span></a>
+        <div class="post__body">
+          <a href="#"><h3>۴ ویژگی که پماد حساسیت پوستی باید داشته باشد! + معرفی انواع و علائم حساسیت پوستی</h3></a>
+          <a href="#" class="link-more">مطالعه مقاله <svg><use href="#i-chev-left"/></svg></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CONSULT ======================= -->
+<section class="section section--white">
+  <div class="container">
+    <div class="consult reveal">
+      <div>
+        <h2><svg class="leaf" width="21" height="21" style="color:var(--green)"><use href="#i-leaf"/></svg> از اینجا شروع کن</h2>
+        <p>نمی‌دانی چه محصولی برای پوستت مناسبه؟ سؤالت را از ما بپرس؛ در واتساپ، تلگرام یا بله پاسخ می‌دهیم.</p>
+        <button class="btn btn--primary" data-sheet-open="#sheet-advice"><svg><use href="#i-headset"/></svg> شروع مشاوره پوستی</button>
+      </div>
+      <img src="assets/img/consult.jpg" alt="مشاوره پوستی زیته">
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TESTIMONIALS ======================= -->
+<section class="section section--cream">
+  <div class="container">
+    <div class="sec-head sec-head--center">
+      <h2 class="sec-title"><svg class="leaf" width="22" height="22"><use href="#i-leaf"/></svg> نظر شما، برای ما ارزشمند است</h2>
+    </div>
+    <div class="quotes reveal">
+      <div class="quote">
+        <div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+        <p>محصولات اورجینال و ارسال سریع. تجربه خرید براِم عالی کرد.</p>
+        <div class="quote__ava">ن</div>
+        <b>نهال محمدی</b>
+      </div>
+      <div class="quote">
+        <div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+        <p>تنوع محصولات و توضیحات کامل باعث شد انتخاب راحتی داشته باشم.</p>
+        <div class="quote__ava">س</div>
+        <b>سارا احمدی</b>
+      </div>
+      <div class="quote">
+        <div class="stars"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></div>
+        <p>پشتیبانی عالی و بسته‌بندی شیک، حس خاصی به من داد. ممنون از زیته!</p>
+        <div class="quote__ava">م</div>
+        <b>مریم کریمی</b>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= INSTAGRAM ======================= -->
+<section class="section section--white">
+  <div class="container">
+    <div class="sec-head sec-head--center" style="margin-bottom:26px">
+      <h2 class="sec-title"><svg class="leaf" width="22" height="22"><use href="#i-instagram"/></svg> ما را در اینستاگرام دنبال کنید</h2>
+      <span class="sec-sub">ziteh@</span>
+    </div>
+    <div class="insta-grid reveal">
+      <a href="#"><svg><use href="#i-instagram"/></svg></a>
+      <a href="#"><svg><use href="#i-instagram"/></svg></a>
+      <a href="#"><svg><use href="#i-instagram"/></svg></a>
+      <a href="#"><svg><use href="#i-instagram"/></svg></a>
+      <a href="#"><svg><use href="#i-instagram"/></svg></a>
+      <a href="#"><svg><use href="#i-instagram"/></svg></a>
+    </div>
+    <div class="insta-foot">
+      <a href="#" class="btn btn--ghost btn--sm"><svg><use href="#i-instagram"/></svg> مشاهده بیشتر در اینستاگرام</a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= NEWSLETTER ======================= -->
+<section class="section section--white" style="padding-top:0">
+  <div class="container">
+    <div class="news news--cream reveal">
+      <div>
+        <h3><svg class="leaf" width="20" height="20" style="color:var(--green)"><use href="#i-leaf"/></svg> خبرنامه زیته</h3>
+        <p>جدیدترین محصولات، مقالات و تخفیف‌ها را مستقیماً در ایمیل خود دریافت کنید.</p>
+      </div>
+      <form onsubmit="return false">
+        <input type="email" inputmode="email" autocomplete="email" enterkeyhint="go" placeholder="ایمیل خود را وارد کنید...">
+        <button type="submit">عضویت</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="logo logo--lg"><b>زیته</b></a>
+        <p>جوانه‌ای برای مراقبت از تو</p>
+        <div class="socials">
+          <a href="#" aria-label="اینستاگرام"><svg><use href="#i-instagram"/></svg></a>
+          <a href="#" aria-label="واتساپ"><svg><use href="#i-whatsapp"/></svg></a>
+          <a href="#" aria-label="تلگرام"><svg><use href="#i-telegram"/></svg></a>
+          <a href="#" aria-label="بله"><svg><use href="#i-bale"/></svg></a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>خدمات مشتریان</h4>
+        <ul>
+          <li><a href="tracking.html">پیگیری سفارش</a></li>
+          <li><a href="#">مرسولات برگشتی</a></li>
+          <li><a href="#">شرایط مرجوعی کالا</a></li>
+          <li><a href="#">شرایط انصراف از خرید</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>دسترسی سریع</h4>
+        <ul>
+          <li><a href="product.html">فروشگاه</a></li>
+          <li><a href="#">برندها</a></li>
+          <li><a href="#">مجله</a></li>
+          <li><a href="#">درباره ما</a></li>
+          <li><a href="#">راه ارتباط پشتیبانی</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>راهنمای خرید</h4>
+        <ul>
+          <li><a href="#">نحوه ارسال سفارش</a></li>
+          <li><a href="#">تاخیر در ارسال مرسولات</a></li>
+          <li><a href="#">بررسی مرسوله هنگام تحویل</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer__bottom">تمامی حقوق مادی و معنوی این فروشگاه اینترنتی متعلق به زیته است.</div>
+</footer>
+
+<script src="assets/js/main.js?v=6"></script>
+<script src="assets/js/app.js?v=6"></script>
+</body>
+</html>

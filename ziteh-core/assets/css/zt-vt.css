@@ -1,0 +1,6 @@
+/*! Ziteh Core — cross-document page transitions (optional) */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:zt-vtOut .22s var(--zt-ease-in-out) forwards}
+::view-transition-new(root){animation:zt-vtIn .3s var(--zt-ease-out)}
+@keyframes zt-vtOut{to{opacity:0;transform:translateY(-6px)}}
+@keyframes zt-vtIn{from{opacity:0;transform:translateY(10px)}}

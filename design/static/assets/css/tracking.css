@@ -1,0 +1,102 @@
+/* ==========================================================================
+   Order tracking page
+   ========================================================================== */
+
+/* ---------- order header card ---------------------------------------------- */
+.ohead{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:26px 24px;
+  display:grid;grid-template-columns:repeat(3,1fr);position:relative;overflow:hidden;margin-bottom:20px}
+.ohead .orn{position:absolute;left:14px;top:-20px;width:150px;opacity:.5;pointer-events:none}
+.ohead__col{text-align:center;position:relative;z-index:2}
+.ohead__col h4{font-size:14px;font-weight:700;color:var(--ink-2);margin-bottom:14px}
+.ohead__num{font-size:26px;font-weight:800;color:var(--green);letter-spacing:-.5px}
+.ohead__col p{font-size:12px;color:var(--muted);margin-top:12px}
+.ohead__amount{font-size:20px;font-weight:800}
+.ohead__amount small{font-size:14px;font-weight:500}
+
+/* ---------- status timeline --------------------------------------------------- */
+.timeline{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:34px 44px 30px;
+  margin-bottom:20px}
+.timeline ol{display:flex;justify-content:space-between;position:relative}
+.timeline ol::before{content:"";position:absolute;top:27px;inset-inline:80px;height:3px;background:var(--line-2)}
+.timeline ol::after{content:"";position:absolute;top:27px;inset-inline-start:80px;
+  width:calc(50% - 80px);height:3px;background:var(--green-700)}
+.tl{position:relative;z-index:2;text-align:center;flex:1 1 0;min-width:0}
+.tl i{width:54px;height:54px;border-radius:50%;background:#fff;border:1px solid var(--line-2);
+  color:var(--muted-2);display:grid;place-items:center;margin:0 auto 14px}
+.tl i svg{width:22px;height:22px}
+.tl.is-done i{background:#fff;border-color:var(--green-700);color:var(--green-700)}
+.tl.is-current i{background:var(--green);border-color:var(--green);color:#fff;
+  box-shadow:0 0 0 6px rgba(107,116,87,.10)}
+.tl b{display:block;font-size:14px;font-weight:700}
+.tl span{display:block;font-size:12px;color:var(--muted);line-height:1.9;margin-top:4px}
+.tl.is-idle b,.tl.is-idle span{color:var(--muted-2)}
+
+/* ---------- details grid --------------------------------------------------------- */
+.trk-grid{display:grid;grid-template-columns:1fr 330px;gap:20px;align-items:start}
+
+.dbox{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:24px 26px}
+.dbox__title{display:flex;align-items:center;gap:11px;font-size:16.5px;font-weight:800;margin-bottom:20px}
+.dbox__title svg{width:20px;height:20px;color:var(--green)}
+
+.itable{width:100%;border-collapse:collapse}
+.itable th{font-size:12px;color:var(--muted);font-weight:500;padding-bottom:14px;text-align:center}
+.itable th:first-child{text-align:start}
+.itable td{padding:14px 0;border-top:1px solid var(--line);text-align:center;font-size:13.5px}
+.itable td:first-child{text-align:start}
+.iprod{display:flex;align-items:center;gap:14px}
+.iprod img{width:56px;height:56px;border-radius:12px;object-fit:cover;background:var(--cream-2);flex:none}
+.iprod b{display:block;font-size:13.5px;font-weight:600;line-height:1.8}
+.iprod span{font-size:11.5px;color:var(--muted)}
+.itotals{margin-top:20px;padding-top:4px}
+.itotals div{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2);padding:6px 0;
+  max-width:420px;margin-inline-start:auto}
+.itotals div.grand{border-top:1px solid var(--line);margin-top:10px;padding-top:16px;font-weight:800;font-size:15px}
+
+/* ---------- side boxes ------------------------------------------------------------- */
+.sbox{background:var(--cream);border-radius:var(--r-lg);padding:24px 22px;margin-bottom:20px}
+.sbox__title{display:flex;align-items:center;gap:11px;font-size:16px;font-weight:800;margin-bottom:18px}
+.sbox__title svg{width:19px;height:19px;color:var(--green)}
+.sbox b.name{display:block;font-size:14.5px;font-weight:700;margin-bottom:8px}
+.sbox p{font-size:13px;color:var(--ink-2);line-height:2.15}
+.sbox .btn{margin-top:18px}
+
+/* ---------- shipping detail timeline ------------------------------------------------ */
+.ship-detail{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:26px 34px 24px;
+  margin-top:20px}
+.sd-line{display:flex;justify-content:space-between;position:relative;margin:26px 0 22px}
+.sd-line::before{content:"";position:absolute;top:9px;inset-inline:70px;height:2px;
+  background:repeating-linear-gradient(to right,var(--line-2) 0 6px,transparent 6px 12px)}
+.sd-line::after{content:"";position:absolute;top:9px;inset-inline-start:70px;width:calc(75% - 70px);
+  height:2px;background:var(--green)}
+.sd{position:relative;z-index:2;text-align:center;flex:1 1 0;min-width:0}
+.sd i{width:19px;height:19px;border-radius:50%;background:#fff;border:2px solid var(--line-2);
+  display:grid;place-items:center;margin:0 auto 14px;color:#fff}
+.sd i svg{width:11px;height:11px}
+.sd.is-done i{background:var(--green);border-color:var(--green)}
+.sd b{display:block;font-size:13.5px;font-weight:700}
+.sd span{display:block;font-size:11.5px;color:var(--muted);line-height:1.9}
+.sd.is-idle b{color:var(--muted-2)}
+
+.eta{background:var(--cream);border-radius:var(--r);padding:20px 24px;display:flex;align-items:center;gap:16px;
+  position:relative;overflow:hidden}
+.eta .orn{position:absolute;left:-14px;bottom:-30px;width:120px;opacity:.55;pointer-events:none}
+.eta svg.cal{width:26px;height:26px;color:var(--green);flex:none;position:relative;z-index:2}
+.eta div{position:relative;z-index:2}
+.eta b{display:block;font-size:14.5px;font-weight:700}
+.eta span{font-size:12.5px;color:var(--muted)}
+
+/* ---------- responsive ---------------------------------------------------------------- */
+@media (max-width:1050px){
+  .trk-grid{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .ohead{grid-template-columns:1fr;gap:22px}
+  .timeline,.ship-detail{padding-inline:16px}
+  .timeline ol,.sd-line{flex-direction:column;gap:22px;align-items:flex-start}
+  .timeline ol::before,.timeline ol::after,.sd-line::before,.sd-line::after{display:none}
+  .tl,.sd{display:flex;align-items:center;gap:16px;text-align:start}
+  .tl i,.sd i{margin:0}
+  .itable thead{display:none}
+  .itable td{display:block;border:0;text-align:start;padding:4px 0}
+  .itable tr{display:block;border-top:1px solid var(--line);padding:14px 0}
+}

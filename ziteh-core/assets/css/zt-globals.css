@@ -1,0 +1,53 @@
+/*! Ziteh Core — page-level globals (font, resets scoped to Ziteh roots) */
+
+@font-face{
+  font-family:'ZitehDana';
+  src:url('../fonts/DanaVF.woff2') format('woff2');
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+
+:root{--zt-font:'ZitehDana','Dana',Vazirmatn,'Segoe UI',Tahoma,sans-serif}
+
+html{-webkit-text-size-adjust:100%}
+
+/* the page itself (added to <body> when the Ziteh design is active) */
+body.zt-site{
+  margin:0;
+  background:var(--zt-paper);
+  color:var(--zt-ink);
+  font-family:var(--zt-font);
+  font-size:15px;
+  line-height:1.9;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+body.zt-site ::selection{background:var(--zt-green-200);color:var(--zt-green-700)}
+
+/* every widget / shell root carries .zt-w — resets below have ZERO specificity
+   (:where) so the cascade is exactly the one of the original design */
+.zt-w{
+  font-family:var(--zt-font);
+  color:var(--zt-ink);
+  line-height:1.9;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+:where(.zt-w),:where(.zt-w) *,:where(.zt-w) *::before,:where(.zt-w) *::after{box-sizing:border-box}
+:where(.zt-w) :is(h1,h2,h3,h4,h5,h6,p,figure,ul,ol){margin:0;padding:0}
+:where(.zt-w) :is(ul,ol){list-style:none}
+:where(.zt-w) a{color:inherit;text-decoration:none}
+:where(.zt-w) img{max-width:100%;display:block}
+:where(.zt-w) :is(button,input,select,textarea){font:inherit;color:inherit}
+:where(.zt-w) button{background:none;border:0;cursor:pointer}
+:where(.zt-w) svg{display:block;flex:none}
+:where(.zt-w) [hidden],:where(.zt-w)[hidden]{display:none!important}
+:where(.zt-w) table{table-layout:auto;max-width:100%}
+
+/* scrollbar */
+body.zt-site::-webkit-scrollbar,html:has(body.zt-site)::-webkit-scrollbar{width:11px;height:11px}
+html:has(body.zt-site)::-webkit-scrollbar-track{background:var(--zt-cream)}
+html:has(body.zt-site)::-webkit-scrollbar-thumb{background:#D8D2C4;border-radius:99px;border:3px solid var(--zt-cream)}
+html:has(body.zt-site)::-webkit-scrollbar-thumb:hover{background:#C3BCAB}

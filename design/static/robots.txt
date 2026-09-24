@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# پس از اتصال دامنه، آدرس زیر را با دامنه‌ی خودتان جایگزین کنید
+Sitemap: https://example.com/sitemap.xml

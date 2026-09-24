@@ -1,0 +1,115 @@
+/* ==========================================================================
+   Cart page (+ shared shop pieces)
+   ========================================================================== */
+
+.shop-grid{display:grid;grid-template-columns:1fr 380px;gap:26px;align-items:start}
+
+/* ---------- panel card ---------------------------------------------------- */
+.pcard{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:26px 28px;
+  margin-bottom:22px;position:relative;overflow:hidden}
+.pcard__title{display:flex;align-items:center;gap:11px;font-size:20px;font-weight:800;margin-bottom:6px}
+.pcard__title svg{width:22px;height:22px;color:var(--green)}
+.pcard__sub{color:var(--muted);font-size:13.5px;margin-bottom:26px}
+
+/* ---------- tiered discount ------------------------------------------------ */
+.tiers{display:flex;align-items:flex-start;justify-content:space-between;position:relative;
+  padding:6px 40px 0;margin-bottom:30px}
+.tiers::before{content:"";position:absolute;top:34px;inset-inline:100px;height:3px;background:var(--line-2);border-radius:3px}
+.tiers__fill{position:absolute;top:34px;inset-inline-start:100px;width:calc(50% - 100px);height:3px;
+  background:var(--green);border-radius:3px}
+.tier{position:relative;z-index:2;text-align:center;flex:1 1 0;min-width:0;max-width:200px}
+.tier__dot{width:60px;height:60px;border-radius:50%;background:var(--cream-2);color:var(--muted);
+  display:grid;place-items:center;margin:0 auto 12px;border:5px solid #fff}
+.tier__dot svg{width:24px;height:24px}
+.tier.is-done .tier__dot{background:var(--green);color:#fff}
+.tier b{display:block;font-size:14px;font-weight:700}
+.tier span{font-size:12px;color:var(--muted)}
+
+.tier-progress{border-top:1px solid var(--line);padding-top:22px;text-align:center}
+.tier-progress p{font-size:13.5px;color:var(--ink-2);margin-bottom:12px}
+.tier-progress .bar{height:9px;border-radius:99px;background:var(--cream-2);overflow:hidden;direction:ltr}
+.tier-progress .bar i{display:block;height:100%;background:var(--green);border-radius:99px}
+
+/* ---------- cart table ------------------------------------------------------ */
+.ctable{width:100%;border-collapse:collapse}
+.ctable th{font-size:13px;color:var(--muted);font-weight:500;padding:0 0 16px;text-align:center}
+.ctable th:first-child{text-align:start;padding-inline-start:4px}
+.ctable td{padding:20px 0;border-top:1px solid var(--line);text-align:center;vertical-align:middle}
+.ctable tr[data-line]{transition:opacity .2s}
+.citem{display:flex;align-items:center;gap:16px;text-align:start}
+.citem img{width:78px;height:78px;border-radius:14px;object-fit:cover;background:var(--cream-2);flex:none}
+.citem b{display:block;font-size:14.5px;font-weight:700;line-height:1.8}
+.citem span{font-size:12.5px;color:var(--muted)}
+.cprice{font-size:14px;font-weight:600;white-space:nowrap}
+.cprice small{font-size:12px;font-weight:400;color:var(--muted);display:block}
+.ctable .qty{height:40px}
+.ctable .qty button{width:36px}
+.crm{width:32px;height:32px;border-radius:50%;color:var(--muted);display:grid;place-items:center;
+  transition:all var(--t);margin-inline:auto}
+.crm:hover{background:#FBEEEA;color:var(--red)}
+.crm svg{width:14px;height:14px}
+.ctable-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  border-top:1px solid var(--line);padding-top:22px;margin-top:4px}
+
+/* ---------- gift samples ------------------------------------------------------ */
+.gifts{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.gift{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px 10px 14px;
+  text-align:center;cursor:pointer;transition:border-color var(--t),box-shadow var(--t)}
+.gift:hover{border-color:var(--green-200)}
+.gift.is-selected{border-color:var(--green);box-shadow:0 0 0 3px rgba(107,116,87,.09)}
+.gift img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;margin-bottom:10px}
+.gift b{display:block;font-size:12.5px;font-weight:600;line-height:1.7;min-height:42px}
+.gift span{font-size:11.5px;color:var(--muted);display:block;margin-bottom:10px}
+.gift .radio{margin-inline:auto;width:18px;height:18px}
+.gift--note{background:var(--cream);border-color:transparent;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px;cursor:default;padding:18px 16px}
+.gift--note p{font-size:12.5px;color:var(--ink-2);line-height:2}
+.gift--note svg{width:26px;height:26px;color:var(--green)}
+
+/* ---------- summary sidebar ---------------------------------------------------- */
+.sum{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:26px 24px;position:relative;overflow:hidden}
+.sum__title{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:800;margin-bottom:24px}
+.sum__title svg{width:21px;height:21px;color:var(--green)}
+.sum__row{display:flex;align-items:center;justify-content:space-between;font-size:13.5px;
+  color:var(--ink-2);padding:9px 0}
+.sum__row span:last-child{font-weight:600}
+.sum__row .dash{color:var(--muted-2);letter-spacing:2px}
+.sum hr{border:0;height:1px;background:var(--line-2);margin:14px 0}
+.sum__total{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:22px}
+.sum__total > span{font-size:14px;color:var(--ink-2)}
+.sum__total b{font-size:21px;font-weight:800;color:var(--green)}
+.sum__total b small{font-size:14px;font-weight:500}
+.sum__terms{display:flex;gap:12px;background:var(--cream);border-radius:var(--r);padding:16px 16px;
+  font-size:12.5px;color:var(--ink-2);line-height:2;margin-bottom:20px}
+.sum__terms svg{width:22px;height:22px;color:var(--green);flex:none;margin-top:6px}
+.sum__terms a{color:var(--green);text-decoration:underline}
+.sum .btn{margin-bottom:12px}
+.sum__perks{background:var(--cream);border-radius:var(--r);padding:6px 18px;margin-top:22px}
+.sum__perks div{display:flex;align-items:center;gap:14px;padding:15px 0}
+.sum__perks div + div{border-top:1px solid var(--line-2)}
+.sum__perks svg{width:26px;height:26px;color:var(--green);flex:none}
+.sum__perks b{display:block;font-size:13.5px;font-weight:700}
+.sum__perks span{font-size:11.5px;color:var(--muted)}
+
+/* ---------- responsive ---------------------------------------------------------- */
+@media (max-width:1150px){
+  .shop-grid{grid-template-columns:1fr}
+  .gifts{grid-template-columns:repeat(3,1fr)}
+  .tiers{padding-inline:0}
+  .tiers::before,.tiers__fill{inset-inline:60px}
+}
+@media (max-width:860px){
+  .tiers{padding-inline:0;gap:6px}
+  .tiers::before,.tiers__fill{inset-inline:40px}
+  .tier__dot{width:46px;height:46px;border-width:4px}
+  .tier__dot svg{width:19px;height:19px}
+  .tier b{font-size:12px}
+  .tier span{font-size:10.5px}
+}
+@media (max-width:760px){
+  .gifts{grid-template-columns:repeat(2,1fr)}
+  .ctable thead{display:none}
+  .ctable td{display:block;border:0;padding:6px 0;text-align:start}
+  .ctable tr[data-line]{display:block;border-top:1px solid var(--line);padding:16px 0}
+  .tier b{font-size:12.5px}
+}

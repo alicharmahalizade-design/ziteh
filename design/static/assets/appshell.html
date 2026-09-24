@@ -1,0 +1,194 @@
+<!-- ═══════════════ APP SHELL (shared, injected by build.py) ═══════════════ -->
+
+<!-- scroll progress ---------------------------------------------------- -->
+<div class="scrollprog" aria-hidden="true"><i data-scrollprog></i></div>
+
+<!-- mobile app bar ----------------------------------------------------- -->
+<header class="appbar" data-appbar>
+  <button class="appbar__btn" data-drawer-open aria-label="منو" data-only="home">
+    <svg><use href="#i-menu"/></svg>
+  </button>
+  <button class="appbar__btn" data-back aria-label="بازگشت" data-only="inner">
+    <svg><use href="#i-chev-right"/></svg>
+  </button>
+
+  <a class="appbar__logo" href="index.html" data-only="home"><b>زیته</b></a>
+  <h2 class="appbar__title" data-appbar-title data-only="inner"></h2>
+
+  <div class="appbar__actions">
+    <button class="appbar__btn" data-search-open aria-label="جستجو">
+      <svg><use href="#i-search"/></svg>
+    </button>
+    <a class="appbar__btn" href="cart.html" aria-label="سبد خرید">
+      <svg><use href="#i-bag"/></svg>
+      <span class="appbar__count" data-cart-badge>۰</span>
+    </a>
+  </div>
+</header>
+
+<!-- bottom tab bar ------------------------------------------------------ -->
+<nav class="tabbar" data-tabbar aria-label="ناوبری اصلی">
+  <a href="index.html" class="tab" data-tab="home">
+    <span class="tab__ic"><svg><use href="#i-home"/></svg></span><span class="tab__t">خانه</span>
+  </a>
+  <a href="product.html" class="tab" data-tab="shop">
+    <span class="tab__ic"><svg><use href="#i-store"/></svg></span><span class="tab__t">فروشگاه</span>
+  </a>
+  <a href="cart.html" class="tab tab--fab" data-tab="cart" aria-label="سبد خرید">
+    <span class="tab__fab"><svg><use href="#i-bag"/></svg><i class="tab__count" data-cart-badge>۰</i></span>
+    <span class="tab__t">سبد</span>
+  </a>
+  <a href="#" class="tab" data-tab="wish" data-wishlist>
+    <span class="tab__ic"><svg><use href="#i-heart"/></svg></span><span class="tab__t">علاقه‌مندی</span>
+  </a>
+  <a href="panel.html" class="tab" data-tab="account">
+    <span class="tab__ic"><svg><use href="#i-user"/></svg></span><span class="tab__t">حساب</span>
+  </a>
+</nav>
+
+<!-- side drawer --------------------------------------------------------- -->
+<div class="scrim" data-scrim hidden></div>
+
+<aside class="drawer" data-drawer hidden aria-label="منوی زیته">
+  <div class="drawer__head">
+    <a href="panel.html" class="drawer__user">
+      <span class="drawer__ava"><svg><use href="#i-user"/></svg></span>
+      <span><b>خوش آمدید</b><small>وارد شوید یا ثبت‌نام کنید</small></span>
+    </a>
+    <button class="drawer__close" data-drawer-close aria-label="بستن"><svg><use href="#i-x"/></svg></button>
+  </div>
+
+  <nav class="drawer__nav">
+    <a href="index.html"><svg><use href="#i-home"/></svg> خانه</a>
+    <a href="product.html"><svg><use href="#i-store"/></svg> فروشگاه</a>
+    <div class="drawer__acc" data-drawer-acc>
+      <button><svg><use href="#i-grid"/></svg> دسته‌بندی‌ها <svg class="chev"><use href="#i-chev-down"/></svg></button>
+      <div class="drawer__sub"><div>
+        <a href="product.html">مراقبت پوست</a>
+        <a href="product.html">مراقبت مو</a>
+        <a href="product.html">مراقبت کودک</a>
+        <a href="product.html">بهداشت فردی</a>
+        <a href="product.html">سلامت دندان</a>
+        <a href="product.html">مراقبت دور چشم</a>
+      </div></div>
+    </div>
+    <a href="tracking.html"><svg><use href="#i-truck-fast"/></svg> پیگیری سفارش</a>
+    <a href="#"><svg><use href="#i-tag"/></svg> تخفیف‌های ویژه</a>
+    <a href="#"><svg><use href="#i-leaf"/></svg> مجله زیته</a>
+    <a href="#"><svg><use href="#i-info"/></svg> درباره ما</a>
+    <a href="#"><svg><use href="#i-headset"/></svg> تماس با ما</a>
+  </nav>
+
+  <div class="drawer__foot">
+    <div class="drawer__socials">
+      <a href="#" aria-label="اینستاگرام"><svg><use href="#i-instagram"/></svg></a>
+      <a href="#" aria-label="تلگرام"><svg><use href="#i-telegram"/></svg></a>
+      <a href="#" aria-label="واتساپ"><svg><use href="#i-whatsapp"/></svg></a>
+    </div>
+    <p>زیته — جوانه‌ای برای مراقبت از خودت</p>
+  </div>
+</aside>
+
+<!-- search overlay ------------------------------------------------------ -->
+<div class="searchpane" data-searchpane hidden>
+  <div class="searchpane__bar">
+    <button class="appbar__btn" data-search-close aria-label="بستن"><svg><use href="#i-chev-right"/></svg></button>
+    <label class="searchpane__field">
+      <svg><use href="#i-search"/></svg>
+      <input type="search" placeholder="دنبال چه محصولی می‌گردی؟" data-search-input enterkeyhint="search">
+      <button data-search-clear aria-label="پاک کردن" hidden><svg><use href="#i-x"/></svg></button>
+    </label>
+  </div>
+  <div class="searchpane__body">
+    <section data-search-idle>
+      <h3><svg><use href="#i-history"/></svg> جستجوهای اخیر</h3>
+      <div class="chips">
+        <button class="chipbtn">شامپو ضد ریزش</button>
+        <button class="chipbtn">سرم ویتامین C</button>
+        <button class="chipbtn">ضد آفتاب</button>
+        <button class="chipbtn">ماسک مو</button>
+      </div>
+      <h3><svg><use href="#i-fire"/></svg> پرجستجوترین‌ها</h3>
+      <div class="chips">
+        <button class="chipbtn">تونر آبرسان</button>
+        <button class="chipbtn">کرم مرطوب‌کننده</button>
+        <button class="chipbtn">مام ضد عرق</button>
+        <button class="chipbtn">عطر خانه</button>
+        <button class="chipbtn">پک هدیه</button>
+      </div>
+    </section>
+    <section data-search-results hidden>
+      <h3 data-search-count></h3>
+      <div class="sresults" data-search-list></div>
+      <p class="sempty" data-search-empty hidden>چیزی پیدا نشد. یک عبارت دیگر امتحان کنید.</p>
+    </section>
+  </div>
+</div>
+
+<!-- quick add sheet ------------------------------------------------------ -->
+<div class="sheet" id="sheet-quickadd" data-sheet hidden aria-label="افزودن سریع به سبد">
+  <div class="sheet__panel">
+    <div class="sheet__grab" data-sheet-grab></div>
+    <div class="sheet__body">
+      <div class="qa">
+        <img data-qa-img src="" alt="">
+        <div>
+          <span class="qa__cat" data-qa-cat></span>
+          <b data-qa-title></b>
+          <div class="qa__price"><span data-qa-price></span> <small>تومان</small></div>
+        </div>
+      </div>
+      <div class="qa__row">
+        <span>تعداد</span>
+        <div class="qty" data-qa-qty>
+          <button data-step="-1" aria-label="کاهش"><svg><use href="#i-minus"/></svg></button>
+          <span>۱</span>
+          <button data-step="1" aria-label="افزایش"><svg><use href="#i-plus"/></svg></button>
+        </div>
+      </div>
+      <div class="qa__note"><svg><use href="#i-truck-fast"/></svg> ارسال سریع، تحویل ۱ تا ۳ روز کاری</div>
+    </div>
+    <div class="sheet__foot">
+      <button class="btn btn--ghost" data-sheet-close>انصراف</button>
+      <button class="btn btn--primary" data-qa-add><svg><use href="#i-bag"/></svg> افزودن به سبد</button>
+    </div>
+  </div>
+</div>
+
+<!-- advice sheet (WhatsApp / Telegram / Bale) ---------------------------- -->
+<div class="sheet" id="sheet-advice" data-sheet hidden aria-label="مشاوره پوستی">
+  <div class="sheet__panel">
+    <div class="sheet__grab" data-sheet-grab></div>
+    <div class="sheet__body">
+      <h3 class="sheetttl">مشاوره پوستی رایگان</h3>
+      <p style="font-size:13.5px;color:var(--muted);line-height:2;margin-bottom:18px">
+        سؤالت را از هر کدام از راه‌های زیر بپرس؛ در ساعات کاری پاسخ می‌دهیم.</p>
+      <div class="advice">
+        <a href="https://wa.me/989121234567" target="_blank" rel="noopener">
+          <i><svg><use href="#i-whatsapp"/></svg></i>
+          <span><b>واتساپ</b><small>۰۹۱۲ ۱۲۳ ۴۵۶۷</small></span>
+          <span class="go"><svg><use href="#i-chev-left"/></svg></span>
+        </a>
+        <a href="https://t.me/ziteh" target="_blank" rel="noopener">
+          <i><svg><use href="#i-telegram"/></svg></i>
+          <span><b>تلگرام</b><small>ziteh@</small></span>
+          <span class="go"><svg><use href="#i-chev-left"/></svg></span>
+        </a>
+        <a href="https://ble.ir/ziteh" target="_blank" rel="noopener">
+          <i><svg><use href="#i-headset"/></svg></i>
+          <span><b>بله</b><small>ziteh@</small></span>
+          <span class="go"><svg><use href="#i-chev-left"/></svg></span>
+        </a>
+      </div>
+    </div>
+    <div class="sheet__foot" style="grid-template-columns:1fr">
+      <button class="btn btn--ghost" data-sheet-close>بستن</button>
+    </div>
+  </div>
+</div>
+
+<!-- toast host ------------------------------------------------------------ -->
+<div class="toasts" data-toasts aria-live="polite"></div>
+
+<!-- back to top ----------------------------------------------------------- -->
+<button class="fab-top" data-totop aria-label="بازگشت به بالا"><svg><use href="#i-arrow-up"/></svg></button>
