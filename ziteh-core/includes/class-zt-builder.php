@@ -840,23 +840,24 @@ class ZT_Builder {
 			update_option( 'zt_woo_setup_done', 1 );
 			$log[] = 'تنظیمات پایه ووکامرس (ایران، تومان، ارسال) اعمال شد.';
 		}
-		// Ziteh shipping zone.
-		$found = false;
-		foreach ( WC_Shipping_Zones::get_zones() as $z ) {
-			foreach ( $z['shipping_methods'] as $m ) {
-				if ( 'zt_shipping' === $m->id ) {
-					$found = true;
-				}
-			}
+		// Ziteh shipping zone: reuse a zone covering Iran, add the method once.
+		if ( function_exists( 'WC' ) && WC()->shipping() ) {
+			WC()->shipping()->load_shipping_methods();
 		}
-		if ( ! $found ) {
-			$zone = new WC_Shipping_Zone();
-			$zone->set_zone_name( 'ایران' );
-			$zone->set_zone_order( 0 );
-			$zone->add_location( 'IR', 'country' );
-			$zone->save();
-			$zone->add_shipping_method( 'zt_shipping' );
-			$log[] = 'منطقه حمل‌ونقل «ایران» با روش «ارسال زیته» ساخته شد.';
+		global $wpdb;
+		$has = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}woocommerce_shipping_zone_methods WHERE method_id = 'zt_shipping'" ); // phpcs:ignore
+		if ( ! $has ) {
+			$zone_id = (int) $wpdb->get_var( "SELECT zone_id FROM {$wpdb->prefix}woocommerce_shipping_zone_locations WHERE location_code = 'IR' AND location_type = 'country' ORDER BY zone_id ASC LIMIT 1" ); // phpcs:ignore
+			$zone    = $zone_id ? new WC_Shipping_Zone( $zone_id ) : new WC_Shipping_Zone();
+			if ( ! $zone_id ) {
+				$zone->set_zone_name( 'ایران' );
+				$zone->set_zone_order( 0 );
+				$zone->add_location( 'IR', 'country' );
+				$zone->save();
+			}
+			if ( $zone->add_shipping_method( 'zt_shipping' ) ) {
+				$log[] = 'روش «ارسال زیته» به منطقه حمل‌ونقل «' . $zone->get_zone_name() . '» اضافه شد.';
+			}
 		}
 		return $log;
 	}

@@ -82,7 +82,7 @@ class ZT_W_Account_Orders extends ZT_Widget_Base {
 			);
 			foreach ( $orders as $o ) {
 				$href   = 'tracking' === $s['row_link'] ? ZT_Account::track_url( $o ) : ( 'view' === $s['row_link'] ? $o->get_view_order_url() : '' );
-				$rows[] = array( $o->get_order_number(), zt_jdate( 'Y/m/d', $o->get_date_created() ? $o->get_date_created()->getTimestamp() : time() ), (float) $o->get_total(), $o->get_status(), wc_get_order_status_name( $o->get_status() ), $href );
+				$rows[] = array( $o->get_order_number(), zt_jdate( 'Y/m/d', $o->get_date_created() ? $o->get_date_created()->getTimestamp() : time() ), (float) $o->get_total(), $o->get_status(), ZT_Tracking::status_label( $o->get_status() ), $href );
 			}
 		}
 		echo '<section class="zt-dcard">' . ZT_Acc::head( $s, $link ); // phpcs:ignore

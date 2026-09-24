@@ -52,6 +52,30 @@ class ZT_Tracking {
 	}
 
 	/**
+	 * Persian label of an order status (independent of installed translations).
+	 *
+	 * @param string $status Status (with or without wc-).
+	 * @return string
+	 */
+	public static function status_label( $status ) {
+		$status = 0 === strpos( $status, 'wc-' ) ? substr( $status, 3 ) : $status;
+		$map    = array(
+			'pending'        => 'در انتظار پرداخت',
+			'processing'     => 'در حال آماده‌سازی',
+			'on-hold'        => 'در انتظار بررسی',
+			'completed'      => 'تکمیل شده',
+			'cancelled'      => 'لغو شده',
+			'refunded'       => 'مسترد شده',
+			'failed'         => 'ناموفق',
+			'checkout-draft' => 'پیش‌نویس',
+			'zt-shipped'     => 'در حال ارسال',
+			'zt-transit'     => 'در راه',
+		);
+		$map = apply_filters( 'zt_order_status_labels', $map );
+		return isset( $map[ $status ] ) ? $map[ $status ] : wc_get_order_status_name( $status );
+	}
+
+	/**
 	 * Extra order statuses.
 	 */
 	public static function register_statuses() {

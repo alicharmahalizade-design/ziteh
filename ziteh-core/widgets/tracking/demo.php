@@ -79,7 +79,7 @@ if ( ! class_exists( 'ZT_Order_View' ) ) {
 			return array(
 				'id'         => $o->get_order_number(),
 				'created'    => $created,
-				'status'     => wc_get_order_status_name( $o->get_status() ),
+				'status'     => ZT_Tracking::status_label( $o->get_status() ),
 				'status_ic'  => isset( $tl[ $cur ] ) ? $tl[ $cur ]['icon'] : 'clipboard',
 				'ship'       => $ship_method,
 				'pay'        => $o->get_payment_method_title(),
